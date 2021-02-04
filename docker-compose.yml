@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  gitui:
+    image: saramorillon/scrum-board:latest
+    container_name: gitui
+    restart: always
+    ports:
+      - 127.0.0.1:3000:3000
+    volumes:
+      - ./db:/app/db
+      - ./logs:/app/logs
+      - ./repos:/app/repos
+    environment:
+      - NODE_ENV=
+      - APP_KEY=
+      - COOKIE_NAME=
+      - LOG_LEVEL=
