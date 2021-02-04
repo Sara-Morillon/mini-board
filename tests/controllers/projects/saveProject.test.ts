@@ -41,6 +41,6 @@ describe('saveProject', () => {
 
   it('should redirect to project page', async () => {
     await saveProject(req, res)
-    expect(res.redirect).toHaveBeenCalledWith('/projects/edit/8')
+    expect(res.redirect).toHaveBeenCalledWith('/projects/list')
   })
 })

@@ -16,11 +16,11 @@ async function updateProject(req: Req, res: Response): Promise<void> {
   const { id } = req.params
   const { name, description } = req.body
   await Project.getRepository().update(id, { name, description })
-  res.redirect(`/projects/edit/${id}`)
+  res.redirect('/projects/list')
 }
 
 async function createProject(req: Req, res: Response): Promise<void> {
   const { name, description } = req.body
-  const project = await Project.getRepository().save({ name, description })
-  res.redirect(`/projects/edit/${project.id}`)
+  await Project.getRepository().save({ name, description })
+  res.redirect('/projects/list')
 }

@@ -17,7 +17,7 @@ export default function Projects({ projects }: IProjectsProps): JSX.Element {
           </a>
         </div>
         {projects.map((project) => (
-          <Card key={project.name}>
+          <Card key={project.name} className="mb-3">
             <CardBody>
               <CardTitle tag="h5">{project.name}</CardTitle>
               <CardSubtitle tag="h6" className="text-muted mb-3">
