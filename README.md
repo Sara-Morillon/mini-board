@@ -34,8 +34,6 @@ Scrum board listens to port 3000
 
 The default credentials are admin/admin.
 
-Make sure that `git` is installed on your server as git command are used by the backend (git is installed by default in the Dockerfile).
-
 ## Environment variables
 
 | Variable      | Value type                     | Default value | Description                                      |

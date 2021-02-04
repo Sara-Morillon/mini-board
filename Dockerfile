@@ -1,7 +1,6 @@
 FROM node:lts-alpine
 
 RUN apk update
-RUN apk --no-cache add git python g++ make
 
 ENV NODE_ENV=production
 

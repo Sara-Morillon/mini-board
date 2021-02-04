@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  gitui:
+  scrum-board:
     image: saramorillon/scrum-board:latest
-    container_name: gitui
+    container_name: scrum-board
     restart: always
     ports:
       - 127.0.0.1:3000:3000
