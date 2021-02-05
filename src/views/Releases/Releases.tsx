@@ -22,6 +22,7 @@ export default function Releases({ releases, projectId }: IReleasesProps): JSX.E
           <th>Name</th>
           <th>Creation date</th>
           <th>Due date</th>
+          <th>Points</th>
         </tr>
       </thead>
       <tbody>
@@ -41,6 +42,7 @@ export default function Releases({ releases, projectId }: IReleasesProps): JSX.E
             <td className={differenceInDays(release.dueDate, new Date()) <= 7 ? 'text-danger' : ''}>
               {format(release.dueDate, 'PPP')}
             </td>
+            <td>{release.issues.reduce((acc, curr) => acc + curr.points, 0)} points</td>
           </tr>
         ))}
       </tbody>

@@ -8,6 +8,7 @@ export async function getReleases(req: Req, res: Response): Promise<void> {
   const releases = await Release.getRepository().find({
     where: { project: { id: projectId } },
     order: { dueDate: 'ASC' },
+    relations: ['issues'],
   })
   res.render('Releases/Releases', { releases })
 }

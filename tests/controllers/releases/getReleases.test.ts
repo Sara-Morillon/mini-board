@@ -23,6 +23,7 @@ describe('getReleases', () => {
     expect(releaseMock.find).toHaveBeenCalledWith({
       where: { project: { id: 'projectId' } },
       order: { dueDate: 'ASC' },
+      relations: ['issues'],
     })
   })
 
