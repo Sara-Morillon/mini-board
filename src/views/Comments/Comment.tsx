@@ -17,7 +17,7 @@ export function CommentCard({ projectId, issueId, comment }: ICommentProps): JSX
         <CardTitle tag="h6">
           {comment.author.username} <small>{format(comment.createdAt, 'PPP')}</small>
         </CardTitle>
-        <CardText>{comment.content}</CardText>
+        <CardText dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }} />
         <CardLink href={`/project/${projectId}/comments/delete/${comment.id}?issueId=${issueId}`}>
           <Trash size={16} className="mb-1" /> Delete
         </CardLink>
