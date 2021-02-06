@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React, { CSSProperties } from 'react'
-import { Alert, Table } from 'reactstrap'
+import { Table } from 'reactstrap'
 import { Issue, Status } from '../../models/Issue'
 import { Release } from '../../models/Release'
 import { Ticket } from './Ticket'
@@ -26,11 +26,7 @@ export interface IBoardProps {
 
 export default function Board({ release, issues, projectId }: IBoardProps): JSX.Element {
   if (!release) {
-    return (
-      <Alert color="info" fade={false}>
-        No suitable release found
-      </Alert>
-    )
+    return <div className="text-muted bg-light p-5">No suitable release found</div>
   }
 
   return (
