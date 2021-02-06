@@ -1,35 +1,48 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
+import mockdate from 'mockdate'
+import { MoreThan } from 'typeorm'
 import { getIssues, Req } from '../../../src/controllers/issues/getIssues'
-import { Issue } from '../../../src/models/Issue'
+import { Release } from '../../../src/models/Release'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
+mockdate.set('2020-01-01T00:00:00.000Z')
+
 jest.mock('../../../src/models/Release')
-jest.mock('../../../src/models/Issue')
 
 describe('getIssues', () => {
-  const req = getMockReq<Req>({ params: { projectId: 'projectId' } })
+  const req = getMockReq<Req>({ params: { projectId: 'projectId' }, query: { all: '' } })
   const { res, clearMockRes } = getMockRes()
 
-  let issueMock: RepoMock<Issue>
+  let releaseMock: RepoMock<Release>
 
   beforeEach(() => {
     clearMockRes()
 
-    issueMock = mockRepository(Issue.getRepository as jest.Mock)
-    issueMock.find.mockResolvedValue('issues')
+    releaseMock = mockRepository(Release.getRepository as jest.Mock)
+    releaseMock.find.mockResolvedValue('releases')
   })
 
   it('should get issues', async () => {
     await getIssues(req, res)
-    expect(issueMock.find).toHaveBeenCalledWith({
+    expect(releaseMock.find).toHaveBeenCalledWith({
+      where: { project: { id: 'projectId' }, dueDate: MoreThan('2020-01-01T00:00:00.000Z') },
+      order: { dueDate: 'ASC' },
+      relations: ['issues', 'issues.author'],
+    })
+  })
+
+  it('should get all issues when all is not true', async () => {
+    const req = getMockReq<Req>({ params: { projectId: 'projectId' }, query: { all: 'true' } })
+    await getIssues(req, res)
+    expect(releaseMock.find).toHaveBeenCalledWith({
       where: { project: { id: 'projectId' } },
-      order: { updatedAt: 'DESC' },
-      relations: ['release', 'author'],
+      order: { dueDate: 'ASC' },
+      relations: ['issues', 'issues.author'],
     })
   })
 
   it('should render issues page with issues', async () => {
     await getIssues(req, res)
-    expect(res.render).toHaveBeenCalledWith('Issues/Issues', { issues: 'issues' })
+    expect(res.render).toHaveBeenCalledWith('Issues/Issues', { all: '', releases: 'releases' })
   })
 })
