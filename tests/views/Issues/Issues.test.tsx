@@ -56,4 +56,9 @@ describe('Issues', () => {
     render(<Issues {...props} />)
     expect(screen.getByText('January 1st, 2018')).toBeInTheDocument()
   })
+
+  it('should render issue points', () => {
+    render(<Issues {...props} />)
+    expect(screen.getByText('5')).toBeInTheDocument()
+  })
 })
