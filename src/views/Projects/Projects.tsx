@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React from 'react'
 import { Plus } from 'react-feather'
 import { Card, CardBody, CardLink, CardSubtitle, CardTitle, Container } from 'reactstrap'
@@ -19,6 +20,11 @@ export default function Projects({ projects }: IProjectsProps): JSX.Element {
         {projects.map((project) => (
           <Card key={project.name} className="mb-3">
             <CardBody>
+              {project.releases[0] && (
+                <CardSubtitle tag="h6" className="text-muted float-right">
+                  Next release: {project.releases[0].name} <small>{format(project.releases[0].dueDate, 'PPP')}</small>
+                </CardSubtitle>
+              )}
               <CardTitle tag="h5">{project.name}</CardTitle>
               <CardSubtitle tag="h6" className="text-muted mb-3">
                 {project.description}

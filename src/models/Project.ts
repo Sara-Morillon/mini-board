@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Issue } from './Issue'
+import { Release } from './Release'
 
 @Entity()
 export class Project {
@@ -31,6 +32,9 @@ export class Project {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToMany(() => Issue, (issue) => issue.release)
+  @OneToMany(() => Issue, (issue) => issue.project)
   issues: Issue[]
+
+  @OneToMany(() => Release, (release) => release.project)
+  releases: Release[]
 }

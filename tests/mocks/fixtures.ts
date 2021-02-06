@@ -10,6 +10,7 @@ export const mockProject1: Project = {
   name: 'project1',
   description: 'description1',
   issues: [],
+  releases: [],
   createdAt: new Date('2018-01-01T00:00:00.000Z'),
   updatedAt: new Date('2019-01-01T00:00:00.000Z'),
 }
@@ -36,6 +37,16 @@ export const mockRelease1: Release = {
   project: mockProject1,
   issues: [],
   dueDate: new Date('2020-01-01T00:00:00.000Z'),
+  createdAt: new Date('2018-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2019-01-01T00:00:00.000Z'),
+}
+
+export const mockProject2: Project = {
+  id: 1,
+  name: 'project1',
+  description: 'description1',
+  issues: [],
+  releases: [mockRelease1],
   createdAt: new Date('2018-01-01T00:00:00.000Z'),
   updatedAt: new Date('2019-01-01T00:00:00.000Z'),
 }

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import Projects, { IProjectsProps } from '../../../src/views/Projects/Projects'
-import { mockProject1 } from '../../mocks/fixtures'
+import { mockProject1, mockProject2 } from '../../mocks/fixtures'
 
 describe('Projects', () => {
   const props: IProjectsProps = {
@@ -26,5 +26,20 @@ describe('Projects', () => {
   it('should render issues link', () => {
     render(<Projects {...props} />)
     expect(screen.getByText('Issues')).toHaveAttribute('href', '/project/1/issues/list')
+  })
+
+  it('should not render release if there are no release', () => {
+    render(<Projects {...props} />)
+    expect(screen.queryByText('Next release:')).not.toBeInTheDocument()
+  })
+
+  it('should render next release if there is a release', () => {
+    render(<Projects {...props} projects={[mockProject2]} />)
+    expect(screen.getByText('Next release: release1')).toBeInTheDocument()
+  })
+
+  it('should render next release date if there is a release', () => {
+    render(<Projects {...props} projects={[mockProject2]} />)
+    expect(screen.getByText('January 1st, 2020')).toBeInTheDocument()
   })
 })
