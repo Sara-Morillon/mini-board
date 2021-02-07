@@ -25,13 +25,18 @@ describe('Ticket', () => {
     expect(screen.getByText('title1')).toBeInTheDocument()
   })
 
-  it('should render first 50 characters of issue description', () => {
-    render(<Ticket {...props} issue={mockIssue3} />)
-    expect(screen.getByText('a'.repeat(50))).toBeInTheDocument()
+  it('should render issue description', () => {
+    render(<Ticket {...props} />)
+    expect(screen.getByText('description1')).toBeInTheDocument()
   })
 
-  it('should render open link', () => {
+  it('should not render issue description if status is done', () => {
+    render(<Ticket {...props} issue={mockIssue3} />)
+    expect(screen.queryByText('description1')).not.toBeInTheDocument()
+  })
+
+  it('should render issue link', () => {
     render(<Ticket {...props} />)
-    expect(screen.getByText('Open')).toHaveAttribute('href', '/project/projectId/issues/edit/1')
+    expect(screen.getByText('title1')).toHaveAttribute('href', '/project/projectId/issues/edit/1')
   })
 })
