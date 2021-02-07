@@ -35,7 +35,7 @@ export const config: IConfig = {
     secret: [env.APP_KEY],
     resave: false,
     saveUninitialized: false,
-    store: new FileStore({ path: env.SESSION_DIR }),
+    store: new FileStore({ path: env.SESSION_DIR, ttl: 604800000 }),
     name: 'sid',
     cookie: { domain: env.COOKIE_DOMAIN, httpOnly: false, secure: false },
   },
