@@ -1,0 +1,12 @@
+.d2h-files-diff {
+  height: unset;
+}
+
+.over {
+  background-color: #007bff !important;
+  opacity: 0.07;
+}
+
+.over .board-ticket {
+  visibility: hidden;
+}

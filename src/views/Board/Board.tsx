@@ -1,21 +1,13 @@
 import { format } from 'date-fns'
 import React, { CSSProperties } from 'react'
 import { Table } from 'reactstrap'
-import { Issue, Status } from '../../models/Issue'
+import { Issue } from '../../models/Issue'
 import { Release } from '../../models/Release'
+import { dropProps } from '../utils'
 import { Ticket } from './Ticket'
 
 const oddStyle: CSSProperties = {
   backgroundColor: '#fafafa',
-}
-
-function cellProps(issue: Issue, status: Status, projectId: string) {
-  return {
-    className: 'board-cell',
-    'data-priority': issue.priority,
-    'data-status': status,
-    'data-projectid': projectId,
-  }
 }
 
 export interface IBoardProps {
@@ -44,13 +36,13 @@ export default function Board({ release, issues, projectId }: IBoardProps): JSX.
       <tbody>
         {issues.map((issue) => (
           <tr key={issue.id}>
-            <td {...cellProps(issue, 'to do', projectId)}>
+            <td {...dropProps('to do', issue.priority, projectId)}>
               <Ticket issue={issue} status="to do" projectId={projectId} />
             </td>
-            <td style={oddStyle} {...cellProps(issue, 'doing', projectId)}>
+            <td style={oddStyle} {...dropProps('doing', issue.priority, projectId)}>
               <Ticket issue={issue} status="doing" projectId={projectId} />
             </td>
-            <td {...cellProps(issue, 'done', projectId)}>
+            <td {...dropProps('done', issue.priority, projectId)}>
               <Ticket issue={issue} status="done" projectId={projectId} />
             </td>
           </tr>

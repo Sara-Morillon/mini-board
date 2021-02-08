@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react'
 import { Badge, Card, CardBody, CardSubtitle, CardTitle } from 'reactstrap'
 import { Issue, Status, Type } from '../../models/Issue'
+import { dragProps } from '../utils'
 
 export const colors: { [key in Type]: string } = {
   bug: 'danger',
@@ -25,7 +26,7 @@ export function Ticket({ status, issue, projectId }: ITicketProps): JSX.Element 
   }
 
   return (
-    <Card className="board-ticket" color={colors[issue.type]} outline draggable data-id={issue.id}>
+    <Card color={colors[issue.type]} outline {...dragProps(issue)}>
       <CardBody className="p-2" style={ellipsis}>
         <Badge className="float-right" color="light">
           {issue.points}

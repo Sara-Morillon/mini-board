@@ -1,14 +1,22 @@
 import { differenceInDays, format } from 'date-fns'
 import React, { CSSProperties } from 'react'
 import { Table } from 'reactstrap'
+import { Issue } from '../../models/Issue'
 import { Release } from '../../models/Release'
 import { colors } from '../Board/Ticket'
+import { dragProps, dropProps } from '../utils'
 
 const bulletStyle: CSSProperties = {
   display: 'inline-block',
   width: '1rem',
   height: '1rem',
   borderRadius: '0.5rem',
+}
+
+function dragAndDropProps(issue: Issue, projectId: string) {
+  const drags = dragProps(issue)
+  const drops = dropProps(issue.status, issue.priority, projectId)
+  return { ...drags, ...drops, className: drags.className + ' ' + drops.className }
 }
 
 export interface IIssuesTableProps {
@@ -36,7 +44,7 @@ export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Elem
       </thead>
       <tbody>
         {release.issues.map((issue) => (
-          <tr key={issue.id}>
+          <tr key={issue.id} {...dragAndDropProps(issue, projectId)}>
             <td>
               <a href={`/project/${projectId}/issues/edit/${issue.id}`}>
                 <span style={bulletStyle} className={`bg-${colors[issue.type]}`} /> {issue.title}

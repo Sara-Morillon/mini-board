@@ -10,8 +10,8 @@ export function Head({ title }: IHeadProps): JSX.Element {
       <title>Scrum board - {title}</title>
       <link rel="icon" type="image/png" href="/favicon.svg" />
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/index.css" />
       <script type="text/javascript" src="/scripts/tickets.js" defer></script>
-      <style>.d2h-files-diff &#123; height: unset &#125;</style>
     </>
   )
 }
