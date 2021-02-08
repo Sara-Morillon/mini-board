@@ -12,7 +12,7 @@ export function IssuesToggle({ all, projectId }: IIssuesToggleProps): JSX.Elemen
   return (
     <FormGroup check>
       <Label check>
-        <Input type="checkbox" defaultChecked={all === 'true'} />
+        <Input type="checkbox" disabled defaultChecked={all === 'true'} />
         <a href={`/project/${projectId}/issues/list${query}`}>All issues</a>
       </Label>
     </FormGroup>

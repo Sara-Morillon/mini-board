@@ -21,13 +21,18 @@ describe('IssuesToggle', () => {
     expect(screen.getByText('All issues')).toHaveAttribute('href', '/project/projectId/issues/list')
   })
 
-  it('should render unchecked box when all is empty', () => {
+  it('should render an unchecked box when all is empty', () => {
     render(<IssuesToggle {...props} />)
     expect(screen.getByLabelText('All issues')).not.toBeChecked()
   })
 
-  it('should render checked box when all is true', () => {
+  it('should render a checked box when all is true', () => {
     render(<IssuesToggle {...props} all="true" />)
     expect(screen.getByLabelText('All issues')).toBeChecked()
+  })
+
+  it('should render a disabled box', () => {
+    render(<IssuesToggle {...props} all="true" />)
+    expect(screen.getByLabelText('All issues')).toBeDisabled()
   })
 })
