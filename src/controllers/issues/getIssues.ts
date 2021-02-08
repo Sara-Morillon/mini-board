@@ -12,5 +12,8 @@ export async function getIssues(req: Req, res: Response): Promise<void> {
     order: { dueDate: 'ASC' },
     relations: ['issues', 'issues.author'],
   })
+  for (const release of releases) {
+    release.issues.sort((i1, i2) => i1.priority - i2.priority)
+  }
   res.render('Issues/Issues', { all, releases })
 }

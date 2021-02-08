@@ -3,6 +3,7 @@ import mockdate from 'mockdate'
 import { MoreThan } from 'typeorm'
 import { getIssues, Req } from '../../../src/controllers/issues/getIssues'
 import { Release } from '../../../src/models/Release'
+import { mockRelease1 } from '../../mocks/fixtures'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
 mockdate.set('2020-01-01T00:00:00.000Z')
@@ -19,7 +20,7 @@ describe('getIssues', () => {
     clearMockRes()
 
     releaseMock = mockRepository(Release.getRepository as jest.Mock)
-    releaseMock.find.mockResolvedValue('releases')
+    releaseMock.find.mockResolvedValue([mockRelease1])
   })
 
   it('should get issues', async () => {
@@ -43,6 +44,6 @@ describe('getIssues', () => {
 
   it('should render issues page with issues', async () => {
     await getIssues(req, res)
-    expect(res.render).toHaveBeenCalledWith('Issues/Issues', { all: '', releases: 'releases' })
+    expect(res.render).toHaveBeenCalledWith('Issues/Issues', { all: '', releases: [mockRelease1] })
   })
 })
