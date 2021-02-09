@@ -49,6 +49,6 @@ describe('Releases', () => {
 
   it('should render release points', () => {
     render(<Releases {...props} releases={[mockRelease2]} />)
-    expect(screen.getByText('8 points')).toBeInTheDocument()
+    expect(screen.getByText('3/11 points')).toBeInTheDocument()
   })
 })

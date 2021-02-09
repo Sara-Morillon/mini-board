@@ -22,7 +22,7 @@ describe('Board', () => {
 
   it('should render release date', () => {
     render(<Board {...props} />)
-    expect(screen.getByText('(January 1st, 2020)')).toBeInTheDocument()
+    expect(screen.getByText('January 1st, 2020')).toBeInTheDocument()
   })
 
   it('should render tickets', () => {

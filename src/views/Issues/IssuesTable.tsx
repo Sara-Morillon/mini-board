@@ -1,9 +1,11 @@
-import { differenceInDays, format } from 'date-fns'
+import { format } from 'date-fns'
 import React, { CSSProperties } from 'react'
-import { Table } from 'reactstrap'
+import { Badge, Table } from 'reactstrap'
 import { Issue } from '../../models/Issue'
 import { Release } from '../../models/Release'
 import { colors } from '../Board/Ticket'
+import { ReleaseName } from '../Releases/ReleaseName'
+import { ReleasePoints } from '../Releases/ReleasePoints'
 import { dragProps, dropProps } from '../utils'
 
 const bulletStyle: CSSProperties = {
@@ -28,11 +30,10 @@ export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Elem
   return (
     <Table striped>
       <caption style={{ captionSide: 'top' }}>
-        <span className="float-right">{release.issues.reduce((acc, curr) => acc + curr.points, 0)} points</span>
-        {release.name}{' '}
-        <small className={differenceInDays(release.dueDate, new Date()) <= 7 ? 'text-danger' : ''}>
-          {format(release.dueDate, 'PPP')}
-        </small>
+        <div className="float-right">
+          <ReleasePoints release={release} />
+        </div>
+        <ReleaseName release={release} />
       </caption>
       <thead>
         <tr>
@@ -40,6 +41,7 @@ export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Elem
           <th>Author</th>
           <th>Creation date</th>
           <th>Points</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -53,6 +55,9 @@ export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Elem
             <td>{issue.author.username}</td>
             <td>{format(issue.createdAt, 'PPP')}</td>
             <td>{issue.points}</td>
+            <td>
+              <Badge color={colors[issue.status]}>{issue.status}</Badge>
+            </td>
           </tr>
         ))}
       </tbody>

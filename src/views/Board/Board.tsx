@@ -1,8 +1,8 @@
-import { format } from 'date-fns'
 import React, { CSSProperties } from 'react'
 import { Table } from 'reactstrap'
 import { Issue } from '../../models/Issue'
 import { Release } from '../../models/Release'
+import { ReleaseName } from '../Releases/ReleaseName'
 import { dropProps } from '../utils'
 import { Ticket } from './Ticket'
 
@@ -24,7 +24,7 @@ export default function Board({ release, issues, projectId }: IBoardProps): JSX.
   return (
     <Table style={{ tableLayout: 'fixed' }}>
       <caption style={{ captionSide: 'top' }}>
-        <strong>{release.name}</strong> ({format(release.dueDate, 'PPP')})
+        <ReleaseName release={release} />
       </caption>
       <thead>
         <tr>

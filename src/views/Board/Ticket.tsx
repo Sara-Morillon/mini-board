@@ -3,9 +3,12 @@ import { Badge, Card, CardBody, CardSubtitle, CardTitle } from 'reactstrap'
 import { Issue, Status, Type } from '../../models/Issue'
 import { dragProps } from '../utils'
 
-export const colors: { [key in Type]: string } = {
+export const colors: { [key in Type | Status]: string } = {
   bug: 'danger',
   feature: 'warning',
+  'to do': 'secondary',
+  doing: 'primary',
+  done: 'success',
 }
 
 const ellipsis: CSSProperties = {

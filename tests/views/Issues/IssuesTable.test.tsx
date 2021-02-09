@@ -34,7 +34,7 @@ describe('IssuesTable', () => {
 
   it('should render issue creation date', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getAllByText('January 1st, 2018')).toHaveLength(2)
+    expect(screen.getAllByText('January 1st, 2018')).toHaveLength(3)
   })
 
   it('should render issue points', () => {
@@ -44,7 +44,7 @@ describe('IssuesTable', () => {
 
   it('should render release total points', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getByText('8 points')).toBeInTheDocument()
+    expect(screen.getByText('3/11 points')).toBeInTheDocument()
   })
 
   it('should render release due date', () => {

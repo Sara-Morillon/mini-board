@@ -3,6 +3,7 @@ import React from 'react'
 import { Plus } from 'react-feather'
 import { Table } from 'reactstrap'
 import { Release } from '../../models/Release'
+import { ReleasePoints } from './ReleasePoints'
 
 export interface IReleasesProps {
   releases: Release[]
@@ -36,7 +37,9 @@ export default function Releases({ releases, projectId }: IReleasesProps): JSX.E
               <td className={differenceInDays(release.dueDate, new Date()) <= 7 ? 'text-danger' : ''}>
                 {format(release.dueDate, 'PPP')}
               </td>
-              <td>{release.issues.reduce((acc, curr) => acc + curr.points, 0)} points</td>
+              <td>
+                <ReleasePoints release={release} />
+              </td>
             </tr>
           ))}
         </tbody>

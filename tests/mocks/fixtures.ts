@@ -85,20 +85,10 @@ export const mockIssue2: Issue = {
   updatedAt: new Date('2019-01-01T00:00:00.000Z'),
 }
 
-export const mockRelease2: Release = {
-  id: 2,
-  name: 'release2',
-  project: mockProject1,
-  issues: [mockIssue1, mockIssue2],
-  dueDate: new Date('2021-01-01T00:00:00.000Z'),
-  createdAt: new Date('2018-01-01T00:00:00.000Z'),
-  updatedAt: new Date('2019-01-01T00:00:00.000Z'),
-}
-
 export const mockIssue3: Issue = {
   id: 2,
-  title: 'title2',
-  description: 'description2',
+  title: 'title3',
+  description: 'description3',
   author: mockUser2,
   points: 3,
   priority: 2,
@@ -108,6 +98,16 @@ export const mockIssue3: Issue = {
   type: 'feature',
   attachments: [],
   comments: [],
+  createdAt: new Date('2018-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2019-01-01T00:00:00.000Z'),
+}
+
+export const mockRelease2: Release = {
+  id: 2,
+  name: 'release2',
+  project: mockProject1,
+  issues: [mockIssue1, mockIssue2, mockIssue3],
+  dueDate: new Date('2021-01-01T00:00:00.000Z'),
   createdAt: new Date('2018-01-01T00:00:00.000Z'),
   updatedAt: new Date('2019-01-01T00:00:00.000Z'),
 }
