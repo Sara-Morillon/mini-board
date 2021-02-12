@@ -15,6 +15,10 @@ const bulletStyle: CSSProperties = {
   borderRadius: '0.5rem',
 }
 
+const moveStyle: CSSProperties = {
+  cursor: 'pointer',
+}
+
 export interface IIssuesTableProps {
   release: Release
   projectId: string
@@ -44,7 +48,7 @@ export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Elem
           <tr key={issue.id} {...dropProps(projectId, issue.priority)} {...dragImageProps(issue)}>
             <td>
               <span {...dragProps(issue)}>
-                <Move />
+                <Move style={moveStyle} />
               </span>
             </td>
             <td>
