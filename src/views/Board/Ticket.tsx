@@ -17,6 +17,10 @@ const ellipsis: CSSProperties = {
   whiteSpace: 'nowrap',
 }
 
+const moveStyle: CSSProperties = {
+  cursor: 'pointer',
+}
+
 export interface ITicketProps {
   status: Status
   issue: Issue
@@ -29,7 +33,7 @@ export function Ticket({ status, issue, projectId }: ITicketProps): JSX.Element 
   }
 
   return (
-    <Card color={colors[issue.type]} outline {...dragProps(issue)} {...dragImageProps(issue)}>
+    <Card color={colors[issue.type]} outline {...dragProps(issue)} {...dragImageProps(issue)} style={moveStyle}>
       <CardBody className="p-2" style={ellipsis}>
         <Badge className="float-right" color="light">
           {issue.points}
