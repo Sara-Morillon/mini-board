@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import { Badge, Card, CardBody, CardSubtitle, CardTitle } from 'reactstrap'
 import { Issue, Status, Type } from '../../models/Issue'
-import { dragProps } from '../utils'
+import { dragImageProps, dragProps } from '../utils'
 
 export const colors: { [key in Type | Status]: string } = {
   bug: 'danger',
@@ -29,7 +29,7 @@ export function Ticket({ status, issue, projectId }: ITicketProps): JSX.Element 
   }
 
   return (
-    <Card color={colors[issue.type]} outline {...dragProps(issue)}>
+    <Card color={colors[issue.type]} outline {...dragProps(issue)} {...dragImageProps(issue)}>
       <CardBody className="p-2" style={ellipsis}>
         <Badge className="float-right" color="light">
           {issue.points}

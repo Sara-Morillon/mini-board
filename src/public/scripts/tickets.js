@@ -1,8 +1,8 @@
 ;(function () {
-  const cells = document.querySelectorAll('.board-cell')
-  const tickets = document.querySelectorAll('.board-ticket')
+  const droppable = document.querySelectorAll('.drop-item')
+  const draggable = document.querySelectorAll('.drag-item')
 
-  for (const cell of cells) {
+  for (const cell of droppable) {
     cell.addEventListener('drop', (e) => {
       const projectId = cell.dataset.projectId
       const dropStatus = cell.dataset.dropStatus
@@ -10,9 +10,8 @@
       const dragId = e.dataTransfer.getData('dragId')
       const dragStatus = e.dataTransfer.getData('dragStatus')
       const dragPriority = e.dataTransfer.getData('dragPriority')
-      if (dragStatus !== dropStatus || dragPriority !== dropPriority) {
+      if ((dropStatus && dragStatus !== dropStatus) || dragPriority !== dropPriority) {
         saveTicket(dragId, projectId, dropStatus, dropPriority)
-        // console.log(dragId, projectId, dropStatus, dropPriority)
       }
       cell.classList.remove('over')
     })
@@ -32,11 +31,12 @@
     })
   }
 
-  for (const ticket of tickets) {
+  for (const ticket of draggable) {
     ticket.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('dragId', ticket.dataset.dragId)
       e.dataTransfer.setData('dragStatus', ticket.dataset.dragStatus)
       e.dataTransfer.setData('dragPriority', ticket.dataset.dragPriority)
+      e.dataTransfer.setDragImage(document.getElementById(`drag-image-${ticket.dataset.dragId}`), 0, 0)
     })
   }
 
@@ -47,9 +47,9 @@
     xhr.addEventListener('load', function () {
       window.location.reload()
     })
-    const formData = new FormData()
-    formData.set('status', status)
-    formData.set('priority', priority)
-    xhr.send(`status=${status}&priority=${priority}`)
+    const body = new URLSearchParams()
+    status && body.set('status', status)
+    body.set('priority', priority)
+    xhr.send(body)
   }
 })()

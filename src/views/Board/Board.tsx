@@ -36,13 +36,13 @@ export default function Board({ release, issues, projectId }: IBoardProps): JSX.
       <tbody>
         {issues.map((issue) => (
           <tr key={issue.id}>
-            <td {...dropProps('to do', issue.priority, projectId)}>
+            <td {...dropProps(projectId, issue.priority, 'to do')}>
               <Ticket issue={issue} status="to do" projectId={projectId} />
             </td>
-            <td style={oddStyle} {...dropProps('doing', issue.priority, projectId)}>
+            <td style={oddStyle} {...dropProps(projectId, issue.priority, 'doing')}>
               <Ticket issue={issue} status="doing" projectId={projectId} />
             </td>
-            <td {...dropProps('done', issue.priority, projectId)}>
+            <td {...dropProps(projectId, issue.priority, 'done')}>
               <Ticket issue={issue} status="done" projectId={projectId} />
             </td>
           </tr>

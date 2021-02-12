@@ -6,7 +6,7 @@ export function noop(): void {
 
 interface IDragProps {
   draggable: true
-  className: 'board-ticket'
+  className: 'drag-item'
   'data-drag-id': number
   'data-drag-status': Status
   'data-drag-priority': number
@@ -15,7 +15,7 @@ interface IDragProps {
 export function dragProps(issue: Issue): IDragProps {
   return {
     draggable: true,
-    className: 'board-ticket',
+    className: 'drag-item',
     'data-drag-id': issue.id,
     'data-drag-status': issue.status,
     'data-drag-priority': issue.priority,
@@ -23,17 +23,25 @@ export function dragProps(issue: Issue): IDragProps {
 }
 
 interface IDropProps {
-  className: 'board-cell'
-  'data-drop-status': Status
+  className: 'drop-item'
+  'data-drop-status'?: Status
   'data-drop-priority': number
   'data-project-id': string
 }
 
-export function dropProps(status: Status, priority: number, projectId: string): IDropProps {
+export function dropProps(projectId: string, priority: number, status?: Status): IDropProps {
   return {
-    className: 'board-cell',
+    className: 'drop-item',
     'data-drop-status': status,
     'data-drop-priority': priority,
     'data-project-id': projectId,
   }
+}
+
+interface IDragImageProps {
+  id: string
+}
+
+export function dragImageProps(issue: Issue): IDragImageProps {
+  return { id: `drag-image-${issue.id}` }
 }

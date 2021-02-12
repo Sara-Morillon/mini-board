@@ -58,9 +58,15 @@ describe('moveIssue', () => {
     expect(issueMock.findOne).toHaveBeenCalledWith('8', { relations: ['release'] })
   })
 
-  it('should update status', async () => {
+  it('should update status if status is in body', async () => {
     await moveIssue(req, res)
     expect(issueMock.update).toHaveBeenCalledWith('8', { status: 'doing' })
+  })
+
+  it('should not update status if status is not in body', async () => {
+    const req = getMockReq<Req>({ params: { projectId: 'projectId', id: '8' }, body: { priority: 7 } })
+    await moveIssue(req, res)
+    expect(issueMock.update).not.toHaveBeenCalled()
   })
 
   it('should return 204 status', async () => {

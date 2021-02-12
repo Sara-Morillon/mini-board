@@ -86,7 +86,7 @@ export const mockIssue2: Issue = {
 }
 
 export const mockIssue3: Issue = {
-  id: 2,
+  id: 3,
   title: 'title3',
   description: 'description3',
   author: mockUser2,

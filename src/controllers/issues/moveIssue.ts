@@ -16,12 +16,14 @@ export async function updatePriority(id: string, priority: number): Promise<void
   }
 }
 
-export type Req = Request<{ id: string }, unknown, { status: Status; priority: number }>
+export type Req = Request<{ id: string }, unknown, { status?: Status; priority: number }>
 
 export async function moveIssue(req: Req, res: Response): Promise<void> {
   const { id } = req.params
   const { status, priority } = req.body
   await updatePriority(id, priority)
-  await Issue.getRepository().update(id, { status })
+  if (status) {
+    await Issue.getRepository().update(id, { status })
+  }
   res.sendStatus(204)
 }
