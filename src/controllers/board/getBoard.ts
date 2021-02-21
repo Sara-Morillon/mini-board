@@ -14,6 +14,7 @@ export async function getBoard(req: Req, res: Response): Promise<void> {
   const issues = await Issue.getRepository().find({
     where: { project: { id: projectId }, release },
     order: { priority: 'ASC' },
+    relations: ['project'],
   })
   res.render('Board/Board', { release, issues })
 }

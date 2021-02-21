@@ -21,7 +21,7 @@ export class Project {
   id: number
 
   @Column({ nullable: true })
-  key: string | null
+  key: string
 
   @Column()
   name: string

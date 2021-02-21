@@ -20,9 +20,9 @@ describe('Ticket', () => {
     expect(screen.getByText('5')).toBeInTheDocument()
   })
 
-  it('should render issue title', () => {
+  it('should render issue title and key', () => {
     render(<Ticket {...props} />)
-    expect(screen.getByText('title1')).toBeInTheDocument()
+    expect(screen.getByText('[P1-1] title1')).toBeInTheDocument()
   })
 
   it('should render issue description', () => {

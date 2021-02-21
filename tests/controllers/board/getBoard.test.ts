@@ -41,6 +41,7 @@ describe('getBoard', () => {
     expect(issueMock.find).toHaveBeenCalledWith({
       where: { project: { id: 'projectId' }, release: 'release' },
       order: { priority: 'ASC' },
+      relations: ['project'],
     })
   })
 
