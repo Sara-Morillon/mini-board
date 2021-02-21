@@ -24,7 +24,7 @@ export class Release {
   @ManyToOne(() => Project, { nullable: false, onDelete: 'CASCADE' })
   project: Project
 
-  @Column()
+  @Column({ length: 40 })
   name: string
 
   @Column()

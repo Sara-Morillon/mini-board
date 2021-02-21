@@ -20,13 +20,13 @@ export class Project {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ nullable: true })
+  @Column({ length: 10, nullable: true })
   key: string
 
-  @Column()
+  @Column({ length: 40 })
   name: string
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   description?: string
 
   @CreateDateColumn()

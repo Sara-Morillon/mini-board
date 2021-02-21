@@ -26,7 +26,7 @@ export class Comment {
   @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
   author: User
 
-  @Column()
+  @Column('text')
   content: string
 
   @CreateDateColumn()

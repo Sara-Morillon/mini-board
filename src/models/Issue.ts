@@ -39,10 +39,10 @@ export class Issue {
   @ManyToOne(() => Release, { nullable: false, onDelete: 'RESTRICT' })
   release: Release
 
-  @Column()
+  @Column('enum', { enum: types })
   type: Type
 
-  @Column({ default: 'to do' })
+  @Column('enum', { enum: statuses, default: 'to do' })
   status: Status
 
   @Column({ default: 0 })
@@ -51,7 +51,7 @@ export class Issue {
   @Column({ default: 0 })
   points: number
 
-  @Column()
+  @Column({ length: 100 })
   title: string
 
   @Column('text')

@@ -17,10 +17,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ unique: true })
+  @Column({ length: 40, unique: true })
   username: string
 
-  @Column()
+  @Column('char', { length: 64 })
   password: string
 
   @CreateDateColumn()
