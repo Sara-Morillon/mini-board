@@ -7,6 +7,7 @@ import { User } from '../../src/models/User'
 
 export const mockProject1: Project = {
   id: 1,
+  key: 'P1',
   name: 'project1',
   description: 'description1',
   issues: [],
@@ -43,6 +44,7 @@ export const mockRelease1: Release = {
 
 export const mockProject2: Project = {
   id: 1,
+  key: 'P2',
   name: 'project1',
   description: 'description1',
   issues: [],

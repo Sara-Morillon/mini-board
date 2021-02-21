@@ -7,7 +7,7 @@ import { mockRepository, RepoMock } from '../../mocks/repository'
 jest.mock('../../../src/models/Project')
 
 describe('saveProject', () => {
-  const body = { name: 'name', description: 'description' }
+  const body = { key: 'key', name: 'name', description: 'description' }
   const req = getMockReq<Req>({ params: { id: '8' }, body })
   const { res, clearMockRes } = getMockRes()
 
@@ -24,6 +24,7 @@ describe('saveProject', () => {
   it('should update project if id is present', async () => {
     await saveProject(req, res)
     expect(projectMock.update).toHaveBeenCalledWith('8', {
+      key: 'key',
       name: 'name',
       description: 'description',
     })
@@ -34,6 +35,7 @@ describe('saveProject', () => {
     req.user = { id: 2 } as User
     await saveProject(req, res)
     expect(projectMock.save).toHaveBeenCalledWith({
+      key: 'key',
       name: 'name',
       description: 'description',
     })

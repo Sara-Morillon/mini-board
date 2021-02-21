@@ -13,6 +13,10 @@ export default function AddProject({ project }: IProjectProps): JSX.Element {
   return (
     <Form action={action} method="POST">
       <FormGroup>
+        <Label for="key">Key</Label>
+        <Input id="key" name="key" type="text" value={project?.key || ''} onChange={noop} required />
+      </FormGroup>
+      <FormGroup>
         <Label for="name">Name</Label>
         <Input id="name" name="name" type="text" value={project?.name} onChange={noop} required />
       </FormGroup>

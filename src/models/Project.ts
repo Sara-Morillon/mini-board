@@ -20,6 +20,9 @@ export class Project {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column({ nullable: true })
+  key: string | null
+
   @Column()
   name: string
 

@@ -18,6 +18,11 @@ describe('Project', () => {
     expect(baseElement.querySelector('form')).toHaveAttribute('action', '/projects/edit')
   })
 
+  it('should set project key', () => {
+    render(<Project {...props} />)
+    expect(screen.getByLabelText('Key')).toHaveValue('P1')
+  })
+
   it('should set project name', () => {
     render(<Project {...props} />)
     expect(screen.getByLabelText('Name')).toHaveValue('project1')
