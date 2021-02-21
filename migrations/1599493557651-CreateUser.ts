@@ -5,11 +5,11 @@ export class CreateUser1599493557651 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "username" varchar NOT NULL, "password" varchar NOT NULL, "createdAt" datetime NOT NULL DEFAULT (datetime('now')), "updatedAt" datetime NOT NULL DEFAULT (datetime('now')), CONSTRAINT "UQ_78a916df40e02a9deb1c4b75edb" UNIQUE ("username"))`
+      'CREATE TABLE `user` (`id` int(11) NOT NULL AUTO_INCREMENT,`username` varchar(40) NOT NULL,`password` char(64) NOT NULL,`createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,`updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,UNIQUE INDEX `user_username` (`username`),PRIMARY KEY (`id`)) ENGINE = InnoDB'
     )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "user"`)
+    await queryRunner.query('DROP TABLE `user`')
   }
 }

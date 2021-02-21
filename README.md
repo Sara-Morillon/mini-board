@@ -36,14 +36,18 @@ The default credentials are admin/admin.
 
 ## Environment variables
 
-| Variable      | Value type                     | Default value | Description                                      |
-| ------------- | ------------------------------ | ------------- | ------------------------------------------------ |
-| NODE_ENV      | development \| production      |               | Environment of the application                   |
-| APP_KEY       | string                         |               | App key for session                              |
-| APP_PORT      | number                         | 80            | App port                                         |
-| LOG_LEVEL     | debug \| info \| warn \| error | info          | Level of the loger                               |
-| SESSION_DIR   | string                         |               | Directory to store session                       |
-| UPLOAD_DIR    | string                         |               | Directory to store attachments                   |
-| DB_PATH       | string                         |               | Path of sqlite database                          |
-| COOKIE_DOMAIN | string                         |               | Domain of the session cookie                     |
-| MYSQL_LOGGING | boolean                        |               | Should mysql queries be logged to console or not |
+| Variable      | Value type                     | Default value | Description                                   |
+| ------------- | ------------------------------ | ------------- | --------------------------------------------- |
+| NODE_ENV      | development \| production      |               | Environment of the application                |
+| APP_KEY       | string                         |               | App key for session                           |
+| APP_PORT      | number                         | 80            | App port                                      |
+| COOKIE_DOMAIN | string                         |               | Domain of the session cookie                  |
+| LOG_LEVEL     | debug \| info \| warn \| error | info          | Level of the loger                            |
+| SESSION_DIR   | string                         |               | Directory to store session                    |
+| UPLOAD_DIR    | string                         |               | Directory to store attachments                |
+| DB_HOST       | string                         |               | Database host                                 |
+| DB_PORT       | number                         |               | Database port                                 |
+| DB_USER       | string                         |               | Database user                                 |
+| DB_PASSWORD   | string                         |               | Database password                             |
+| DB_DATABASE   | boolean                        |               | Database name                                 |
+| DB_LOGGING    | boolean                        | false         | Should DB queries be logged to console or not |
