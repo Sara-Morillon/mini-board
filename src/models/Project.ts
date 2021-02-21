@@ -20,7 +20,7 @@ export class Project {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ length: 10, nullable: true })
+  @Column({ length: 10, unique: true })
   key: string
 
   @Column({ length: 40 })
