@@ -55,6 +55,7 @@ export const mockProject2: Project = {
 
 export const mockIssue1: Issue = {
   id: 1,
+  key: '[P1-1]',
   title: 'title1',
   description: 'description1',
   author: mockUser1,
@@ -72,6 +73,7 @@ export const mockIssue1: Issue = {
 
 export const mockIssue2: Issue = {
   id: 2,
+  key: '[P1-2]',
   title: 'title2',
   description: 'description2',
   author: mockUser2,
@@ -89,6 +91,7 @@ export const mockIssue2: Issue = {
 
 export const mockIssue3: Issue = {
   id: 3,
+  key: '[P1-3]',
   title: 'title3',
   description: 'description3',
   author: mockUser2,
@@ -135,6 +138,7 @@ export const mockComment1: Comment = {
 
 export const mockIssue4: Issue = {
   id: 4,
+  key: '[P1-4]',
   title: 'title1',
   description: 'a'.repeat(100),
   author: mockUser1,

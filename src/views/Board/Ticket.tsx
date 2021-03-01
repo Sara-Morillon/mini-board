@@ -32,8 +32,6 @@ export function Ticket({ status, issue, projectId }: ITicketProps): JSX.Element 
     return null
   }
 
-  const issueKey = issue.project.key ? `[${issue.project.key}-${issue.id}]` : ''
-
   return (
     <Card color={colors[issue.type]} outline {...dragProps(issue)} {...dragImageProps(issue)} style={moveStyle}>
       <CardBody className="p-2" style={ellipsis}>
@@ -42,7 +40,7 @@ export function Ticket({ status, issue, projectId }: ITicketProps): JSX.Element 
         </Badge>
         <CardTitle className="font-weight-bold" style={ellipsis}>
           <a href={`/project/${projectId}/issues/edit/${issue.id}`}>
-            {issueKey} {issue.title}
+            {issue.key} {issue.title}
           </a>
         </CardTitle>
         {issue.status !== 'done' && (

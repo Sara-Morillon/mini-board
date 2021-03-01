@@ -30,7 +30,7 @@ describe('Issues', () => {
 
   it('should render issues title', () => {
     render(<Issues {...props} />)
-    expect(screen.getByText('title1')).toBeInTheDocument()
-    expect(screen.getByText('title2')).toBeInTheDocument()
+    expect(screen.getByText('[P1-1] title1')).toBeInTheDocument()
+    expect(screen.getByText('[P1-2] title2')).toBeInTheDocument()
   })
 })

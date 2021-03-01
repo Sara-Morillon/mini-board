@@ -28,7 +28,7 @@ describe('getIssues', () => {
     expect(releaseMock.find).toHaveBeenCalledWith({
       where: { project: { id: 'projectId' }, dueDate: MoreThan('2020-01-01T00:00:00.000Z') },
       order: { dueDate: 'ASC' },
-      relations: ['issues', 'issues.author'],
+      relations: ['issues', 'issues.author', 'issues.project'],
     })
   })
 
@@ -38,7 +38,7 @@ describe('getIssues', () => {
     expect(releaseMock.find).toHaveBeenCalledWith({
       where: { project: { id: 'projectId' } },
       order: { dueDate: 'ASC' },
-      relations: ['issues', 'issues.author'],
+      relations: ['issues', 'issues.author', 'issues.project'],
     })
   })
 

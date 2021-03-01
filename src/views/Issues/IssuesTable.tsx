@@ -53,7 +53,7 @@ export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Elem
             </td>
             <td>
               <a href={`/project/${projectId}/issues/edit/${issue.id}`}>
-                <span style={bulletStyle} className={`bg-${colors[issue.type]}`} /> {issue.title}
+                <span style={bulletStyle} className={`bg-${colors[issue.type]}`} /> {issue.key} {issue.title}
               </a>
             </td>
             <td>{issue.author.username}</td>

@@ -10,7 +10,7 @@ export async function getIssues(req: Req, res: Response): Promise<void> {
   const releases = await Release.getRepository().find({
     where: { project: { id: projectId }, ...(all !== 'true' && { dueDate: MoreThan(new Date().toISOString()) }) },
     order: { dueDate: 'ASC' },
-    relations: ['issues', 'issues.author'],
+    relations: ['issues', 'issues.author', 'issues.project'],
   })
   for (const release of releases) {
     release.issues.sort((i1, i2) => i1.priority - i2.priority)

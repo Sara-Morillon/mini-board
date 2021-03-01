@@ -14,17 +14,17 @@ describe('IssuesTable', () => {
 
   it('should render issue title', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getByText('title1')).toBeInTheDocument()
+    expect(screen.getByText('[P1-1] title1')).toBeInTheDocument()
   })
 
   it('should render issue link', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getByText('title1')).toHaveAttribute('href', '/project/projectId/issues/edit/1')
+    expect(screen.getByText('[P1-1] title1')).toHaveAttribute('href', '/project/projectId/issues/edit/1')
   })
 
   it('should render issue type', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getByText('title1').firstChild).toHaveClass('bg-danger')
+    expect(screen.getByText('[P1-1] title1').firstChild).toHaveClass('bg-danger')
   })
 
   it('should render issue author', () => {
