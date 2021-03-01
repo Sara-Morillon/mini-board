@@ -5,6 +5,6 @@ import { Head } from '../../../src/views/Layout/Head'
 describe('Head', () => {
   it('should render title in page title', () => {
     render(<Head title="Title" />)
-    expect(screen.getByText('Scrum board - Title')).toBeInTheDocument()
+    expect(screen.getByText('Mini board - Title')).toBeInTheDocument()
   })
 })

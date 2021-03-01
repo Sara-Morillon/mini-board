@@ -7,7 +7,7 @@ interface IHeadProps {
 export function Head({ title }: IHeadProps): JSX.Element {
   return (
     <>
-      <title>Scrum board - {title}</title>
+      <title>Mini board - {title}</title>
       <link rel="icon" type="image/png" href="/favicon.svg" />
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
       <link rel="stylesheet" href="/index.css" />

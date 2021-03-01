@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  scrum-board:
-    image: saramorillon/scrum-board:latest
-    container_name: scrum-board
+  mini-board:
+    image: saramorillon/mini-board:latest
+    container_name: mini-board
     restart: always
     ports:
       - 127.0.0.1:3000:3000

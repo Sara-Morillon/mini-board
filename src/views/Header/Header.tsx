@@ -19,7 +19,7 @@ export function Header({ title, user, projectId, active }: IHeaderProps): JSX.El
   return (
     <header>
       <Navbar color="primary" dark expand="md">
-        <NavbarBrand href="/">Scrum board</NavbarBrand>
+        <NavbarBrand href="/">Mini board</NavbarBrand>
         {user && (
           <Nav className="ml-auto" navbar>
             <NavItem>

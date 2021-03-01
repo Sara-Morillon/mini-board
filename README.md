@@ -1,12 +1,12 @@
-# Scrum board
+# Mini board
 
-Scrum board is a minimal scrum board.
+Mini board is a minimal board.
 
 ## Installation
 
 ### With Docker
 
-`docker pull saramorillon/scrum-board:latest`
+`docker pull saramorillon/mini-board:latest`
 
 ### With docker-compose
 
@@ -16,21 +16,21 @@ You can use the [docker-compose.yml](./docker-compose.yml) provided as an exampl
 
 ### Using source code (production)
 
-- Download the latest release of scrum-board
+- Download the latest release of mini-board
 - Install packages using command `yarn install --production`
 - Make sure that your system is configured with the appropriate environment variables (see below)
 - Run project using command `yarn start`
 
 ### Using source code (development)
 
-- Download the latest release of scrum-board
+- Download the latest release of mini-board
 - Install packages using command `yarn install`
 - Rename [.env.template](./.env.template) to `.env` and fill it with appropriate values
 - Run project using command `yarn start:dev`
 
-## Running Scrum board
+## Running Mini board
 
-Scrum board listens to port 3000
+Mini board listens to port 3000
 
 The default credentials are admin/admin.
 
