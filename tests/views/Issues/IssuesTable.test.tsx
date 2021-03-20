@@ -24,7 +24,7 @@ describe('IssuesTable', () => {
 
   it('should render issue type', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getAllByText('●')[0]).toHaveClass('text-danger')
+    expect(screen.getAllByText('•')[0]).toHaveClass('text-danger')
   })
 
   it('should render issue creation date and author', () => {

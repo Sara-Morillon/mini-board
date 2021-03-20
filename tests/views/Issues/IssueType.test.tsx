@@ -6,6 +6,6 @@ import { mockIssue1 } from '../../mocks/fixtures'
 describe('IssueType', () => {
   it('should render correct color', () => {
     render(<IssueType issue={mockIssue1} />)
-    expect(screen.getByText('●')).toHaveClass('text-danger')
+    expect(screen.getByText('•')).toHaveClass('text-danger')
   })
 })

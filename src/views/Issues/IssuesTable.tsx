@@ -18,18 +18,16 @@ export interface IIssuesTableProps {
 
 export function IssuesTable({ release, projectId }: IIssuesTableProps): JSX.Element {
   return (
-    <>
+    <div className="mt-3">
       <div className="float-right">
         <ReleasePoints release={release} />
       </div>
       <ReleaseName release={release} />
       {!release.issues.length && <DropRow target={{ releaseId: release.id, priority: 0 }} />}
-      <div>
-        {release.issues.map((issue) => (
-          <IssueRow key={issue.id} projectId={projectId} release={release} issue={issue} />
-        ))}
-      </div>
-    </>
+      {release.issues.map((issue) => (
+        <IssueRow key={issue.id} projectId={projectId} release={release} issue={issue} />
+      ))}
+    </div>
   )
 }
 
