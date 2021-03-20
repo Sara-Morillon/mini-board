@@ -13,8 +13,8 @@ export interface IReleasesProps {
 export default function Releases({ releases, projectId }: IReleasesProps): JSX.Element {
   return (
     <>
-      <Table striped className="mb-0">
-        <caption className="text-right" style={{ captionSide: 'top' }}>
+      <Table striped className="releases mb-0">
+        <caption className="text-right">
           <a href={`/project/${projectId}/releases/edit`}>
             <Plus size="1rem" className="mb-1" /> Create release
           </a>

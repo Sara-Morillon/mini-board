@@ -1,17 +1,21 @@
 ;(function () {
-  const droppable = document.querySelectorAll('.drop-item')
-  const draggable = document.querySelectorAll('.drag-item')
+  const draggable = document.querySelectorAll('[draggable]')
+  const droppable = document.querySelectorAll('[data-droppable]')
+
+  function shouldSave(dragItem, dropTarget) {
+    return (
+      dragItem.releaseId !== dropTarget.releaseId ||
+      (dropTarget.status && dragItem.status !== dropTarget.status) ||
+      dragItem.priority !== dropTarget.priority
+    )
+  }
 
   for (const cell of droppable) {
     cell.addEventListener('drop', (e) => {
-      const projectId = cell.dataset.projectId
-      const dropStatus = cell.dataset.dropStatus
-      const dropPriority = cell.dataset.dropPriority
-      const dragId = e.dataTransfer.getData('dragId')
-      const dragStatus = e.dataTransfer.getData('dragStatus')
-      const dragPriority = e.dataTransfer.getData('dragPriority')
-      if ((dropStatus && dragStatus !== dropStatus) || dragPriority !== dropPriority) {
-        saveTicket(dragId, projectId, dropStatus, dropPriority)
+      const dragItem = JSON.parse(e.dataTransfer.getData('dragItem'))
+      const dropTarget = JSON.parse(cell.dataset.dropTarget)
+      if (shouldSave(dragItem, dropTarget)) {
+        saveTicket(dragItem, dropTarget)
       }
       cell.classList.remove('over')
     })
@@ -33,23 +37,21 @@
 
   for (const ticket of draggable) {
     ticket.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('dragId', ticket.dataset.dragId)
-      e.dataTransfer.setData('dragStatus', ticket.dataset.dragStatus)
-      e.dataTransfer.setData('dragPriority', ticket.dataset.dragPriority)
-      e.dataTransfer.setDragImage(document.getElementById(`drag-image-${ticket.dataset.dragId}`), 0, 0)
+      e.dataTransfer.setData('dragItem', ticket.dataset.dragItem)
     })
   }
 
-  function saveTicket(id, projectId, status, priority) {
+  function saveTicket(dragItem, dropTarget) {
     const xhr = new XMLHttpRequest()
-    xhr.open('POST', `/project/${projectId}/issues/move/${id}`)
+    xhr.open('POST', `/project/${dragItem.projectId}/issues/move/${dragItem.id}`)
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
     xhr.addEventListener('load', function () {
       window.location.reload()
     })
     const body = new URLSearchParams()
-    status && body.set('status', status)
-    body.set('priority', priority)
+    dropTarget.status && body.set('status', dropTarget.status)
+    body.set('priority', dropTarget.priority)
+    body.set('release', dropTarget.releaseId)
     xhr.send(body)
   }
 })()

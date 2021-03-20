@@ -14,7 +14,7 @@ export default function File({ size, content, projectId, branch, path }: IFilePr
   return (
     <Card>
       <CardHeader>
-        <a style={{ float: 'right' }} href={`/project/${projectId}/${branch}/files/download?path=${path}`}>
+        <a className="float-right" href={`/project/${projectId}/${branch}/files/download?path=${path}`}>
           <Download size="1rem" className="mb-1" /> Download file
         </a>
         {size}

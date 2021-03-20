@@ -7,6 +7,67 @@
   opacity: 0.07;
 }
 
-.over .drag-item {
+.over [draggable] {
   visibility: hidden;
+}
+
+[draggable] {
+  cursor: pointer;
+}
+
+.login {
+  max-width: 30rem;
+  margin: 2rem auto;
+}
+
+.releases caption {
+  caption-side: top;
+}
+
+.download {
+  font-size: 1rem;
+}
+
+.board {
+  table-layout: fixed;
+}
+
+.board caption {
+  caption-side: top;
+}
+
+.board th:nth-child(even),
+.board td:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-button {
+  border-color: #ced4da;
+}
+
+.hash {
+  width: unset;
+}
+
+.issue-type {
+  line-height: 1rem;
+  font-size: 1.3rem;
+}
+
+.issue-points {
+  background-color: #ededed;
+}
+
+.issue-row {
+  border-radius: 0;
+}
+
+.issue-row:not(:last-child) {
+  border-bottom: none;
 }

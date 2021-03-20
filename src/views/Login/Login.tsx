@@ -5,9 +5,9 @@ interface ILoginProps {
   error?: string
 }
 
-export default function Test({ error }: ILoginProps): JSX.Element {
+export default function Login({ error }: ILoginProps): JSX.Element {
   return (
-    <Card style={{ maxWidth: '30rem', margin: '2rem auto' }}>
+    <Card className="login">
       <CardBody>
         <Form action="/login" method="POST">
           <FormGroup>

@@ -1,4 +1,4 @@
-import { Issue, Status } from '../models/Issue'
+import { Status } from '../models/Issue'
 
 export function noop(): void {
   // do nothing
@@ -6,42 +6,38 @@ export function noop(): void {
 
 interface IDragProps {
   draggable: true
-  className: 'drag-item'
-  'data-drag-id': number
-  'data-drag-status': Status
-  'data-drag-priority': number
+  'data-drag-item': string
 }
 
-export function dragProps(issue: Issue): IDragProps {
+export interface IDragTarget {
+  id: number
+  projectId: string
+  releaseId: number
+  priority: number
+  status: Status
+}
+
+export function dragProps(target: IDragTarget): IDragProps {
   return {
     draggable: true,
-    className: 'drag-item',
-    'data-drag-id': issue.id,
-    'data-drag-status': issue.status,
-    'data-drag-priority': issue.priority,
+    'data-drag-item': JSON.stringify(target),
   }
 }
 
 interface IDropProps {
-  className: 'drop-item'
-  'data-drop-status'?: Status
-  'data-drop-priority': number
-  'data-project-id': string
+  'data-droppable': true
+  'data-drop-target': string
 }
 
-export function dropProps(projectId: string, priority: number, status?: Status): IDropProps {
+export interface IDropTarget {
+  releaseId: number
+  priority: number
+  status?: Status
+}
+
+export function dropProps(target: IDropTarget): IDropProps {
   return {
-    className: 'drop-item',
-    'data-drop-status': status,
-    'data-drop-priority': priority,
-    'data-project-id': projectId,
+    'data-droppable': true,
+    'data-drop-target': JSON.stringify(target),
   }
-}
-
-interface IDragImageProps {
-  id: string
-}
-
-export function dragImageProps(issue: Issue): IDragImageProps {
-  return { id: `drag-image-${issue.id}` }
 }

@@ -1,13 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { ITicketProps, Ticket } from '../../../src/views/Board/Ticket'
-import { mockIssue1, mockIssue2, mockIssue3 } from '../../mocks/fixtures'
+import { mockIssue1, mockIssue2, mockIssue3, mockRelease1 } from '../../mocks/fixtures'
 
 describe('Ticket', () => {
   const props: ITicketProps = {
     status: 'doing',
     issue: mockIssue1,
     projectId: 'projectId',
+    release: mockRelease1,
   }
 
   it('should render nothing when status does not fit', () => {

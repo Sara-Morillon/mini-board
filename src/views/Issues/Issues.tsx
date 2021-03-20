@@ -19,10 +19,10 @@ export default function Issues({ all, releases, projectId }: IIssuesProps): JSX.
         </a>
       </div>
       <IssuesToggle all={all} projectId={projectId} />
+      {!releases.length && <div className="text-muted bg-light p-5">No issue found</div>}
       {releases.map((release) => (
         <IssuesTable key={release.id} release={release} projectId={projectId} />
       ))}
-      {!releases.length && <div className="text-muted bg-light p-5">No issue found</div>}
     </>
   )
 }

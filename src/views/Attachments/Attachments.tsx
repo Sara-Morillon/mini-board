@@ -12,7 +12,7 @@ interface IDownloadProps {
 function DownloadAll({ projectId, issueId }: IDownloadProps) {
   return (
     <a href={`/project/${projectId}/attachments/download?issueId=${issueId}`}>
-      <small style={{ fontSize: '1rem' }} className="float-right">
+      <small className="download float-right">
         <Download size={16} className="mb-1" /> Download all
       </small>
     </a>

@@ -11,10 +11,6 @@ import {
   PaginationLink,
 } from 'reactstrap'
 
-const buttonStyle = {
-  borderColor: '#ced4da',
-}
-
 export interface ICommitsProps {
   commits: {
     hash: string
@@ -55,11 +51,11 @@ export default function Commits({ commits, pagination, projectId, branch, path }
           <Media right>
             <InputGroup>
               <InputGroupAddon addonType="prepend">
-                <Button style={buttonStyle} className="copy-button" color="light" data-hash={commit.hash}>
+                <Button className="copy-button" color="light" data-hash={commit.hash}>
                   <Clipboard size="1rem" />
                 </Button>
               </InputGroupAddon>
-              <Input defaultValue={commit.hash.slice(0, 7)} size={4} style={{ width: 'unset' }} />
+              <Input defaultValue={commit.hash.slice(0, 7)} size={4} className="hash" />
             </InputGroup>
           </Media>
         </Media>

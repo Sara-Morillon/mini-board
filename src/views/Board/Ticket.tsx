@@ -1,7 +1,10 @@
-import React, { CSSProperties } from 'react'
-import { Badge, Card, CardBody, CardSubtitle, CardTitle } from 'reactstrap'
+import React from 'react'
+import { Card, CardBody, CardSubtitle, CardTitle } from 'reactstrap'
 import { Issue, Status, Type } from '../../models/Issue'
-import { dragImageProps, dragProps } from '../utils'
+import { Release } from '../../models/Release'
+import { IssueName } from '../Issues/IssueName'
+import { IssuePoints } from '../Issues/IssuePoints'
+import { dragProps, IDragTarget } from '../utils'
 
 export const colors: { [key in Type | Status]: string } = {
   bug: 'danger',
@@ -11,43 +14,34 @@ export const colors: { [key in Type | Status]: string } = {
   done: 'success',
 }
 
-const ellipsis: CSSProperties = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-}
-
-const moveStyle: CSSProperties = {
-  cursor: 'pointer',
-}
-
 export interface ITicketProps {
   status: Status
   issue: Issue
   projectId: string
+  release: Release
 }
 
-export function Ticket({ status, issue, projectId }: ITicketProps): JSX.Element | null {
+export function Ticket({ status, issue, projectId, release }: ITicketProps): JSX.Element | null {
   if (status !== issue.status) {
     return null
   }
 
+  const dragTarget: IDragTarget = {
+    id: issue.id,
+    projectId,
+    releaseId: release.id,
+    priority: issue.priority,
+    status: issue.status,
+  }
+
   return (
-    <Card color={colors[issue.type]} outline {...dragProps(issue)} {...dragImageProps(issue)} style={moveStyle}>
-      <CardBody className="p-2" style={ellipsis}>
-        <Badge className="float-right" color="light">
-          {issue.points}
-        </Badge>
-        <CardTitle className="font-weight-bold" style={ellipsis}>
-          <a href={`/project/${projectId}/issues/edit/${issue.id}`}>
-            {issue.key} {issue.title}
-          </a>
+    <Card color={colors[issue.type]} outline {...dragProps(dragTarget)}>
+      <CardBody className="ellipsis p-2">
+        <IssuePoints issue={issue} />
+        <CardTitle className="ellipsis font-weight-bold">
+          <IssueName projectId={projectId} issue={issue} />
         </CardTitle>
-        {issue.status !== 'done' && (
-          <CardSubtitle className="text-muted" style={ellipsis}>
-            {issue.description}
-          </CardSubtitle>
-        )}
+        {issue.status !== 'done' && <CardSubtitle className="ellipsis text-muted">{issue.description}</CardSubtitle>}
       </CardBody>
     </Card>
   )

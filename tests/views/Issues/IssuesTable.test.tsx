@@ -24,17 +24,12 @@ describe('IssuesTable', () => {
 
   it('should render issue type', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getByText('[P1-1] title1').firstChild).toHaveClass('bg-danger')
+    expect(screen.getAllByText('●')[0]).toHaveClass('text-danger')
   })
 
-  it('should render issue author', () => {
+  it('should render issue creation date and author', () => {
     render(<IssuesTable {...props} />)
-    expect(screen.getByText('user1')).toBeInTheDocument()
-  })
-
-  it('should render issue creation date', () => {
-    render(<IssuesTable {...props} />)
-    expect(screen.getAllByText('January 1st, 2018')).toHaveLength(3)
+    expect(screen.getByText('Created on January 1st, 2018 by user1')).toBeInTheDocument()
   })
 
   it('should render issue points', () => {

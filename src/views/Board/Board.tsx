@@ -1,14 +1,10 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import { Table } from 'reactstrap'
-import { Issue } from '../../models/Issue'
+import { Issue, Status } from '../../models/Issue'
 import { Release } from '../../models/Release'
 import { ReleaseName } from '../Releases/ReleaseName'
-import { dropProps } from '../utils'
+import { dropProps, IDropTarget } from '../utils'
 import { Ticket } from './Ticket'
-
-const oddStyle: CSSProperties = {
-  backgroundColor: '#fafafa',
-}
 
 export interface IBoardProps {
   release?: Release
@@ -22,32 +18,48 @@ export default function Board({ release, issues, projectId }: IBoardProps): JSX.
   }
 
   return (
-    <Table style={{ tableLayout: 'fixed' }}>
-      <caption style={{ captionSide: 'top' }}>
+    <Table className="board">
+      <caption>
         <ReleaseName release={release} />
       </caption>
       <thead>
         <tr>
           <th>To do</th>
-          <th style={oddStyle}>Doing</th>
+          <th>Doing</th>
           <th>Done</th>
         </tr>
       </thead>
       <tbody>
         {issues.map((issue) => (
-          <tr key={issue.id}>
-            <td {...dropProps(projectId, issue.priority, 'to do')}>
-              <Ticket issue={issue} status="to do" projectId={projectId} />
-            </td>
-            <td style={oddStyle} {...dropProps(projectId, issue.priority, 'doing')}>
-              <Ticket issue={issue} status="doing" projectId={projectId} />
-            </td>
-            <td {...dropProps(projectId, issue.priority, 'done')}>
-              <Ticket issue={issue} status="done" projectId={projectId} />
-            </td>
-          </tr>
+          <IssueRow key={issue.id} projectId={projectId} release={release} issue={issue} />
         ))}
       </tbody>
     </Table>
+  )
+}
+
+interface IIssueRowProps {
+  projectId: string
+  release: Release
+  issue: Issue
+}
+
+function IssueRow({ projectId, release, issue }: IIssueRowProps) {
+  function getDropTarget(status: Status): IDropTarget {
+    return { releaseId: release.id, priority: issue.priority, status }
+  }
+
+  return (
+    <tr key={issue.id}>
+      <td {...dropProps(getDropTarget('to do'))}>
+        <Ticket issue={issue} status="to do" projectId={projectId} release={release} />
+      </td>
+      <td {...dropProps(getDropTarget('doing'))}>
+        <Ticket issue={issue} status="doing" projectId={projectId} release={release} />
+      </td>
+      <td {...dropProps(getDropTarget('done'))}>
+        <Ticket issue={issue} status="done" projectId={projectId} release={release} />
+      </td>
+    </tr>
   )
 }
