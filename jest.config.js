@@ -7,6 +7,7 @@ const common = {
   resetMocks: true,
   restoreMocks: true,
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
+  moduleNameMapper: { '@/(.*)': '<rootDir>/src/$1' },
 }
 
 module.exports = {

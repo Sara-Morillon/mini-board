@@ -1,9 +1,9 @@
+import { getUsers } from '@/controllers/users/getUsers'
+import { User } from '@/models/User'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { getUsers } from '../../../src/controllers/users/getUsers'
-import { User } from '../../../src/models/User'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/User')
+jest.mock('@/models/User')
 
 describe('getUsers', () => {
   const req = getMockReq()

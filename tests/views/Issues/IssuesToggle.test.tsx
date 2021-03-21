@@ -1,7 +1,7 @@
+import { IIssuesToggleProps, IssuesToggle } from '@/views/Issues/IssuesToggle'
 import { render, screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
-import { IIssuesToggleProps, IssuesToggle } from '../../../src/views/Issues/IssuesToggle'
 
 mockdate.set('2020-12-31T00:00:00.000Z')
 

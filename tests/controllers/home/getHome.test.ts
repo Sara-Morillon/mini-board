@@ -1,5 +1,5 @@
+import { getHome } from '@/controllers/home/getHome'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { getHome } from '../../../src/controllers/home/getHome'
 
 describe('getHome', () => {
   const req = getMockReq()

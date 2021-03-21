@@ -1,6 +1,6 @@
+import Commits, { ICommitsProps } from '@/views/Commits/Commits'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Commits, { ICommitsProps } from '../../../src/views/Commits/Commits'
 
 describe('Commits', () => {
   const pagination: ICommitsProps['pagination'] = {

@@ -1,10 +1,10 @@
+import { logger as mockLogger } from '@/libs/logger'
+import { accessLogger } from '@/middlewares/accessLogger'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { logger as mockLogger } from '../../src/libs/logger'
-import { accessLogger } from '../../src/middlewares/accessLogger'
 
 const { res } = getMockRes()
 
-jest.mock('../../src/libs/logger')
+jest.mock('@/libs/logger')
 
 describe('logger', () => {
   it('should log if request succeeds', () => {

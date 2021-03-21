@@ -1,4 +1,4 @@
-import { getIcon } from '../../src/libs/icons'
+import { getIcon } from '@/libs/icons'
 
 describe('getIcon', () => {
   it('should return default folder icon', () => {

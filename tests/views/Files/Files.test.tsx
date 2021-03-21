@@ -1,6 +1,6 @@
+import Files, { IFilesProps } from '@/views/Files/Files'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Files, { IFilesProps } from '../../../src/views/Files/Files'
 
 describe('Files', () => {
   const props: IFilesProps = {

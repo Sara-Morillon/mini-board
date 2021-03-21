@@ -1,10 +1,10 @@
+import { Req, saveProject } from '@/controllers/projects/saveProject'
+import { Project } from '@/models/Project'
+import { User } from '@/models/User'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { Req, saveProject } from '../../../src/controllers/projects/saveProject'
-import { Project } from '../../../src/models/Project'
-import { User } from '../../../src/models/User'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Project')
+jest.mock('@/models/Project')
 
 describe('saveProject', () => {
   const body = { key: 'key', name: 'name', description: 'description' }

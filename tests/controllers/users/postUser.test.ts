@@ -1,9 +1,9 @@
+import { postUser, Req } from '@/controllers/users/postUser'
+import { User } from '@/models/User'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { postUser, Req } from '../../../src/controllers/users/postUser'
-import { User } from '../../../src/models/User'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/User')
+jest.mock('@/models/User')
 
 describe('postUser', () => {
   const body = { username: 'username', password: 'password' }

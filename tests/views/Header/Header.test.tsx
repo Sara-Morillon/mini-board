@@ -1,6 +1,6 @@
+import { Header, IHeaderProps } from '@/views/Header/Header'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { Header, IHeaderProps } from '../../../src/views/Header/Header'
 import { mockUser1 } from '../../mocks/fixtures'
 
 describe('Header', () => {

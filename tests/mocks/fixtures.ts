@@ -1,9 +1,9 @@
-import { Attachment } from '../../src/models/Attachment'
-import { Comment } from '../../src/models/Comment'
-import { Issue } from '../../src/models/Issue'
-import { Project } from '../../src/models/Project'
-import { Release } from '../../src/models/Release'
-import { User } from '../../src/models/User'
+import { Attachment } from '@/models/Attachment'
+import { Comment } from '@/models/Comment'
+import { Issue } from '@/models/Issue'
+import { Project } from '@/models/Project'
+import { Release } from '@/models/Release'
+import { User } from '@/models/User'
 
 export const mockProject1: Project = {
   id: 1,

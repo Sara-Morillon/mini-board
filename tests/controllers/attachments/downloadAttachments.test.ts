@@ -1,11 +1,11 @@
+import { downloadAttachments, Req } from '@/controllers/attachments/downloadAttachments'
+import { Attachment } from '@/models/Attachment'
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import archiver from 'archiver'
 import fs from 'fs'
-import { downloadAttachments, Req } from '../../../src/controllers/attachments/downloadAttachments'
-import { Attachment } from '../../../src/models/Attachment'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Attachment')
+jest.mock('@/models/Attachment')
 jest.mock('archiver')
 
 const archiverMock = (archiver as unknown) as jest.Mock

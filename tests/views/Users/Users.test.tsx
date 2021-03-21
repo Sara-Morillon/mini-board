@@ -1,6 +1,6 @@
+import ListUsers from '@/views/Users/Users'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import ListUsers from '../../../src/views/Users/Users'
 import { mockUser1, mockUser2 } from '../../mocks/fixtures'
 
 describe('ListUsers', () => {

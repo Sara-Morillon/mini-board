@@ -1,6 +1,6 @@
+import Board, { IBoardProps } from '@/views/Board/Board'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Board, { IBoardProps } from '../../../src/views/Board/Board'
 import { mockIssue1, mockIssue2, mockRelease1 } from '../../mocks/fixtures'
 
 describe('Board', () => {

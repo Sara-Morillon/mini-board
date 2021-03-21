@@ -1,7 +1,7 @@
+import { ReleaseName } from '@/views/Releases/ReleaseName'
 import { render, screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
-import { ReleaseName } from '../../../src/views/Releases/ReleaseName'
 import { mockRelease1 } from '../../mocks/fixtures'
 
 mockdate.set('2020-12-31T00:00:00.000Z')

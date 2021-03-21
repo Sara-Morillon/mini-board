@@ -1,6 +1,6 @@
+import Release, { IReleaseProps } from '@/views/Releases/Release'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Release, { IReleaseProps } from '../../../src/views/Releases/Release'
 import { mockRelease1 } from '../../mocks/fixtures'
 
 describe('Release', () => {

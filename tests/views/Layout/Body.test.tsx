@@ -1,6 +1,6 @@
+import { Body, IBodyProps } from '@/views/Layout/Body'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { Body, IBodyProps } from '../../../src/views/Layout/Body'
 
 describe('Body', () => {
   const props: IBodyProps = {

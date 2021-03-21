@@ -1,13 +1,13 @@
+import { Req, saveIssue } from '@/controllers/issues/saveIssue'
+import { Attachment } from '@/models/Attachment'
+import { Issue } from '@/models/Issue'
+import { User } from '@/models/User'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { Req, saveIssue } from '../../../src/controllers/issues/saveIssue'
-import { Attachment } from '../../../src/models/Attachment'
-import { Issue } from '../../../src/models/Issue'
-import { User } from '../../../src/models/User'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Release')
-jest.mock('../../../src/models/Issue')
-jest.mock('../../../src/models/Attachment')
+jest.mock('@/models/Release')
+jest.mock('@/models/Issue')
+jest.mock('@/models/Attachment')
 
 describe('saveIssue', () => {
   const body = { title: 'title', type: 'bug', description: 'description', points: 5, release: 1 }

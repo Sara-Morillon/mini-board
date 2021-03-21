@@ -1,5 +1,5 @@
+import { addUser } from '@/controllers/users/addUser'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { addUser } from '../../../src/controllers/users/addUser'
 
 describe('addUser', () => {
   it('should render add user page', () => {

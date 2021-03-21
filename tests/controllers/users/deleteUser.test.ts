@@ -1,9 +1,9 @@
+import { deleteUser, Req } from '@/controllers/users/deleteUser'
+import { User } from '@/models/User'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { deleteUser, Req } from '../../../src/controllers/users/deleteUser'
-import { User } from '../../../src/models/User'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/User')
+jest.mock('@/models/User')
 
 describe('deleteUser', () => {
   const req = getMockReq<Req>({ params: { id: 'id' } })

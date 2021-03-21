@@ -1,6 +1,6 @@
+import { CommentCard, ICommentProps } from '@/views/Comments/Comment'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { CommentCard, ICommentProps } from '../../../src/views/Comments/Comment'
 import { mockComment1 } from '../../mocks/fixtures'
 
 describe('CommentCard', () => {

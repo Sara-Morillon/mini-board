@@ -1,10 +1,10 @@
+import { Req, saveRelease } from '@/controllers/releases/saveRelease'
+import { Release } from '@/models/Release'
+import { User } from '@/models/User'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { Req, saveRelease } from '../../../src/controllers/releases/saveRelease'
-import { Release } from '../../../src/models/Release'
-import { User } from '../../../src/models/User'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Release')
+jest.mock('@/models/Release')
 
 describe('saveRelease', () => {
   const body = { name: 'name', dueDate: '2020-01-01' }

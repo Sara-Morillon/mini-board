@@ -1,6 +1,6 @@
+import { AttachmentCard, IAttachmentProps } from '@/views/Attachments/Attachment'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { AttachmentCard, IAttachmentProps } from '../../../src/views/Attachments/Attachment'
 import { mockAttachment1 } from '../../mocks/fixtures'
 
 describe('AttachmentCard', () => {

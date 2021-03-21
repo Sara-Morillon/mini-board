@@ -1,6 +1,6 @@
+import Projects, { IProjectsProps } from '@/views/Projects/Projects'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Projects, { IProjectsProps } from '../../../src/views/Projects/Projects'
 import { mockProject1, mockProject2 } from '../../mocks/fixtures'
 
 describe('Projects', () => {

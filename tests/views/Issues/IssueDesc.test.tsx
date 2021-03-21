@@ -1,6 +1,6 @@
+import { IssueDesc } from '@/views/Issues/IssueDesc'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { IssueDesc } from '../../../src/views/Issues/IssueDesc'
 import { mockIssue1 } from '../../mocks/fixtures'
 
 describe('IssueDesc', () => {

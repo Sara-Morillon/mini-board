@@ -1,11 +1,11 @@
+import { getProjects } from '@/controllers/projects/getProjects'
+import { Project } from '@/models/Project'
+import { Release } from '@/models/Release'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { getProjects } from '../../../src/controllers/projects/getProjects'
-import { Project } from '../../../src/models/Project'
-import { Release } from '../../../src/models/Release'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Project')
-jest.mock('../../../src/models/Release')
+jest.mock('@/models/Project')
+jest.mock('@/models/Release')
 
 describe('getProjects', () => {
   const req = getMockReq()

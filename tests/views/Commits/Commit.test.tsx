@@ -1,6 +1,6 @@
+import Commit, { ICommitProps } from '@/views/Commits/Commit'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Commit, { ICommitProps } from '../../../src/views/Commits/Commit'
 
 describe('Commit', () => {
   const props: ICommitProps = {

@@ -1,6 +1,6 @@
+import { Comments, ICommentsProps } from '@/views/Comments/Comments'
 import { render } from '@testing-library/react'
 import React from 'react'
-import { Comments, ICommentsProps } from '../../../src/views/Comments/Comments'
 
 describe('Comments', () => {
   const props: ICommentsProps = {

@@ -1,5 +1,5 @@
+import { hasSession } from '@/middlewares/session'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { hasSession } from '../../src/middlewares/session'
 
 const { res } = getMockRes()
 

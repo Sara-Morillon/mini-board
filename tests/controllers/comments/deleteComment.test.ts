@@ -1,9 +1,9 @@
+import { deleteComment, Req } from '@/controllers/comments/deleteComment'
+import { Comment } from '@/models/Comment'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { deleteComment, Req } from '../../../src/controllers/comments/deleteComment'
-import { Comment } from '../../../src/models/Comment'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Comment')
+jest.mock('@/models/Comment')
 
 describe('deleteComment', () => {
   const req = getMockReq<Req>({ params: { projectId: 'projectId', id: 'id' }, query: { issueId: 'issueId' } })

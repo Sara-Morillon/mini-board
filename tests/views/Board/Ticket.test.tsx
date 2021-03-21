@@ -1,6 +1,6 @@
+import { ITicketProps, Ticket } from '@/views/Board/Ticket'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { ITicketProps, Ticket } from '../../../src/views/Board/Ticket'
 import { mockIssue1, mockIssue2, mockIssue3, mockRelease1 } from '../../mocks/fixtures'
 
 describe('Ticket', () => {

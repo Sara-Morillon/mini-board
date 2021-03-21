@@ -1,5 +1,5 @@
+import { getLogout } from '@/controllers/session/getLogout'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { getLogout } from '../../../src/controllers/session/getLogout'
 
 describe('getLogout', () => {
   const req = getMockReq()

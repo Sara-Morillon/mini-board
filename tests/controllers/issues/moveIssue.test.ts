@@ -1,10 +1,10 @@
+import { moveIssue, Req } from '@/controllers/issues/moveIssue'
+import { Issue } from '@/models/Issue'
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import { Between } from 'typeorm'
-import { moveIssue, Req } from '../../../src/controllers/issues/moveIssue'
-import { Issue } from '../../../src/models/Issue'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Issue')
+jest.mock('@/models/Issue')
 
 describe('moveIssue', () => {
   const req = getMockReq<Req>({

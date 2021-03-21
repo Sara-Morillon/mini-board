@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
+    "paths": { "@/*": ["*"] },
     "lib": ["ES5", "ES6", "ESNext", "DOM"],
     "target": "es5",
     "module": "commonjs",

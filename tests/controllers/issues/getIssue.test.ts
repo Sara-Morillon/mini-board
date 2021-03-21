@@ -1,16 +1,16 @@
+import { getIssue, Req } from '@/controllers/issues/getIssue'
+import { Issue } from '@/models/Issue'
+import { Release } from '@/models/Release'
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import { Request } from 'express'
 import mockdate from 'mockdate'
 import { MoreThan } from 'typeorm'
-import { getIssue, Req } from '../../../src/controllers/issues/getIssue'
-import { Issue } from '../../../src/models/Issue'
-import { Release } from '../../../src/models/Release'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
 mockdate.set('2020-01-01T00:00:00.000Z')
 
-jest.mock('../../../src/models/Release')
-jest.mock('../../../src/models/Issue')
+jest.mock('@/models/Release')
+jest.mock('@/models/Issue')
 
 describe('getIssue', () => {
   const req = getMockReq<Req>({ params: { projectId: 'projectId', id: 'id' } })

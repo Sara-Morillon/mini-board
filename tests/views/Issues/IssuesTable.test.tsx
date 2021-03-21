@@ -1,7 +1,7 @@
+import { IIssuesTableProps, IssuesTable } from '@/views/Issues/IssuesTable'
 import { render, screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
-import { IIssuesTableProps, IssuesTable } from '../../../src/views/Issues/IssuesTable'
 import { mockRelease2 } from '../../mocks/fixtures'
 
 mockdate.set('2020-12-31T00:00:00.000Z')

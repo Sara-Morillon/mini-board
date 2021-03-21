@@ -1,6 +1,6 @@
+import Issue, { IIssueProps } from '@/views/Issues/Issue'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import Issue, { IIssueProps } from '../../../src/views/Issues/Issue'
 import { mockIssue1, mockIssue4, mockRelease1, mockRelease2 } from '../../mocks/fixtures'
 
 describe('Issue', () => {

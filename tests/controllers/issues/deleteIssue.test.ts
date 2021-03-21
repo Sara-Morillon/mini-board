@@ -1,12 +1,12 @@
+import { deleteIssue, Req } from '@/controllers/issues/deleteIssue'
+import { Attachment } from '@/models/Attachment'
+import { Issue } from '@/models/Issue'
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import { promises as fs } from 'fs'
-import { deleteIssue, Req } from '../../../src/controllers/issues/deleteIssue'
-import { Attachment } from '../../../src/models/Attachment'
-import { Issue } from '../../../src/models/Issue'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Issue')
-jest.mock('../../../src/models/Attachment')
+jest.mock('@/models/Issue')
+jest.mock('@/models/Attachment')
 
 describe('deleteIssue', () => {
   const req = getMockReq<Req>({ params: { projectId: 'projectId', id: 'id' } })

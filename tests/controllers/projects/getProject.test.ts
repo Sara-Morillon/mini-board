@@ -1,9 +1,9 @@
+import { getProject, Req } from '@/controllers/projects/getProject'
+import { Project } from '@/models/Project'
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { getProject, Req } from '../../../src/controllers/projects/getProject'
-import { Project } from '../../../src/models/Project'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Project')
+jest.mock('@/models/Project')
 
 describe('getProject', () => {
   const req = getMockReq<Req>({ params: { projectId: 'projectId', id: 'id' } })

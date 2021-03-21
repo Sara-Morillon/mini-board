@@ -1,10 +1,10 @@
+import { downloadAttachment, Req } from '@/controllers/attachments/downloadAttachment'
+import { Attachment } from '@/models/Attachment'
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import fs from 'fs'
-import { downloadAttachment, Req } from '../../../src/controllers/attachments/downloadAttachment'
-import { Attachment } from '../../../src/models/Attachment'
 import { mockRepository, RepoMock } from '../../mocks/repository'
 
-jest.mock('../../../src/models/Attachment')
+jest.mock('@/models/Attachment')
 
 describe('downloadAttachment', () => {
   const req = getMockReq<Req>({ params: { id: 'id' } })

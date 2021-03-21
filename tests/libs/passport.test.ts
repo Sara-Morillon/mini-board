@@ -1,8 +1,8 @@
-import { deserializeUser, localStrategy, serializeUser } from '../../src/libs/passport'
-import { User } from '../../src/models/User'
+import { deserializeUser, localStrategy, serializeUser } from '@/libs/passport'
+import { User } from '@/models/User'
 import { mockUser1 } from '../mocks/fixtures'
 
-jest.mock('../../src/models/User')
+jest.mock('@/models/User')
 
 const mockedRepository = User.getRepository as jest.Mock
 

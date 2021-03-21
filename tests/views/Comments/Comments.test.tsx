@@ -1,6 +1,6 @@
+import { Comments, ICommentsProps } from '@/views/Comments/Comments'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { Comments, ICommentsProps } from '../../../src/views/Comments/Comments'
 import { mockComment1 } from '../../mocks/fixtures'
 
 describe('Comments', () => {
