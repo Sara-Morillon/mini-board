@@ -13,7 +13,9 @@ export async function downloadAttachment(req: Req, res: Response): Promise<void>
     return res.render('404')
   }
   const stream = fs.createReadStream(path.join(config.uploadDir, attachment.filepath))
-  res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
+  if (!/image\/.*/.test(attachment.mime)) {
+    res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
+  }
   res.set('Content-Type', attachment?.mime)
   stream.pipe(res)
 }
