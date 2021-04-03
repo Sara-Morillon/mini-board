@@ -71,3 +71,18 @@
 .issue-row:not(:last-child) {
   border-bottom: none;
 }
+
+.attachment-asset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 198px;
+  height: 198px;
+  background-color: #ededed;
+  border-radius: 3px 3px 0 0;
+}
+
+.attachment-asset img {
+  max-width: 100%;
+  max-height: 100%;
+}
