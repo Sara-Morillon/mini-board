@@ -127,6 +127,16 @@ export const mockAttachment1: Attachment = {
   updatedAt: new Date('2019-01-01T00:00:00.000Z'),
 }
 
+export const mockAttachment2: Attachment = {
+  id: 2,
+  filename: 'filename',
+  filepath: 'filepath',
+  issue: mockIssue1,
+  mime: 'image/png',
+  createdAt: new Date('2018-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2019-01-01T00:00:00.000Z'),
+}
+
 export const mockComment1: Comment = {
   id: 2,
   author: mockUser1,

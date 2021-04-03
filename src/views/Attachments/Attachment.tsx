@@ -15,10 +15,8 @@ export function AttachmentCard({ projectId, issueId, attachment }: IAttachmentPr
 
   return (
     <Card key={attachment.id} className="d-inline-block" style={{ maxWidth: 200 }}>
-      <a href={downloadLink} target="_blank" rel="noreferrer">
-        <div className="attachment-asset">
-          <img src={src} alt={attachment.filename} />
-        </div>
+      <a className="attachment-asset" href={downloadLink} target="_blank" rel="noreferrer">
+        <img src={src} alt={attachment.filename} />
       </a>
       <CardBody>
         <CardTitle>{attachment.filename}</CardTitle>
