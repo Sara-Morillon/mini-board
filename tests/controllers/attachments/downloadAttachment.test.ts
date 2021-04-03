@@ -42,7 +42,7 @@ describe('downloadAttachment', () => {
   it('should set attachment headers', async () => {
     attachmentMock.findOne.mockResolvedValue({ filename: 'filename', mime: 'mime', filepath: 'filepath' })
     await downloadAttachment(req, res)
-    expect(res.set).toHaveBeenCalledWith('Content-disposition', 'attachment; filename=filename')
+    expect(res.set).toHaveBeenCalledWith('Content-disposition', 'filename=filename')
     expect(res.set).toHaveBeenCalledWith('Content-Type', 'mime')
   })
 
