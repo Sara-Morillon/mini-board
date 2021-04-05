@@ -6,11 +6,11 @@ import { mockIssue1 } from '../../mocks/fixtures'
 describe('IssueStatus', () => {
   it('should render issue status', () => {
     render(<IssueStatus issue={mockIssue1} />)
-    expect(screen.getByText('doing')).toBeInTheDocument()
+    expect(screen.getByText('DOING')).toBeInTheDocument()
   })
 
   it('should render issue status with correct color', () => {
     render(<IssueStatus issue={mockIssue1} />)
-    expect(screen.getByText('doing')).toHaveClass('badge-primary')
+    expect(screen.getByText('DOING')).toHaveClass('badge-primary')
   })
 })

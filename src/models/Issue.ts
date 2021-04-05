@@ -18,7 +18,7 @@ import { User } from './User'
 const types = ['bug', 'feature'] as const
 export type Type = typeof types[number]
 
-const statuses = ['to do', 'doing', 'done'] as const
+export const statuses = ['to do', 'doing', 'done'] as const
 export type Status = typeof statuses[number]
 
 @Entity()

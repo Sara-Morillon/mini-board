@@ -45,6 +45,11 @@ describe('Issue', () => {
     expect(screen.getByLabelText('Points')).toHaveValue(5)
   })
 
+  it('should set issue status', () => {
+    render(<Issue {...props} />)
+    expect(screen.getByLabelText('Status')).toHaveValue('doing')
+  })
+
   it('should set default points without issue', () => {
     render(<Issue {...props} issue={undefined} />)
     expect(screen.getByLabelText('Points')).toHaveValue(0)

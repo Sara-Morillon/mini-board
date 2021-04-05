@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import React from 'react'
 import { Save, Trash } from 'react-feather'
 import { Button, ButtonGroup, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
-import { Issue } from '../../models/Issue'
+import { Issue, statuses } from '../../models/Issue'
 import { Release } from '../../models/Release'
 import { Attachments } from '../Attachments/Attachments'
 import { Comments } from '../Comments/Comments'
@@ -50,8 +50,24 @@ export default function AddIssue({ issue, projectId, releases }: IIssueProps): J
           </Col>
         </Row>
         <FormGroup>
-          <Label for="title">Title</Label>
-          <Input id="title" name="title" type="text" value={issue?.title} onChange={noop} required />
+          <Row>
+            <Col sm={10}>
+              <Label for="title">Title</Label>
+              <Input id="title" name="title" type="text" value={issue?.title} onChange={noop} required />
+            </Col>
+            <Col sm={2}>
+              <FormGroup>
+                <Label for="status">Status</Label>
+                <Input id="status" name="status" type="select" value={issue?.status} onChange={noop} required>
+                  {statuses.map((status) => (
+                    <option key={status} value={status}>
+                      {status.toUpperCase()}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Col>
+          </Row>
         </FormGroup>
         <FormGroup>
           <Label for="description">Summary</Label>
