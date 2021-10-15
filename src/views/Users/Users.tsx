@@ -52,10 +52,11 @@ export default function ListUsers({ users, user }: IListUsersProps): JSX.Element
   const { username } = user
   return (
     <>
-      <a href="/users/add" className="text-right d-block">
-        <Plus size="1rem" className="mb-1" /> Create User
-      </a>
-      <hr />
+      <div className="text-right mb-3">
+        <Button as="a" color="link" href={`/users/add`}>
+          <Plus size="1rem" className="mb-1" /> Create User
+        </Button>
+      </div>
       {users.map((user) => (
         <UserCard key={user.id} user={user} canDelete={user.username !== username} />
       ))}

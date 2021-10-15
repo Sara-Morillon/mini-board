@@ -1,7 +1,7 @@
 import { differenceInDays, format } from 'date-fns'
 import React from 'react'
 import { Plus } from 'react-feather'
-import { Table } from 'reactstrap'
+import { Button, Table } from 'reactstrap'
 import { Release } from '../../models/Release'
 import { ReleasePoints } from './ReleasePoints'
 
@@ -15,9 +15,9 @@ export default function Releases({ releases, projectId }: IReleasesProps): JSX.E
     <>
       <Table striped className="releases mb-0">
         <caption className="text-right">
-          <a href={`/project/${projectId}/releases/edit`}>
+          <Button as="a" color="link" href={`/project/${projectId}/releases/edit`}>
             <Plus size="1rem" className="mb-1" /> Create release
-          </a>
+          </Button>
         </caption>
         <thead>
           <tr>

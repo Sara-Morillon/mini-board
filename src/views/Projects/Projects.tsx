@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import React from 'react'
 import { Plus } from 'react-feather'
-import { Card, CardBody, CardLink, CardSubtitle, CardTitle } from 'reactstrap'
+import { Button, Card, CardBody, CardLink, CardSubtitle, CardTitle } from 'reactstrap'
 import { Project } from '../../models/Project'
 
 export interface IProjectsProps {
@@ -12,9 +12,9 @@ export default function Projects({ projects }: IProjectsProps): JSX.Element {
   return (
     <>
       <div className="text-right mb-3">
-        <a href={`/projects/edit`}>
+        <Button as="a" color="link" href={`/projects/edit`}>
           <Plus size="1rem" className="mb-1" /> Create project
-        </a>
+        </Button>
       </div>
       {projects.map((project) => (
         <Card key={project.name} className="mb-3">

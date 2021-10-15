@@ -18,6 +18,7 @@ export default function AddRelease({ release, projectId }: IReleaseProps): JSX.E
         <Label for="name">Name</Label>
         <Input id="name" name="name" type="text" value={release?.name} onChange={noop} required />
       </FormGroup>
+
       <FormGroup>
         <Label for="due-date">Due date</Label>
         <Input
@@ -29,6 +30,7 @@ export default function AddRelease({ release, projectId }: IReleaseProps): JSX.E
           required
         />
       </FormGroup>
+
       <FormGroup>
         <ButtonGroup>
           <Button color="primary">
