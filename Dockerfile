@@ -13,8 +13,10 @@ FROM base as bsources
 
 COPY backend/package.json backend/
 COPY backend/yarn.lock backend/
+COPY backend/prisma backend/prisma
 
 RUN yarn --cwd backend install --production=false
+RUN yarn --cwd backend prisma generate
 
 # Frontend 
 FROM base as fsources
@@ -31,9 +33,6 @@ RUN yarn --cwd frontend install --production=false
 # Backend
 FROM bsources as dependencies
 
-COPY backend/prisma backend/prisma
-
-RUN yarn prisma generate
 RUN yarn --cwd backend install --frozen-lockfile --force --production --ignore-scripts --prefer-offline
 
 ####################
