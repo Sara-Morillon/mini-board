@@ -8,17 +8,13 @@ services:
     ports:
       - 127.0.0.1:3000:80
     volumes:
-      - ./db:/app/db
       - ./logs:/app/logs
-      - ./repos:/app/repos
+      - ./data:/app/data
       - ./sessions:/app/sessions
     environment:
-      - TYPEORM_CONNECTION=sqlite
-      - TYPEORM_DATABASE=/app/db/database.sqlite
+      - DATABASE_URL=mysql://user:pass@host:port/database
       - NODE_ENV=production
       - APP_KEY=appkey
       - COOKIE_DOMAIN=mydomain.com
       - SESSION_DIR=/app/sessions
-      - REPO_DIR=/app/repos
-      - DB_PATH=/app/db
-      - SERVER_URL=https://git.mydomain.com
+      - UPLOAD_DIR=/app/data

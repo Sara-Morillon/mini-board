@@ -1,8 +1,5 @@
 FROM node:16.13.2-alpine as base
 
-RUN apk update
-RUN apk --no-cache add git
-
 ENV NODE_ENV=production
 
 WORKDIR /app
@@ -34,6 +31,9 @@ RUN yarn --cwd frontend install --production=false
 # Backend
 FROM bsources as dependencies
 
+COPY backend/prisma backend/prisma
+
+RUN yarn prisma generate
 RUN yarn --cwd backend install --frozen-lockfile --force --production --ignore-scripts --prefer-offline
 
 ####################
@@ -47,7 +47,6 @@ COPY backend/tsconfig.json backend/
 COPY backend/tsconfig.build.json backend/
 COPY backend/src backend/src
 COPY backend/types backend/types
-COPY models/ models/
 
 RUN yarn --cwd backend build
 
@@ -56,10 +55,10 @@ FROM fsources as fbuild
 
 COPY frontend/tsconfig.json frontend/
 COPY frontend/tsconfig.build.json frontend/
-COPY frontend/poi.config.js frontend/
+COPY frontend/vite.config.ts frontend/
+COPY frontend/index.html frontend/
 COPY frontend/public frontend/public
 COPY frontend/src frontend/src
-COPY models/ models/
 
 RUN yarn --cwd frontend build
 
@@ -70,19 +69,14 @@ RUN yarn --cwd frontend build
 FROM base as release
 
 ENV PUBLIC_DIR=/app/dist/public
-ENV TYPEORM_ENTITIES=/app/dist/backend/src/models/**/*.js
 
 COPY --from=dependencies --chown=node:node /app/backend/node_modules/ /app/node_modules/
 COPY --from=bbuild --chown=node:node /app/backend/dist/ /app/dist/
 COPY --from=fbuild --chown=node:node /app/frontend/dist/ /app/dist/public
 
-# Create repos directory
-RUN mkdir /app/repos
-RUN chown -R node:node /app/repos
-
-# Create db directory
-RUN mkdir /app/db
-RUN chown -R node:node /app/db
+# Create upload directory
+RUN mkdir /app/data
+RUN chown -R node:node /app/data
 
 # Create session directory
 RUN mkdir /app/sessions
