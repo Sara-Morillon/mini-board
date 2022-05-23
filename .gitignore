@@ -4,5 +4,7 @@ dist
 yarn-error.log
 .env
 logs
+coverage
 db
 sessions
+data

@@ -1,6 +1,6 @@
-# Mini board
+# Mini Git
 
-Mini board is a minimal board.
+Mini Git is a minimal UI for Git.
 
 ## Installation
 
@@ -12,7 +12,7 @@ Mini board is a minimal board.
 
 You can use the [docker-compose.yml](./docker-compose.yml) provided as an example.
 
-**:warning: Make sure that the `db`, `logs` and `upload` folder are writable by the container user (uid: 1000 - gid: 1000)**
+**:warning: Make sure that the `db` and `logs` folder are writable by the container user (uid: 1000 - gid: 1000)**
 
 ### Using source code (production)
 
@@ -25,29 +25,26 @@ You can use the [docker-compose.yml](./docker-compose.yml) provided as an exampl
 
 - Download the latest release of mini-board
 - Install packages using command `yarn install`
-- Rename [.env.template](./.env.template) to `.env` and fill it with appropriate values
+- Rename [.env.template](./backend/.env.template) to `.env` and fill it with appropriate values
 - Run project using command `yarn start:dev`
 
-## Running Mini board
+## Running Mini Git
 
-Mini board listens to port 3000
+Mini Git listens to port 80 by default.
 
 The default credentials are admin/admin.
 
+Make sure that `git` is installed on your server as git command are used by the backend (git is installed by default in the Dockerfile).
+
 ## Environment variables
 
-| Variable      | Value type                     | Default value | Description                                   |
-| ------------- | ------------------------------ | ------------- | --------------------------------------------- |
-| NODE_ENV      | development \| production      |               | Environment of the application                |
-| APP_KEY       | string                         |               | App key for session                           |
-| APP_PORT      | number                         | 80            | App port                                      |
-| COOKIE_DOMAIN | string                         |               | Domain of the session cookie                  |
-| LOG_LEVEL     | debug \| info \| warn \| error | info          | Level of the loger                            |
-| SESSION_DIR   | string                         |               | Directory to store session                    |
-| UPLOAD_DIR    | string                         |               | Directory to store attachments                |
-| DB_HOST       | string                         |               | Database host                                 |
-| DB_PORT       | number                         |               | Database port                                 |
-| DB_USER       | string                         |               | Database user                                 |
-| DB_PASSWORD   | string                         |               | Database password                             |
-| DB_DATABASE   | boolean                        |               | Database name                                 |
-| DB_LOGGING    | boolean                        | false         | Should DB queries be logged to console or not |
+| Variable      | Value type                | Default value | Description                                       |
+| ------------- | ------------------------- | ------------- | ------------------------------------------------- |
+| NODE_ENV      | development \| production |               | Environment of the application                    |
+| APP_KEY       | string                    |               | App key for session                               |
+| APP_PORT      | number                    | 80            | App port                                          |
+| COOKIE_DOMAIN | string                    |               | Domain of the session cookie                      |
+| SESSION_DIR   | string                    |               | Directory to store session                        |
+| REPO_DIR      | string                    |               | Directory where repositories are stored           |
+| DB_PATH       | string                    |               | Path of sqlite database                           |
+| SERVER_URL    | string                    |               | URL of the Git server, used to clone repositories |

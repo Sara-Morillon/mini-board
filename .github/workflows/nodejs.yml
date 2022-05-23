@@ -1,13 +1,16 @@
-name: Node CI
+name: Mini Git
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-  test:
+  backend:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [12.x, 14.x, 16.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -16,7 +19,31 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: yarn install
+        working-directory: backend
       - name: Build
         run: yarn build
+        working-directory: backend
       - name: Test
         run: yarn test
+        working-directory: backend
+
+  frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install
+        run: yarn install
+        working-directory: frontend
+      - name: Build
+        run: yarn build
+        working-directory: frontend
+      - name: Test
+        run: yarn test
+        working-directory: frontend

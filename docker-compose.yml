@@ -1,18 +1,24 @@
-version: '3'
+version: "3"
 
 services:
-  mini-board:
-    image: saramorillon/mini-board:latest
-    container_name: mini-board
+  gitui:
+    image: saramorillon/mini-board
+    container_name: miniboard
     restart: always
     ports:
-      - 127.0.0.1:3000:3000
+      - 127.0.0.1:3000:80
     volumes:
       - ./db:/app/db
       - ./logs:/app/logs
       - ./repos:/app/repos
+      - ./sessions:/app/sessions
     environment:
-      - NODE_ENV=
-      - APP_KEY=
-      - COOKIE_NAME=
-      - LOG_LEVEL=
+      - TYPEORM_CONNECTION=sqlite
+      - TYPEORM_DATABASE=/app/db/database.sqlite
+      - NODE_ENV=production
+      - APP_KEY=appkey
+      - COOKIE_DOMAIN=mydomain.com
+      - SESSION_DIR=/app/sessions
+      - REPO_DIR=/app/repos
+      - DB_PATH=/app/db
+      - SERVER_URL=https://git.mydomain.com

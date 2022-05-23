@@ -1,0 +1,116 @@
+-- CreateTable
+CREATE TABLE `attachment` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `issueId` INTEGER NOT NULL,
+    `filename` VARCHAR(255) NOT NULL,
+    `filepath` VARCHAR(255) NOT NULL,
+    `mime` VARCHAR(255) NOT NULL,
+    `createdAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    INDEX `FK_54f51431f696f4d3b8436475e88`(`issueId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `comment` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `issueId` INTEGER NOT NULL,
+    `authorId` INTEGER NOT NULL,
+    `content` TEXT NOT NULL,
+    `createdAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    INDEX `FK_276779da446413a0d79598d4fbd`(`authorId`),
+    INDEX `FK_c91b5a63310845bdeca63d9ee13`(`issueId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `issue` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `projectId` INTEGER NOT NULL,
+    `releaseId` INTEGER NOT NULL,
+    `authorId` INTEGER NOT NULL,
+    `type` ENUM('bug', 'feature') NOT NULL,
+    `status` ENUM('to do', 'doing', 'done') NOT NULL DEFAULT 'to do',
+    `priority` INTEGER NOT NULL DEFAULT 0,
+    `points` INTEGER NOT NULL DEFAULT 0,
+    `title` VARCHAR(100) NOT NULL,
+    `description` TEXT NOT NULL,
+    `createdAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    INDEX `FK_0afd9b73442e8fcc3c2d13007b6`(`authorId`),
+    INDEX `FK_168f3ee7d0a35d31343f583eaeb`(`releaseId`),
+    INDEX `FK_be30b91466b730c5e25f1181f79`(`projectId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `migrations` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `timestamp` BIGINT NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `project` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `key` VARCHAR(10) NOT NULL,
+    `name` VARCHAR(40) NOT NULL,
+    `description` TEXT NULL,
+    `createdAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    UNIQUE INDEX `IDX_2db22c052f9ffdd51a6c113b37`(`key`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `release` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `projectId` INTEGER NOT NULL,
+    `name` VARCHAR(40) NOT NULL,
+    `dueDate` DATETIME(0) NOT NULL,
+    `createdAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    INDEX `FK_f47da974d2cab31cfa0ce0d812e`(`projectId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `user` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(40) NOT NULL,
+    `password` CHAR(64) NOT NULL,
+    `createdAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    UNIQUE INDEX `IDX_78a916df40e02a9deb1c4b75ed`(`username`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `attachment` ADD CONSTRAINT `FK_54f51431f696f4d3b8436475e88` FOREIGN KEY (`issueId`) REFERENCES `issue`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `comment` ADD CONSTRAINT `FK_276779da446413a0d79598d4fbd` FOREIGN KEY (`authorId`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `comment` ADD CONSTRAINT `FK_c91b5a63310845bdeca63d9ee13` FOREIGN KEY (`issueId`) REFERENCES `issue`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `issue` ADD CONSTRAINT `FK_0afd9b73442e8fcc3c2d13007b6` FOREIGN KEY (`authorId`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `issue` ADD CONSTRAINT `FK_be30b91466b730c5e25f1181f79` FOREIGN KEY (`projectId`) REFERENCES `project`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `issue` ADD CONSTRAINT `FK_168f3ee7d0a35d31343f583eaeb` FOREIGN KEY (`releaseId`) REFERENCES `release`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `release` ADD CONSTRAINT `FK_f47da974d2cab31cfa0ce0d812e` FOREIGN KEY (`projectId`) REFERENCES `project`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
