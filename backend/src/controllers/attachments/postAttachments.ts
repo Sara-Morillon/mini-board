@@ -7,15 +7,13 @@ const schema = {
   params: z.object({
     id: z.string().transform(Number),
   }),
-  body: z.object({
-    files: z.array(
-      z.object({
-        originalname: z.string(),
-        filename: z.string(),
-        mimetype: z.string(),
-      })
-    ),
-  }),
+  files: z.array(
+    z.object({
+      originalname: z.string(),
+      filename: z.string(),
+      mimetype: z.string(),
+    })
+  ),
 }
 
 export async function postAttachments(req: Request, res: Response): Promise<void> {
@@ -25,7 +23,7 @@ export async function postAttachments(req: Request, res: Response): Promise<void
       res.sendStatus(401)
     } else {
       const { id } = schema.params.parse(req.params)
-      const { files } = schema.body.parse(req.body)
+      const files = schema.files.parse(req.files)
       for (const file of files) {
         await prisma.attachment.create({
           data: { issueId: id, filename: file.originalname, filepath: file.filename, mime: file.mimetype },

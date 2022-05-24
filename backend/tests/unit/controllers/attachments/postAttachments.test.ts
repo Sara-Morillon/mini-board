@@ -7,7 +7,7 @@ describe('postAttachments', () => {
   it('should return 401 status if no user', async () => {
     const req = getMockReq({
       params: { id: '1' },
-      body: { files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }] },
+      files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
     })
     const { res } = getMockRes()
     await postAttachments(req, res)
@@ -18,7 +18,7 @@ describe('postAttachments', () => {
     jest.spyOn(prisma.attachment, 'create').mockResolvedValue(mockAttachment)
     const req = getMockReq({
       params: { id: '1' },
-      body: { files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }] },
+      files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
       user: mockUser,
     })
     const { res } = getMockRes()
@@ -37,7 +37,7 @@ describe('postAttachments', () => {
     jest.spyOn(prisma.attachment, 'create').mockResolvedValue(mockAttachment)
     const req = getMockReq({
       params: { id: '1' },
-      body: { files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }] },
+      files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
       user: mockUser,
     })
     const { res } = getMockRes()
@@ -49,7 +49,7 @@ describe('postAttachments', () => {
     jest.spyOn(prisma.attachment, 'create').mockRejectedValue(new Error())
     const req = getMockReq({
       params: { id: '1' },
-      body: { files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }] },
+      files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
       user: mockUser,
     })
     const { res } = getMockRes()
