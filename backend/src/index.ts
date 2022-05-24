@@ -26,10 +26,6 @@ app.use(session(config.session))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(helmet({ contentSecurityPolicy }))
-app.use((req, res, next) => {
-  res.locals.user = req.user
-  next()
-})
 app.use('/api', router)
 app.get('*', (req, res) => res.sendFile(join(publicDir, 'index.html')))
 app.listen(port, () => {
