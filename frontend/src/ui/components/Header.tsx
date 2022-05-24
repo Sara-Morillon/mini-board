@@ -14,7 +14,7 @@ export function Header(): JSX.Element {
         <Navbar>
           <NavbarGroup>
             <NavbarHeading>
-              <Button minimal icon="git-repo" onClick={() => navigate('/')}>
+              <Button minimal icon={<img src="/favicon.svg" height={16} />} onClick={() => navigate('/')}>
                 Mini Board
               </Button>
             </NavbarHeading>
