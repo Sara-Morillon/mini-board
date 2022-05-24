@@ -10,6 +10,7 @@ const env = cleanEnv(process.env, {
   SESSION_DIR: str(),
   UPLOAD_DIR: str(),
   COOKIE_DOMAIN: str(),
+  COOKIE_MAX_AGE: num({ default: 3600000 }),
   LOG_SILENT: bool({ default: false }),
   PUBLIC_DIR: str(),
 })
@@ -37,7 +38,12 @@ export const config: IConfig = {
     saveUninitialized: false,
     store: new FileStore({ path: env.SESSION_DIR }),
     name: 'sid',
-    cookie: { domain: env.COOKIE_DOMAIN, httpOnly: false, secure: false },
+    cookie: {
+      domain: env.COOKIE_DOMAIN,
+      httpOnly: false,
+      secure: true,
+      maxAge: env.COOKIE_MAX_AGE,
+    },
   },
   uploadDir: env.UPLOAD_DIR,
   logSilent: env.LOG_SILENT,
