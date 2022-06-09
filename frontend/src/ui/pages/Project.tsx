@@ -1,4 +1,3 @@
-import { FormGroup, InputGroup, TextArea } from '@blueprintjs/core'
 import { useFetch, useForm } from '@saramorillon/hooks'
 import React, { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
@@ -40,32 +39,28 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
   const { onSubmit, values, onChange } = useForm(onSave, project ?? empty)
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="p3">
       <div className="flex">
-        <FormGroup label="Key" labelFor="key" labelInfo="*">
-          <InputGroup
-            id="key"
+        <label>
+          Key *
+          <input
             value={values.key}
             onChange={(e) => onChange('key', e.target.value)}
             required
             disabled={Boolean(project)}
           />
-        </FormGroup>
+        </label>
 
-        <FormGroup label="Name" labelFor="name" labelInfo="*" className="ml1 flex-auto">
-          <InputGroup id="name" value={values.name} onChange={(e) => onChange('name', e.target.value)} required />
-        </FormGroup>
+        <label className="ml1 flex-auto">
+          Name *
+          <input value={values.name} onChange={(e) => onChange('name', e.target.value)} required />
+        </label>
       </div>
 
-      <FormGroup label="Description" labelFor="description">
-        <TextArea
-          id="description"
-          value={values.description}
-          onChange={(e) => onChange('description', e.target.value)}
-          rows={5}
-          fill
-        />
-      </FormGroup>
+      <label>
+        Description
+        <textarea value={values.description} onChange={(e) => onChange('description', e.target.value)} rows={5} />
+      </label>
 
       <div className="clearfix">
         <div className="right">

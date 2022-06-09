@@ -1,6 +1,5 @@
-import { Button, Callout, Classes } from '@blueprintjs/core'
 import { useFetch } from '@saramorillon/hooks'
-import c from 'classnames'
+import { IconInfoCircle } from '@tabler/icons'
 import React, { useState } from 'react'
 import { getApp } from '../../services/app'
 import { Info } from './Info'
@@ -12,9 +11,11 @@ export function Footer(): JSX.Element | null {
   if (!app) return null
 
   return (
-    <Callout className={c('mt2 p2 not-rounded center', Classes.TEXT_SMALL)}>
-      <b>{app.name}</b> <small>v{app.version}</small> <Button icon="info-sign" minimal onClick={() => setOpen(true)} />
+    <footer className="center">
+      <b>{app.name}</b>
+      <small className="mx1">v{app.version}</small>
+      <IconInfoCircle onClick={() => setOpen(true)} cursor="pointer" />
       <Info open={open} toggle={() => setOpen(false)} app={app} />
-    </Callout>
+    </footer>
   )
 }

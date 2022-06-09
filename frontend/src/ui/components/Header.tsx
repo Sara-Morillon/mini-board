@@ -1,38 +1,31 @@
-import { Alignment, Button, Callout, H1, Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core'
+import { IconLogout, IconSettings } from '@tabler/icons'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useCurrentTitle } from '../../hooks/useTitle'
 import { logout } from '../../services/session'
 
 export function Header(): JSX.Element {
   const title = useCurrentTitle()
-  const navigate = useNavigate()
 
   return (
     <>
-      <header>
-        <Navbar>
-          <NavbarGroup>
-            <NavbarHeading>
-              <Button minimal icon={<img src="/favicon.svg" height={16} />} onClick={() => navigate('/')}>
-                Mini Board
-              </Button>
-            </NavbarHeading>
-          </NavbarGroup>
+      <nav aria-label="Main">
+        <Link to={'/'}>
+          <img src="/favicon.svg" height={16} /> <strong>Mini Board</strong>
+        </Link>
 
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Button minimal icon="cog" onClick={() => navigate('/users')}>
-              Admin
-            </Button>
-            <Button minimal icon="log-out" onClick={logout}>
-              Log out
-            </Button>
-          </NavbarGroup>
-        </Navbar>
+        <Link to={'/users'} className="ml-auto">
+          <IconSettings /> Admin
+        </Link>
+
+        <button onClick={logout}>
+          <IconLogout /> Log out
+        </button>
+      </nav>
+
+      <header>
+        <h1>{title}</h1>
       </header>
-      <Callout>
-        <H1 className="p4">{title}</H1>
-      </Callout>
     </>
   )
 }

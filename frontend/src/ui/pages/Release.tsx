@@ -1,4 +1,3 @@
-import { FormGroup, InputGroup } from '@blueprintjs/core'
 import { useFetch, useForm } from '@saramorillon/hooks'
 import { formatDistanceToNow } from 'date-fns'
 import React, { useCallback, useMemo } from 'react'
@@ -48,24 +47,21 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
   const { onSubmit, values, onChange } = useForm(onSave, release ?? empty)
 
   return (
-    <form onSubmit={onSubmit}>
-      <FormGroup label="Name" labelFor="name" labelInfo="*">
-        <InputGroup id="name" value={values.name} onChange={(e) => onChange('name', e.target.value)} required />
-      </FormGroup>
+    <form onSubmit={onSubmit} className="p3">
+      <label>
+        Name *
+        <input value={values.name} onChange={(e) => onChange('name', e.target.value)} required />
+      </label>
 
-      <FormGroup
-        label="Due date"
-        labelFor="due-date"
-        labelInfo="*"
-        helperText={values.dueDate && formatDistanceToNow(new Date(values.dueDate), { addSuffix: true })}
-      >
+      <label>
+        Due date *
         <input
           type="date"
-          id="due-date"
           value={(values.dueDate || new Date().toISOString()).substring(0, 10)}
           onChange={(e) => onChange('dueDate', `${e.target.value}T00:00:00.000Z`)}
         />
-      </FormGroup>
+        {values.dueDate && <small>{formatDistanceToNow(new Date(values.dueDate), { addSuffix: true })}</small>}
+      </label>
 
       <div className="clearfix">
         <div className="right">

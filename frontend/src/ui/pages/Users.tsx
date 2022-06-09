@@ -1,12 +1,12 @@
-import { Button, Card, H4 } from '@blueprintjs/core'
 import { useFetch } from '@saramorillon/hooks'
+import { IconPlus, IconTrash } from '@tabler/icons'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSession } from '../../contexts/SessionContext'
 import { useTitle } from '../../hooks/useTitle'
 import { IUser } from '../../models/User'
 import { deleteUser, getUsers } from '../../services/user'
-import { CreateButton } from '../components/CreateButton'
 import { LoadContainer } from '../components/LoadContainer'
 
 export function Users(): JSX.Element {
@@ -14,10 +14,14 @@ export function Users(): JSX.Element {
 
   return (
     <>
-      <div className="clearfix">
-        <CreateButton to="/user">Create user</CreateButton>
-      </div>
-      <LoadContainer loading={loading}>
+      <Link className="mb2 right" to="/user">
+        <IconPlus />
+        Create user
+      </Link>
+
+      <div className="clearfix" />
+
+      <LoadContainer loading={loading} className="center">
         {users.map((user) => (
           <User key={user.username} user={user} refresh={refresh} />
         ))}
@@ -39,23 +43,26 @@ function User({ user, refresh }: IUserProps): JSX.Element {
 
   const onDelete = useCallback(() => {
     setLoading(true)
-    deleteUser(user).then(refresh)
+    deleteUser(user)
+      .then(() => {
+        refresh()
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [user, refresh])
 
   return (
-    <Card key={user.username} className="mb2">
-      <Button
-        disabled={user.username === session.username}
-        onClick={onDelete}
-        loading={loading}
-        intent="danger"
-        icon="delete"
-        className="right"
-      >
-        Delete
-      </Button>
-      <H4>{user.username}</H4>
-      <small title={user.createdAt}>Created at {format(parseISO(user.createdAt), 'Pp')}</small>
-    </Card>
+    <article className="mb2">
+      {user.username !== session.username && (
+        <button aria-busy={loading} disabled={loading} onClick={onDelete} className="right">
+          {!loading && <IconTrash />} Delete
+        </button>
+      )}
+      <h4>{user.username}</h4>
+      <p>
+        <small title={user.createdAt}>Created at {format(parseISO(user.createdAt), 'Pp')}</small>
+      </p>
+    </article>
   )
 }

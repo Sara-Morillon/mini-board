@@ -42,10 +42,10 @@
     "vite": "^2.8.6"
   },
   "dependencies": {
-    "@blueprintjs/core": "^3.52.0",
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@saramorillon/hooks": "^2.3.1",
+    "@tabler/icons": "^1.68.0",
     "axios": "^0.24.0",
     "basscss": "^8.1.0",
     "classnames": "^2.3.1",

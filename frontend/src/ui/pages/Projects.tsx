@@ -1,4 +1,3 @@
-import { Divider, H4 } from '@blueprintjs/core'
 import { useFetch } from '@saramorillon/hooks'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
@@ -18,14 +17,12 @@ export function Projects(): JSX.Element {
         <CreateButton to="/project">Create project</CreateButton>
       </div>
       {projects.map((project) => (
-        <div key={project.id} className="mt2">
+        <article key={project.id} className="mt2">
           <small className="right">Updated {format(parseISO(project.updatedAt), 'PP')}</small>
-          <H4>
-            <Link to={`/project/${project.id}/issues`}>{project.name}</Link>
-          </H4>
-          <p>{project.description}</p>
-          <Divider />
-        </div>
+          <Link to={`/project/${project.id}/issues`}>{project.name}</Link>
+          <br />
+          <small>{project.description}</small>
+        </article>
       ))}
     </LoadContainer>
   )

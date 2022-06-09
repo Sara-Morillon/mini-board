@@ -1,13 +1,12 @@
-import { Spinner, SpinnerProps } from '@blueprintjs/core'
-import React, { PropsWithChildren } from 'react'
+import React, { HTMLAttributes, PropsWithChildren } from 'react'
 
-interface ILoadContainerProps extends SpinnerProps {
+interface ILoadContainerProps extends HTMLAttributes<HTMLDivElement> {
   loading?: boolean
 }
 
 export function LoadContainer({ loading, children, ...props }: PropsWithChildren<ILoadContainerProps>): JSX.Element {
   if (loading) {
-    return <Spinner {...props} />
+    return <div aria-busy {...props} />
   }
 
   return <>{children}</>

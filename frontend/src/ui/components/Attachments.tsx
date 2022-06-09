@@ -1,5 +1,5 @@
-import { Button, Card, Colors, Divider, Icon } from '@blueprintjs/core'
 import { useFetch } from '@saramorillon/hooks'
+import { IconDownload, IconTrash, IconUpload } from '@tabler/icons'
 import React, { ChangeEvent, useCallback } from 'react'
 import { IAttachment } from '../../models/Attachment'
 import { deleteAttachment, getAttachments, saveAttachments } from '../../services/attachment'
@@ -22,27 +22,28 @@ export function Attachments({ issueId }: IAttachementsProps) {
 
   return (
     <>
-      <Divider className="my2" />
+      <hr className="my2" />
       <h3>
-        {attachments.length > 0 && (
-          <a href={`/api/attachments?issueId=${issueId}`} className="right">
+        <div className="flex right">
+          <label className="mr1 relative add-attachments">
             <small>
-              <Icon icon="download" /> Download all
+              <IconUpload /> Add attachments
             </small>
-          </a>
-        )}
-        <label className="right mr1 relative" style={{ cursor: 'pointer', color: Colors.BLUE5 }}>
-          <small>
-            <Icon icon="upload" /> Add attachments
-          </small>
-          <input
-            type="file"
-            className="absolute left-0 right-0"
-            style={{ opacity: 0, fontSize: 0 }}
-            multiple
-            onChange={addAttachments}
-          />
-        </label>
+            <input
+              type="file"
+              className="absolute left-0 right-0 top-0 bottom-0 m0"
+              multiple
+              onChange={addAttachments}
+            />
+          </label>
+          {attachments.length > 0 && (
+            <a href={`/api/attachments?issueId=${issueId}`}>
+              <small>
+                <IconDownload /> Download all
+              </small>
+            </a>
+          )}
+        </div>
         Attachments
       </h3>
       <LoadContainer loading={loading}>
@@ -70,7 +71,7 @@ function Attachment({ attachment, refresh }: IAttachmentProps): JSX.Element {
   }, [attachment, refresh])
 
   return (
-    <Card className="m1 center" interactive>
+    <article className="m1 center">
       <a
         href={downloadLink}
         target="_blank"
@@ -93,8 +94,10 @@ function Attachment({ attachment, refresh }: IAttachmentProps): JSX.Element {
         >
           {attachment.filename}
         </span>
-        <Button small minimal icon="trash" onClick={onDelete} />
+        <button onClick={onDelete}>
+          <IconTrash />
+        </button>
       </p>
-    </Card>
+    </article>
   )
 }

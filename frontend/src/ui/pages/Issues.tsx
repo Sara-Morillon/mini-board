@@ -1,10 +1,9 @@
-import { Button, ButtonGroup, Classes, HTMLTable, Tag } from '@blueprintjs/core'
 import { useFetch, usePagination } from '@saramorillon/hooks'
+import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight } from '@tabler/icons'
 import c from 'classnames'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { colors } from '../../colors'
 import { useParams } from '../../hooks/useParams'
 import { getIssues } from '../../services/issue'
 import { CreateButton } from '../components/CreateButton'
@@ -26,26 +25,32 @@ export function Issues() {
 
   return (
     <>
-      <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
-      <div className="center">
-        <ReleaseSelector projectId={projectId} value={releaseId} onChange={setReleaseId} placeholder="All releases" />
+      <div className="flex justify-between items-center">
+        <ReleaseSelector
+          projectId={projectId}
+          value={releaseId}
+          onChange={setReleaseId}
+          placeholder="All releases"
+          className="p1 mt1"
+        />
+        <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
       </div>
       <LoadContainer loading={loading}>
-        <HTMLTable className="mt2" style={{ width: '100%' }}>
+        <table className="mt2">
           <thead>
             <tr>
-              <th className="nowrap">Type</th>
-              <th className="nowrap">Title</th>
-              <th className="nowrap">Created</th>
-              <th className="nowrap">Release</th>
-              <th className="nowrap">Status</th>
+              <th>Type</th>
+              <th>Title</th>
+              <th>Created</th>
+              <th>Release</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {issues.map((issue) => (
               <tr key={issue.id}>
-                <td className="nowrap">
-                  <Tag intent={colors.types[issue.type]} round title={issue.type} />
+                <td>
+                  <span className={c('mr1', issue.type)} />
                 </td>
                 <td className="truncate" style={{ maxWidth: 0, width: '100%' }}>
                   <Link to={`/project/${projectId}/issue/${issue.id}`}>
@@ -53,17 +58,13 @@ export function Issues() {
                   </Link>
                 </td>
                 <td className="nowrap">
-                  <small className={Classes.TEXT_MUTED}>{format(parseISO(issue.createdAt), 'PP')}</small>
+                  <small>{format(parseISO(issue.createdAt), 'PP')}</small>
                 </td>
                 <td className="nowrap">
-                  <span className={c({ [Classes.TEXT_MUTED]: parseISO(issue.release.dueDate) < new Date() })}>
-                    {issue.release.name}
-                  </span>
+                  <small>{issue.release.name}</small>
                 </td>
                 <td>
-                  <Tag intent={colors.statuses[issue.status]} minimal>
-                    {issue.status.toUpperCase()}
-                  </Tag>
+                  <mark className={issue.status}>{issue.status.toUpperCase()}</mark>
                 </td>
               </tr>
             ))}
@@ -72,20 +73,26 @@ export function Issues() {
             <tr>
               <td colSpan={5}>
                 <div className="center">
-                  <ButtonGroup>
-                    <Button disabled={!canPrevious} onClick={first} icon="chevron-backward" />
-                    <Button disabled={!canPrevious} onClick={previous} icon="chevron-left" />
-                    <Button disabled minimal>
-                      Page {page} of {maxPage}
-                    </Button>
-                    <Button disabled={!canNext} onClick={next} icon="chevron-right" />
-                    <Button disabled={!canNext} onClick={last} icon="chevron-forward" />
-                  </ButtonGroup>
+                  <button disabled={!canPrevious} onClick={first}>
+                    <IconChevronsLeft />
+                  </button>
+                  <button disabled={!canPrevious} onClick={previous}>
+                    <IconChevronLeft />
+                  </button>
+                  <span className="mx1">
+                    Page {page} of {maxPage}
+                  </span>
+                  <button disabled={!canNext} onClick={next}>
+                    <IconChevronRight />
+                  </button>
+                  <button disabled={!canNext} onClick={last}>
+                    <IconChevronsRight />
+                  </button>
                 </div>
               </td>
             </tr>
           </tfoot>
-        </HTMLTable>
+        </table>
       </LoadContainer>
     </>
   )

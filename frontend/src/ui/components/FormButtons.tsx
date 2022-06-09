@@ -1,4 +1,4 @@
-import { Button } from '@blueprintjs/core'
+import { IconDeviceFloppy, IconTrash } from '@tabler/icons'
 import React from 'react'
 
 interface ISaveButtonProps {
@@ -8,9 +8,9 @@ interface ISaveButtonProps {
 
 export function SaveButton({ loading, disabled }: ISaveButtonProps) {
   return (
-    <Button type="submit" loading={loading} disabled={disabled} icon="floppy-disk" intent="primary">
-      Save
-    </Button>
+    <button type="submit" aria-busy={loading} disabled={disabled} data-variant="primary">
+      <IconDeviceFloppy /> Save
+    </button>
   )
 }
 
@@ -20,17 +20,8 @@ interface IDeleteButtonProps extends ISaveButtonProps {
 
 export function DeleteButton({ onClick, loading, disabled }: IDeleteButtonProps) {
   return (
-    <Button
-      type="button"
-      onClick={onClick}
-      loading={loading}
-      disabled={disabled}
-      className="ml1"
-      icon="trash"
-      intent="primary"
-      outlined
-    >
-      Delete
-    </Button>
+    <button type="button" onClick={onClick} aria-busy={loading} disabled={disabled} className="ml1">
+      <IconTrash /> Delete
+    </button>
   )
 }
