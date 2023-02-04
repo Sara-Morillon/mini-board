@@ -65,28 +65,34 @@ span.feature {
 
 /* Status button */
 
-button.todo:not(.checked),
-button.doing:not(.checked),
-button.done:not(.checked) {
-  --button-background: transparent;
+:root {
+  --todo-background: rgba(127, 127, 127, 0.5);
+  --doing-background: rgba(56, 139, 253, 0.5);
+  --done-background: rgba(46, 160, 67, 0.5);
 }
 
 button.todo {
-  --button-background: rgba(127, 127, 127, 0.2);
-  --button-hover: rgba(127, 127, 127, 0.3);
-  --button-border: rgba(127, 127, 127, 0.4);
+  --button-hover: rgba(127, 127, 127, 0.65);
 }
 
-button.doing {
-  --button-background: rgba(56, 139, 253, 0.2);
-  --button-hover: rgba(56, 139, 253, 0.3);
-  --button-border: rgba(56, 139, 253, 0.4);
+button.todo.checked {
+  --button-background: var(--todo-background);
 }
 
-button.done {
-  --button-background: rgba(46, 160, 67, 0.2);
-  --button-hover: rgba(46, 160, 67, 0.3);
-  --button-border: rgba(46, 160, 67, 0.4);
+button.doing:hover {
+  --button-hover: rgba(56, 139, 253, 0.65);
+}
+
+button.doing.checked {
+  --button-background: var(--doing-background);
+}
+
+button.done:hover {
+  --button-hover: rgba(46, 160, 67, 0.65);
+}
+
+button.done.checked {
+  --button-background: var(--done-background);
 }
 
 /* Status badge */
@@ -100,15 +106,15 @@ mark.done {
 }
 
 mark.todo {
-  --mark-background: rgba(127, 127, 127, 0.2);
+  --mark-background: var(--todo-background);
 }
 
 mark.doing {
-  --mark-background: rgba(56, 139, 253, 0.2);
+  --mark-background: var(--doing-background);
 }
 
 mark.done {
-  --mark-background: rgba(46, 160, 67, 0.2);
+  --mark-background: var(--done-background);
 }
 
 /* Count badge */
