@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.5",
-    "@mini-utils/eslint-config-typescript": "^1.0.6",
+    "@saramorillon/eslint-plugin": "^2.0.1",
     "@types/archiver": "^5.1.1",
     "@types/body-parser": "^1.19.2",
     "@types/cookie-parser": "^1.4.2",

@@ -27,7 +27,7 @@ export async function downloadAttachments(req: Request, res: Response): Promise<
       }
       res.set('Content-disposition', `attachment; filename=${issueId}_attachments.zip`)
       res.set('Content-Type', 'application/zip')
-      archive.finalize()
+      await archive.finalize()
     }
     success()
   } catch (error) {

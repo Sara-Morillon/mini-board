@@ -1,6 +1,6 @@
 import { json, urlencoded } from 'body-parser'
 import cookieParser from 'cookie-parser'
-import express from 'express'
+import express, { static as _static } from 'express'
 import session from 'express-session'
 import helmet from 'helmet'
 import passport from 'passport'
@@ -18,7 +18,7 @@ passport.deserializeUser(deserializeUser)
 passport.use(new Strategy(localStrategy))
 
 const app = express()
-app.use(express.static(publicDir))
+app.use(_static(publicDir))
 app.use(cookieParser())
 app.use(json())
 app.use(urlencoded({ extended: true }))
