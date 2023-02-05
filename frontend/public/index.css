@@ -119,27 +119,24 @@ mark.done {
 
 /* Count badge */
 
-mark.count {
+.ticket mark {
   --padding-horizontal: 0.5rem;
   --mark-background: rgba(260, 260, 260, 0.2);
-
-  display: inline-block;
-  font-size: small;
-  border-radius: 50%;
-  text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {
-  mark.count {
+  .ticket mark {
     --mark-background: rgba(255, 255, 255, 0.1);
   }
 }
 
 @media (prefers-color-scheme: light) {
-  mark.count {
+  .ticket mark {
     --mark-background: rgba(0, 0, 0, 0.1);
   }
 }
+
+/* Add attachment link */
 
 .add-attachments:hover {
   text-decoration: underline;

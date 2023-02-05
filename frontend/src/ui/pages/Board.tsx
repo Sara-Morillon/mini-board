@@ -89,5 +89,5 @@ interface ICountProps {
 
 function Count({ issues, status }: ICountProps) {
   const count = issues.filter((issue) => issue.status === status).length
-  return <mark className="count">{count}</mark>
+  return <mark data-variant="pill">{count}</mark>
 }

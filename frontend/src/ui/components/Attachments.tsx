@@ -23,7 +23,7 @@ export function Attachments({ issueId }: IAttachementsProps) {
       <hr className="my2" />
       <h3>
         <div className="flex right">
-          <label className="mr1 relative add-attachments">
+          <label className="m0 mr1 relative add-attachments">
             <small>
               <IconUpload /> Add attachments
             </small>

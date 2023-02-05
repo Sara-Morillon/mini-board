@@ -27,7 +27,9 @@ export function Ticket({ status, issue, projectId, onMove }: ITicketProps): JSX.
     >
       {status === issue.status && (
         <>
-          <mark className="right count">{issue.points}</mark>
+          <mark className="right" data-variant="pill">
+            {issue.points}
+          </mark>
           <h5 className="truncate">
             <Link to={`/project/${projectId}/issue/${issue.id}`}>
               [{issue.project.key}-{issue.id}] {issue.title}
