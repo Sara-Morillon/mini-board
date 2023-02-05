@@ -4,8 +4,6 @@ import { useLocation } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../../src/hooks/useForm'
 import { mock, mockNavigate } from '../../mocks'
 
-jest.mock('react-router-dom')
-
 describe('useFormSave', () => {
   beforeEach(() => {
     mockNavigate()

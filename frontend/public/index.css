@@ -1,0 +1,161 @@
+.icon {
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+  margin-top: -0.25em;
+}
+
+table {
+  width: 100%;
+}
+
+/* Type bullet */
+
+span.bug,
+span.feature {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  opacity: 0.7;
+}
+
+span.bug {
+  background-color: rgb(211, 47, 47);
+  border-color: rgb(154, 0, 7);
+}
+
+span.feature {
+  background-color: rgb(251, 192, 45);
+  border-color: rgb(196, 144, 0);
+}
+
+/* Type card */
+
+.ticket {
+  height: 100%;
+  box-sizing: border-box;
+  opacity: 0;
+}
+
+.ticket.bug,
+.ticket.feature {
+  cursor: grab;
+  opacity: 1;
+}
+
+.ticket.bug {
+  background-color: rgba(211, 47, 47, 0.2);
+}
+
+.ticket.feature {
+  background-color: rgba(251, 192, 45, 0.2);
+}
+
+.ticket.over {
+  background-color: rgb(2, 136, 209, 0.2);
+  opacity: 0.7;
+}
+
+.ticket.dragged {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+/* Status button */
+
+:root {
+  --todo-background: rgba(127, 127, 127, 0.5);
+  --doing-background: rgba(56, 139, 253, 0.5);
+  --done-background: rgba(46, 160, 67, 0.5);
+}
+
+button.todo {
+  --button-hover: rgba(127, 127, 127, 0.65);
+}
+
+button.todo.checked {
+  --button-background: var(--todo-background);
+}
+
+button.doing:hover {
+  --button-hover: rgba(56, 139, 253, 0.65);
+}
+
+button.doing.checked {
+  --button-background: var(--doing-background);
+}
+
+button.done:hover {
+  --button-hover: rgba(46, 160, 67, 0.65);
+}
+
+button.done.checked {
+  --button-background: var(--done-background);
+}
+
+/* Status badge */
+
+mark.todo,
+mark.doing,
+mark.done {
+  display: inline-block;
+  width: 70px;
+  text-align: center;
+}
+
+mark.todo {
+  --mark-background: var(--todo-background);
+}
+
+mark.doing {
+  --mark-background: var(--doing-background);
+}
+
+mark.done {
+  --mark-background: var(--done-background);
+}
+
+/* Count badge */
+
+.ticket mark {
+  --padding-horizontal: 0.5rem;
+  --mark-background: rgba(260, 260, 260, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .ticket mark {
+    --mark-background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .ticket mark {
+    --mark-background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Add attachment link */
+
+.add-attachments:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .add-attachments {
+    color: var(--palette-primary-light);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .add-attachments {
+    color: var(--palette-primary-dark);
+  }
+}
+
+.add-attachments input {
+  cursor: pointer;
+  opacity: 0;
+  font-size: 0;
+}

@@ -1,10 +1,9 @@
-import { Button, FormGroup, InputGroup, Radio, RadioGroup, TextArea } from '@blueprintjs/core'
 import { useFetch, useForm } from '@saramorillon/hooks'
-import React, { useCallback, useMemo } from 'react'
-import { colors } from '../../colors'
+import c from 'classnames'
+import React, { ChangeEvent, useCallback, useMemo } from 'react'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useParams } from '../../hooks/useParams'
-import { IIssue, statuses, Type, types } from '../../models/Issue'
+import { IIssue, statuses, types } from '../../models/Issue'
 import { deleteIssue, getIssue, saveIssue } from '../../services/issue'
 import { Attachments } from '../components/Attachments'
 import { Comments } from '../components/Comments'
@@ -57,83 +56,83 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
 
   const { onSubmit, values, onChange } = useForm(onSave, issue ?? empty)
 
+  const onTypeChanged = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target
+      if (value === 'bug' || value === 'feature') {
+        onChange('type', value)
+      }
+    },
+    [onChange]
+  )
+
   return (
     <>
       <form onSubmit={onSubmit}>
         <div className="flex">
-          <FormGroup label="Title" labelFor="title" labelInfo="*" className="flex-auto mr1">
-            <InputGroup
-              id="title"
-              value={values.title}
-              onChange={(e) => onChange('title', e.target.value)}
-              required
-              fill
-            />
-          </FormGroup>
+          <label className="flex-auto mr1">
+            Title *
+            <input value={values.title} onChange={(e) => onChange('title', e.target.value)} required />
+          </label>
 
-          <FormGroup label="Release" labelFor="release" labelInfo="*">
-            <ReleaseSelector
-              id="release"
-              projectId={projectId}
-              value={values.releaseId}
-              onChange={(releaseId) => onChange('releaseId', releaseId)}
-              placeholder="Select a release"
-              required
-            />
-          </FormGroup>
+          <ReleaseSelector
+            projectId={projectId}
+            label="Release *"
+            value={values.releaseId}
+            onChange={(releaseId) => onChange('releaseId', releaseId)}
+            placeholder="Select a release"
+            required
+          />
         </div>
 
         <div className="flex">
-          <FormGroup label="Type" labelInfo="*">
-            <RadioGroup
-              onChange={(e) => onChange('type', e.currentTarget.value as Type)}
-              selectedValue={values.type}
-              inline
-            >
-              {types.map((type) => (
-                <Radio key={type} value={type} label={type.toUpperCase()} />
-              ))}
-            </RadioGroup>
-          </FormGroup>
+          <fieldset>
+            <legend className="mb2">Type *</legend>
+            {types.map((type) => (
+              <label key={type} className="mr2">
+                <input type="radio" name="type" value={type} checked={values.type === type} onChange={onTypeChanged} />{' '}
+                {type.toUpperCase()}
+              </label>
+            ))}
+          </fieldset>
 
-          <FormGroup label="Points" labelFor="points" labelInfo="*" className="mr1">
-            <InputGroup
+          <label className="mr1">
+            Points *
+            <input
               type="number"
-              id="points"
               value={values.points.toString()}
               onChange={(e) => onChange('points', Number(e.target.value))}
               min={0}
               step={1}
-              fill
               required
             />
-          </FormGroup>
+          </label>
 
-          <FormGroup label="Status" labelFor="status" labelInfo="*">
+          <fieldset>
+            <legend className="mb1">Status *</legend>
             {statuses.map((status) => (
-              <Button
-                key={status}
-                intent={colors.statuses[status]}
-                outlined={status === values.status}
-                minimal={status !== values.status}
-                onClick={() => onChange('status', status)}
-                className="mr1"
-              >
-                {status.toUpperCase()}
-              </Button>
+              <strong key={status}>
+                <button
+                  type="button"
+                  onClick={() => onChange('status', status)}
+                  className={c('mr1', status, { checked: values.status === status })}
+                >
+                  {status.toUpperCase()}
+                </button>
+              </strong>
             ))}
-          </FormGroup>
+          </fieldset>
         </div>
 
-        <FormGroup label="Summary" labelFor="summary">
-          <TextArea
+        <label>
+          Summary
+          <textarea
             id="summary"
             value={values.description}
             onChange={(e) => onChange('description', e.target.value)}
             rows={5}
-            fill
           />
-        </FormGroup>
+        </label>
 
         <div className="clearfix">
           <div className="right">

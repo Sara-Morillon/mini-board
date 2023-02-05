@@ -1,8 +1,7 @@
-import { Callout, H5, Tag } from '@blueprintjs/core'
 import { useDrag, useDrop } from '@saramorillon/hooks'
+import c from 'classnames'
 import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { colors } from '../../colors'
 import { IIssueFull, Status } from '../../models/Issue'
 
 interface ITicketProps {
@@ -18,33 +17,27 @@ export function Ticket({ status, issue, projectId, onMove }: ITicketProps): JSX.
   const [isDragged, dragEvents] = useDrag(source)
   const [isOver, dropEvents] = useDrop(onDrop)
 
-  let opacity = isOver ? 0.7 : 0
-  if (status === issue.status) opacity = isDragged ? 0.5 : 1
-  const cursor = isDragged ? 'grabbing' : 'grab'
-
   return (
-    <Callout
+    <article
       data-testid="ticket"
       {...dragEvents}
       {...dropEvents}
       draggable={status === issue.status}
-      intent={isOver ? 'primary' : colors.types[issue.type]}
-      style={{ height: '100%', opacity, cursor }}
-      icon={null}
+      className={c('mb0', 'ticket', { over: isOver, dragged: isDragged, [issue.type]: status === issue.status })}
     >
       {status === issue.status && (
         <>
-          <Tag className="right" round minimal>
+          <mark className="right" data-variant="pill">
             {issue.points}
-          </Tag>
-          <H5 className="truncate">
+          </mark>
+          <h5 className="truncate">
             <Link to={`/project/${projectId}/issue/${issue.id}`}>
               [{issue.project.key}-{issue.id}] {issue.title}
             </Link>
-          </H5>
+          </h5>
           <p className="truncate mt1 mb0">{issue.description}</p>
         </>
       )}
-    </Callout>
+    </article>
   )
 }

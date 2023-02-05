@@ -1,7 +1,6 @@
 import { useForm } from '@saramorillon/hooks'
-import { act, render } from '@testing-library/react'
-import React, { PropsWithChildren, ReactElement } from 'react'
-import { MemoryRouter, MemoryRouterProps, useNavigate } from 'react-router-dom'
+import { act } from '@testing-library/react'
+import { useNavigate } from 'react-router-dom'
 import { IApp } from '../src/models/App'
 import { IAttachment } from '../src/models/Attachment'
 import { IComment } from '../src/models/Comment'
@@ -11,14 +10,6 @@ import { IRelease } from '../src/models/Release'
 import { IUser } from '../src/models/User'
 
 const { location } = window
-
-export function renderInRouter(ui: ReactElement, props?: MemoryRouterProps) {
-  return render(ui, {
-    wrapper: function wrapper({ children }: PropsWithChildren<unknown>) {
-      return <MemoryRouter {...props}>{children}</MemoryRouter>
-    },
-  })
-}
 
 export async function wait() {
   await act(() => new Promise((resolve) => setTimeout(resolve, 0)))

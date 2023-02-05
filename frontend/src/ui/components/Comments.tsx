@@ -1,5 +1,5 @@
-import { Button, Callout, Classes, Divider, FormGroup, H5, TextArea } from '@blueprintjs/core'
 import { useFetch } from '@saramorillon/hooks'
+import { IconTrash } from '@tabler/icons'
 import React, { FormEvent, useCallback, useState } from 'react'
 import { IComment } from '../../models/Comment'
 import { deleteComment, getComments, saveComment } from '../../services/comment'
@@ -18,7 +18,7 @@ export function Comments({ issueId }: ICommentsProps) {
   const onSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault()
-      saveComment(issueId, content)
+      return saveComment(issueId, content)
         .then(refresh)
         .then(() => setContent(''))
     },
@@ -27,27 +27,20 @@ export function Comments({ issueId }: ICommentsProps) {
 
   return (
     <>
-      <Divider className="my2" />
+      <hr className="my2" />
       <h3>Comments</h3>
       <LoadContainer loading={loading}>
         {comments.map((comment) => (
           <Comment key={comment.id} comment={comment} refresh={refresh} />
         ))}
       </LoadContainer>
-      <Divider className="my1" />
       <form name="add-comment" onSubmit={onSubmit}>
-        <FormGroup>
-          <TextArea
-            placeholder="Add a comment"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            fill
-          ></TextArea>
-        </FormGroup>
-        <Button type="submit" className="right">
+        <label>
+          <textarea placeholder="Add a comment" value={content} onChange={(e) => setContent(e.target.value)} required />
+        </label>
+        <button type="submit" className="right">
           Send
-        </Button>
+        </button>
       </form>
     </>
   )
@@ -59,19 +52,17 @@ interface ICommentProps {
 }
 
 function Comment({ comment, refresh }: ICommentProps): JSX.Element {
-  const onDelete = useCallback(() => {
-    deleteComment(comment).then(refresh)
-  }, [comment, refresh])
+  const onDelete = useCallback(() => deleteComment(comment).then(refresh), [comment, refresh])
 
   return (
-    <Callout className="my1">
-      <H5>
-        {comment.author.username} <small className={Classes.TEXT_MUTED}>{comment.createdAt}</small>
-      </H5>
-      <Button small minimal icon="trash" onClick={onDelete} className="right">
-        Delete
-      </Button>
+    <article className="my1">
+      <h5>
+        {comment.author.username} <small>{comment.createdAt}</small>
+      </h5>
+      <button onClick={onDelete} className="right">
+        <IconTrash /> Delete
+      </button>
       <p>{comment.content}</p>
-    </Callout>
+    </article>
   )
 }

@@ -1,4 +1,3 @@
-import { HTMLTable, Tag } from '@blueprintjs/core'
 import { useFetch } from '@saramorillon/hooks'
 import React, { useCallback, useState } from 'react'
 import { useParams } from '../../hooks/useParams'
@@ -15,9 +14,9 @@ export function Board(): JSX.Element {
 
   return (
     <>
-      <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
-      <div className="center">
-        <ReleaseSelector projectId={projectId} onChange={setReleaseId} />
+      <div className="flex justify-between items-center">
+        <ReleaseSelector projectId={projectId} onChange={setReleaseId} className="p1 mt1" />
+        <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
       </div>
       {releaseId && <BoardTable releaseId={releaseId} projectId={projectId} />}
     </>
@@ -49,7 +48,7 @@ function BoardTable({ releaseId, projectId }: IBoardTableProps): JSX.Element {
 
   return (
     <LoadContainer loading={loading || state.loading}>
-      <HTMLTable className="mt2" style={{ tableLayout: 'fixed', width: '100%', height: 1 }} striped bordered>
+      <table className="mt2" style={{ tableLayout: 'fixed' }}>
         <thead>
           <tr>
             <th>
@@ -66,19 +65,19 @@ function BoardTable({ releaseId, projectId }: IBoardTableProps): JSX.Element {
         <tbody>
           {issues.map((issue) => (
             <tr key={issue.id}>
-              <td style={{ height: '100%' }}>
+              <td style={{ height: 1 }}>
                 <Ticket issue={issue} status="todo" projectId={projectId} onMove={onMove} />
               </td>
-              <td style={{ height: '100%' }}>
+              <td style={{ height: 1 }}>
                 <Ticket issue={issue} status="doing" projectId={projectId} onMove={onMove} />
               </td>
-              <td style={{ height: '100%' }}>
+              <td style={{ height: 1 }}>
                 <Ticket issue={issue} status="done" projectId={projectId} onMove={onMove} />
               </td>
             </tr>
           ))}
         </tbody>
-      </HTMLTable>
+      </table>
     </LoadContainer>
   )
 }
@@ -90,9 +89,5 @@ interface ICountProps {
 
 function Count({ issues, status }: ICountProps) {
   const count = issues.filter((issue) => issue.status === status).length
-  return (
-    <Tag round minimal>
-      {count}
-    </Tag>
-  )
+  return <mark data-variant="pill">{count}</mark>
 }

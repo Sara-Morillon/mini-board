@@ -3,8 +3,6 @@ import { useParams as useRouterParams } from 'react-router-dom'
 import { useParams } from '../../../src/hooks/useParams'
 import { mock } from '../../mocks'
 
-jest.mock('react-router-dom')
-
 describe('useParams', () => {
   beforeEach(() => {
     mock(useRouterParams).mockReturnValue({ projectId: '1', id: 'id' })

@@ -1,42 +1,39 @@
-import { useFetch } from '@saramorillon/hooks'
 import { render, renderHook, screen } from '@testing-library/react'
 import React, { PropsWithChildren, useContext } from 'react'
 import { SessionContext, SessionProvider, useSession } from '../../../src/contexts/SessionContext'
-import { mock } from '../../mocks'
+import { getSession } from '../../../src/services/session'
+import { mock, mockUser, wait } from '../../mocks'
 
-jest.mock('@saramorillon/hooks')
+jest.mock('../../../src/services/session')
 
 function wrapper({ children }: PropsWithChildren<unknown>) {
-  return <SessionProvider>{children}</SessionProvider>
+  return <SessionContext.Provider value={mockUser()}>{children}</SessionContext.Provider>
 }
 
 describe('SessionContext', () => {
   beforeEach(() => {
-    mock(useFetch).mockReturnValue(['session', { loading: false }])
+    mock(getSession).mockResolvedValue('session')
   })
 
-  it('should show loader when loading', () => {
-    mock(useFetch).mockReturnValue([null, { loading: true }])
-    render(<div />, { wrapper })
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+  it('should show loader when loading', async () => {
+    render(<SessionProvider></SessionProvider>)
+    expect(screen.getByLabelText('Loading...')).toBeInTheDocument()
+    await wait()
   })
 
-  it('should render children', () => {
-    render(<div>In provider</div>, { wrapper })
+  it('should render children', async () => {
+    render(<SessionProvider>In provider</SessionProvider>)
+    await wait()
     expect(screen.getByText('In provider')).toBeInTheDocument()
   })
 
   it('should return session', () => {
     const { result } = renderHook(() => useContext(SessionContext), { wrapper })
-    expect(result.current).toEqual('session')
+    expect(result.current).toEqual(mockUser())
   })
 })
 
 describe('useSession', () => {
-  beforeEach(() => {
-    mock(useFetch).mockReturnValue(['session', { loading: false }])
-  })
-
   it('should throw if context is used outside a Provider', () => {
     jest.spyOn(console, 'error').mockImplementation(() => undefined)
     expect(() => renderHook(() => useSession())).toThrow(new Error('No session found'))
@@ -44,6 +41,6 @@ describe('useSession', () => {
 
   it('should return session', () => {
     const { result } = renderHook(() => useSession(), { wrapper })
-    expect(result.current).toBe('session')
+    expect(result.current).toEqual(mockUser())
   })
 })

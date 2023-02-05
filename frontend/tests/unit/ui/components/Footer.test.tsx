@@ -1,56 +1,65 @@
-import { useFetch } from '@saramorillon/hooks'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import mockdate from 'mockdate'
 import React from 'react'
+import { getApp } from '../../../../src/services/app'
 import { Footer } from '../../../../src/ui/components/Footer'
-import { IInfoProps } from '../../../../src/ui/components/Info'
-import { mock } from '../../../mocks'
+import { mock, mockApp, wait } from '../../../mocks'
 
-jest.mock('@saramorillon/hooks')
-jest.mock('../../../../src/ui/components/Info', () => ({
-  Info: ({ open, toggle }: IInfoProps) => (open ? <button onClick={toggle}>Info</button> : null),
-}))
+jest.mock('../../../../src/services/app')
+
+mockdate.set('2019-02-01T00:00:00.000Z')
 
 describe('Footer', () => {
   beforeEach(() => {
-    mock(useFetch).mockReturnValue([])
+    mock(getApp).mockResolvedValue(mockApp())
   })
 
-  it('should render nothing if no app information', () => {
+  it('should render nothing if no app information', async () => {
+    mock(getApp).mockResolvedValue(null)
     const { container } = render(<Footer />)
+    await wait()
     expect(container).toBeEmptyDOMElement()
   })
 
-  it('should render app name', () => {
-    mock(useFetch).mockReturnValue([{ name: 'app' }])
+  it('should render app name', async () => {
     render(<Footer />)
-    expect(screen.getByText('app')).toBeInTheDocument()
+    await wait()
+    expect(screen.getByText('name')).toBeInTheDocument()
   })
 
-  it('should render app version', () => {
-    mock(useFetch).mockReturnValue([{ version: 'version' }])
+  it('should render app version', async () => {
     render(<Footer />)
+    await wait()
     expect(screen.getByText('vversion')).toBeInTheDocument()
   })
 
-  it('should not render info', () => {
-    mock(useFetch).mockReturnValue([{ version: 'version' }])
+  it('should render repository URL', async () => {
     render(<Footer />)
-    expect(screen.queryByText('Info')).not.toBeInTheDocument()
+    await wait()
+    expect(screen.getByText('repository')).toBeInTheDocument()
   })
 
-  it('should render info when clicking on info button', () => {
-    mock(useFetch).mockReturnValue([{ version: 'version' }])
+  it('should render repository link', async () => {
     render(<Footer />)
-    fireEvent.click(screen.getByRole('button'))
-    expect(screen.getByText('Info')).toBeInTheDocument()
+    await wait()
+    expect(screen.getByText('repository')).toHaveAttribute('href', 'repository')
   })
 
-  it('should hide info when toggling info', () => {
-    mock(useFetch).mockReturnValue([{ version: 'version' }])
+  it('should render author URL', async () => {
     render(<Footer />)
-    fireEvent.click(screen.getByRole('button'))
-    expect(screen.getByText('Info')).toBeInTheDocument()
-    fireEvent.click(screen.getByText('Info'))
-    expect(screen.queryByText('Info')).not.toBeInTheDocument()
+    await wait()
+    expect(screen.getByText('url')).toBeInTheDocument()
+  })
+
+  it('should render author link', async () => {
+    render(<Footer />)
+    await wait()
+    expect(screen.getByText('url')).toHaveAttribute('href', 'url')
+  })
+
+  it('should render author name and current year', async () => {
+    render(<Footer />)
+    await wait()
+    expect(screen.getByText('© author 2019')).toBeInTheDocument()
   })
 })

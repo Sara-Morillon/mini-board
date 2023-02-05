@@ -4,7 +4,6 @@ import { postUser } from '../../../../src/services/user'
 import { User } from '../../../../src/ui/pages/User'
 import { mock, mockNavigate, wait } from '../../../mocks'
 
-jest.mock('react-router-dom')
 jest.mock('../../../../src/services/user')
 
 describe('User', () => {
