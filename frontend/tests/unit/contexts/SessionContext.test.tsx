@@ -1,6 +1,5 @@
 import { useFetch } from '@saramorillon/hooks'
-import { render, screen } from '@testing-library/react'
-import { renderHook } from '@testing-library/react-hooks'
+import { render, renderHook, screen } from '@testing-library/react'
 import React, { PropsWithChildren, useContext } from 'react'
 import { SessionContext, SessionProvider, useSession } from '../../../src/contexts/SessionContext'
 import { mock } from '../../mocks'
@@ -39,8 +38,8 @@ describe('useSession', () => {
   })
 
   it('should throw if context is used outside a Provider', () => {
-    const { result } = renderHook(() => useSession())
-    expect(result.error?.message).toBe('No session found')
+    jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    expect(() => renderHook(() => useSession())).toThrow(new Error('No session found'))
   })
 
   it('should return session', () => {

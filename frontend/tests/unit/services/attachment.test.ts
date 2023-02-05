@@ -20,8 +20,7 @@ describe('getAttachments', () => {
 describe('saveAttachments', () => {
   it('should post attachment', async () => {
     const file = new File([], 'test')
-    const fileList: FileList = { 0: file, length: 1, item: () => file }
-    await saveAttachments(1, fileList)
+    await saveAttachments(1, [file])
     expect(request).toHaveBeenCalledWith(
       { url: '/api/issues/1/attachments', method: 'POST', data: expect.any(FormData) },
       null
@@ -29,7 +28,7 @@ describe('saveAttachments', () => {
   })
 
   it('should not post attachment if no files', async () => {
-    await saveAttachments(1, null)
+    await saveAttachments(1, [])
     expect(request).not.toHaveBeenCalled()
   })
 })

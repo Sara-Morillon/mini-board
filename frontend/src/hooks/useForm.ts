@@ -11,17 +11,18 @@ export function useFormSave<T>(
   const [mounted, setMounted] = useState(false)
 
   const onSave = useCallback(
-    async (values: T) => {
+    (values: T) => {
       if (mounted) setLoading(true)
-      try {
-        const path = await saveData(values)
-        if (mounted) {
-          if (path === pathname) refresh()
-          else navigate(path)
-        }
-      } finally {
-        if (mounted) setLoading(false)
-      }
+      return saveData(values)
+        .then((path) => {
+          if (mounted) {
+            if (path === pathname) refresh()
+            else navigate(path)
+          }
+        })
+        .finally(() => {
+          if (mounted) setLoading(false)
+        })
     },
     [mounted, saveData, pathname, refresh, navigate]
   )
@@ -40,14 +41,15 @@ export function useFormDelete<T>(deleteData: (values: T) => Promise<string>): [b
   const [mounted, setMounted] = useState(false)
 
   const onDelete = useCallback(
-    async (values: T) => {
+    (values: T) => {
       if (mounted) setLoading(true)
-      try {
-        const path = await deleteData(values)
-        if (mounted) navigate(path)
-      } finally {
-        if (mounted) setLoading(false)
-      }
+      return deleteData(values)
+        .then((path) => {
+          if (mounted) navigate(path)
+        })
+        .finally(() => {
+          if (mounted) setLoading(false)
+        })
     },
     [mounted, deleteData, navigate]
   )

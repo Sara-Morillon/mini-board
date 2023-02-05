@@ -35,9 +35,9 @@ describe('Attachments', () => {
   it('should save attachments when adding attachments', async () => {
     render(<Attachments issueId={1} />)
     await wait()
-    fireEvent.change(screen.getByLabelText('Add attachments'), { target: { files: 'files' } })
+    fireEvent.change(screen.getByLabelText('Add attachments'), { target: { files: ['file'] } })
     await wait()
-    expect(saveAttachments).toHaveBeenCalledWith(1, 'files')
+    expect(saveAttachments).toHaveBeenCalledWith(1, ['file'])
   })
 
   it('should refresh attachments after saving', async () => {
