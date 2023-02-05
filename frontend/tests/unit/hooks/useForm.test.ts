@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import { useLocation } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../../src/hooks/useForm'
@@ -17,10 +17,11 @@ describe('useFormSave', () => {
     expect(result.current[0]).toBe(false)
   })
 
-  it('should be loading when saving', async () => {
-    const { result } = renderHook(() => useFormSave(jest.fn().mockResolvedValue('pathname'), jest.fn()))
-    await act(() => result.current[1]('values'))
-    expect(result.all[2]).toEqual([true, expect.any(Function)])
+  it('should be loading when saving', () => {
+    const onSave = jest.fn().mockReturnValue({ then: jest.fn().mockReturnThis(), finally: jest.fn() })
+    const { result } = renderHook(() => useFormSave(onSave, jest.fn()))
+    void act(() => result.current[1]('values'))
+    expect(result.current).toEqual([true, expect.any(Function)])
   })
 
   it('should not be loading after saving is done', async () => {
@@ -61,10 +62,11 @@ describe('useFormDelete', () => {
     expect(result.current[0]).toBe(false)
   })
 
-  it('should be loading when deleting', async () => {
-    const { result } = renderHook(() => useFormDelete(jest.fn().mockResolvedValue('pathname')))
-    await act(() => result.current[1]('values'))
-    expect(result.all[2]).toEqual([true, expect.any(Function)])
+  it('should be loading when deleting', () => {
+    const onDelete = jest.fn().mockReturnValue({ then: jest.fn().mockReturnThis(), finally: jest.fn() })
+    const { result } = renderHook(() => useFormDelete(onDelete))
+    void act(() => result.current[1]('values'))
+    expect(result.current).toEqual([true, expect.any(Function)])
   })
 
   it('should not be loading after deleting is done', async () => {

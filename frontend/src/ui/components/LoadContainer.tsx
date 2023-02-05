@@ -1,7 +1,7 @@
 import { Spinner, SpinnerProps } from '@blueprintjs/core'
 import React, { PropsWithChildren } from 'react'
 
-interface ILoadContainerProps extends SpinnerProps {
+type ILoadContainerProps = SpinnerProps & {
   loading?: boolean
 }
 

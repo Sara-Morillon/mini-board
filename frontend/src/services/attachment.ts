@@ -9,11 +9,10 @@ export async function getAttachments(issueId: number): Promise<IAttachment[]> {
   return request<IAttachment[]>({ url: makeUrl(issueId) }, [])
 }
 
-export async function saveAttachments(issueId: number, files: FileList | null): Promise<void> {
-  if (files) {
+export async function saveAttachments(issueId: number, files: File[]): Promise<void> {
+  if (files.length) {
     const data = new FormData()
-    for (let i = 0; i < files.length; i++) {
-      const file = files.item(i)
+    for (const file of files) {
       if (file) data.append('files', file)
     }
     await request<string | null>({ url: makeUrl(issueId), method: 'POST', data }, null)
