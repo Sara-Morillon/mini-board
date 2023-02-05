@@ -54,7 +54,7 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
       </label>
 
       <label>
-        Due date *
+        <span>Due date *</span>
         <input
           type="date"
           value={(values.dueDate || new Date().toISOString()).substring(0, 10)}

@@ -23,8 +23,8 @@ describe('ReleaseSelector', () => {
   })
 
   it('should render loader when loading', () => {
-    render(<ReleaseSelector projectId={1} onChange={jest.fn()} />)
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+    render(<ReleaseSelector projectId={1} onChange={jest.fn()} label="label" />)
+    expect(screen.getByText('label')).toHaveAttribute('aria-busy', 'true')
   })
 
   it('should render "no release found" message when no release', () => {

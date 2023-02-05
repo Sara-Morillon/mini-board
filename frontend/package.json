@@ -7,8 +7,8 @@
     "serve": "vite dev",
     "test": "jest --runInBand",
     "test:ci": "yarn test --ci --coverage",
-    "format": "prettier \"src/**/*.{ts,tsx}\" --write",
-    "lint": "eslint \"src/**/*.{ts,tsx}\""
+    "format": "prettier \"{src,tests}/**/*.{ts,tsx}\" --write",
+    "lint": "eslint \"{src,tests}/**/*.{ts,tsx}\""
   },
   "devDependencies": {
     "@saramorillon/eslint-plugin": "^2.0.1",

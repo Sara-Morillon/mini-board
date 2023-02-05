@@ -14,9 +14,7 @@ export function Attachments({ issueId }: IAttachementsProps) {
   const [attachments, { loading }, refresh] = useFetch(fetch, [])
 
   const addAttachments = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      saveAttachments(issueId, [...(e.target.files || [])]).then(refresh)
-    },
+    (e: ChangeEvent<HTMLInputElement>) => saveAttachments(issueId, e.target.files).then(refresh),
     [issueId, refresh]
   )
 

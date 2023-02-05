@@ -50,7 +50,7 @@ export function Issues() {
             {issues.map((issue) => (
               <tr key={issue.id}>
                 <td>
-                  <span className={c('mr1', issue.type)} />
+                  <span title={issue.type} className={c('mr1', issue.type)} />
                 </td>
                 <td className="truncate" style={{ maxWidth: 0, width: '100%' }}>
                   <Link to={`/project/${projectId}/issue/${issue.id}`}>

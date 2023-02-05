@@ -27,6 +27,11 @@ describe('saveAttachments', () => {
     )
   })
 
+  it('should not post attachment if no filelist', async () => {
+    await saveAttachments(1, null)
+    expect(request).not.toHaveBeenCalled()
+  })
+
   it('should not post attachment if no files', async () => {
     await saveAttachments(1, [])
     expect(request).not.toHaveBeenCalled()

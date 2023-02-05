@@ -18,7 +18,7 @@ describe('SessionContext', () => {
   it('should show loader when loading', () => {
     mock(useFetch).mockReturnValue([null, { loading: true }])
     render(<div />, { wrapper })
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+    expect(screen.getByLabelText('Loading...')).toBeInTheDocument()
   })
 
   it('should render children', () => {

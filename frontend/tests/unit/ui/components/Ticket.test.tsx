@@ -27,21 +27,9 @@ describe('Ticket', () => {
     expect(screen.getByTestId('ticket')).toHaveAttribute('draggable', 'false')
   })
 
-  it('should have an opacity of 0 by default if status does not match', () => {
+  it('should be transparent by default if status does not match', () => {
     render(<Ticket status="done" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
-    expect(screen.getByTestId('ticket')).toHaveStyle({ opacity: 0 })
-  })
-
-  it('should have an opacity of 0.7 when hovering element if status does not match', () => {
-    mock(useDrop).mockReturnValue([true])
-    render(<Ticket status="done" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
-    expect(screen.getByTestId('ticket')).toHaveStyle({ opacity: 0.7 })
-  })
-
-  it('should have an opacity of 0 when not hovering element if status does not match', () => {
-    mock(useDrop).mockReturnValue([false])
-    render(<Ticket status="done" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
-    expect(screen.getByTestId('ticket')).toHaveStyle({ opacity: 0 })
+    expect(screen.getByTestId('ticket')).not.toHaveClass('feature', 'bug')
   })
 
   it('should render issue if status does match', () => {
@@ -54,21 +42,10 @@ describe('Ticket', () => {
     expect(screen.getByTestId('ticket')).toHaveAttribute('draggable', 'true')
   })
 
-  it('should have an opacity of 1 by default if status does match', () => {
-    render(<Ticket status="doing" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
-    expect(screen.getByTestId('ticket')).toHaveStyle({ opacity: 1 })
-  })
-
-  it('should have an opacity of 0.5 when element is dragged if status does match', () => {
+  it('should decrease opacity when element is dragged', () => {
     mock(useDrag).mockReturnValue([true])
     render(<Ticket status="doing" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
-    expect(screen.getByTestId('ticket')).toHaveStyle({ opacity: 0.5 })
-  })
-
-  it('should have an opacity of 1 when element is not dragged if status does match', () => {
-    mock(useDrag).mockReturnValue([false])
-    render(<Ticket status="doing" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
-    expect(screen.getByTestId('ticket')).toHaveStyle({ opacity: 1 })
+    expect(screen.getByTestId('ticket')).toHaveClass('dragged')
   })
 
   it('should render blue card when hovering element', () => {

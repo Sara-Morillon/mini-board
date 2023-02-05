@@ -1,10 +1,10 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { useParams } from '../../../../src/hooks/useParams'
 import { getIssues, moveIssue, saveIssue } from '../../../../src/services/issue'
 import { getReleases } from '../../../../src/services/release'
 import { Board } from '../../../../src/ui/pages/Board'
-import { mock, mockIssueFull, mockRelease, renderInRouter, wait } from '../../../mocks'
+import { mock, mockIssueFull, mockRelease, wait } from '../../../mocks'
 
 jest.mock('../../../../src/hooks/useParams')
 jest.mock('../../../../src/services/issue')
@@ -19,26 +19,26 @@ describe('Board', () => {
   })
 
   it('should render create button', async () => {
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     expect(screen.getByText('Create issue')).toHaveAttribute('href', '/project/1/issue')
   })
 
   it('should render release selector', async () => {
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     expect(screen.getByText('No release found')).toBeInTheDocument()
   })
 
   it('should not render board if no release is selected', async () => {
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
 
   it('should render board', async () => {
     mock(getReleases).mockResolvedValue([mockRelease()])
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     expect(screen.getByRole('table')).toBeInTheDocument()
   })
@@ -55,7 +55,7 @@ describe('Board', () => {
         mockIssueFull({ id: 6, status: 'done' }),
       ],
     })
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     expect(screen.getByText('To do')).toHaveTextContent('To do 2')
     expect(screen.getByText('Doing')).toHaveTextContent('Doing 3')
@@ -65,7 +65,7 @@ describe('Board', () => {
   it('should do nothing when changing nothing', async () => {
     mock(getReleases).mockResolvedValue([mockRelease()])
     mock(getIssues).mockResolvedValue({ issues: [mockIssueFull()] })
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[1], {
       dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
@@ -78,7 +78,7 @@ describe('Board', () => {
   it('should not save issue when changing priority', async () => {
     mock(getReleases).mockResolvedValue([mockRelease()])
     mock(getIssues).mockResolvedValue({ issues: [mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })] })
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[4], {
       dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
@@ -90,7 +90,7 @@ describe('Board', () => {
   it('should save issue when changing a status', async () => {
     mock(getReleases).mockResolvedValue([mockRelease()])
     mock(getIssues).mockResolvedValue({ issues: [mockIssueFull()] })
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[0], {
       dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
@@ -102,7 +102,7 @@ describe('Board', () => {
   it('should not move issue when changing a status', async () => {
     mock(getReleases).mockResolvedValue([mockRelease()])
     mock(getIssues).mockResolvedValue({ issues: [mockIssueFull()] })
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[0], {
       dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
@@ -114,7 +114,7 @@ describe('Board', () => {
   it('should move issue when changing priority', async () => {
     mock(getReleases).mockResolvedValue([mockRelease()])
     mock(getIssues).mockResolvedValue({ issues: [mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })] })
-    renderInRouter(<Board />)
+    render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[4], {
       dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },

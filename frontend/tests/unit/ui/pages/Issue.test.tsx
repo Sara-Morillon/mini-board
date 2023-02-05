@@ -1,5 +1,5 @@
 import { useForm } from '@saramorillon/hooks'
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { useFormDelete, useFormSave } from '../../../../src/hooks/useForm'
 import { useParams } from '../../../../src/hooks/useParams'
@@ -8,7 +8,7 @@ import { getComments } from '../../../../src/services/comment'
 import { getIssue } from '../../../../src/services/issue'
 import { getReleases } from '../../../../src/services/release'
 import { Issue } from '../../../../src/ui/pages/Issue'
-import { mock, mockForm, mockIssue, mockRelease, renderInRouter, wait } from '../../../mocks'
+import { mock, mockForm, mockIssue, mockRelease, wait } from '../../../mocks'
 
 jest.mock('@saramorillon/hooks', () => ({ ...jest.requireActual('@saramorillon/hooks'), useForm: jest.fn() }))
 jest.mock('../../../../src/services/issue')
@@ -31,14 +31,14 @@ describe('Issue', () => {
   })
 
   it('should fetch issue', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(getIssue).toHaveBeenCalledWith('1')
   })
 
   it('should use empty issue if no issue', async () => {
     mock(getIssue).mockResolvedValue(null)
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(useForm).toHaveBeenCalledWith(expect.any(Function), {
       id: 0,
@@ -56,35 +56,35 @@ describe('Issue', () => {
   })
 
   it('should render issue title', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByLabelText('Title *')).toHaveDisplayValue('title1')
   })
 
   it('should update form values when changing title', async () => {
     const { onChange } = mockForm(mockIssue())
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'title2' } })
     expect(onChange).toHaveBeenCalledWith('title', 'title2')
   })
 
   it('should render issue release', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByLabelText('Release *')).toHaveDisplayValue('release1 (Jan 1, 2020)')
   })
 
   it('should update form values when changing release', async () => {
     const { onChange } = mockForm(mockIssue())
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.change(screen.getByLabelText('Release *'), { target: { value: '2' } })
     expect(onChange).toHaveBeenCalledWith('releaseId', 2)
   })
 
   it('should render issue type', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByLabelText('BUG')).toBeChecked()
     expect(screen.getByLabelText('FEATURE')).not.toBeChecked()
@@ -92,61 +92,58 @@ describe('Issue', () => {
 
   it('should update form values when changing type', async () => {
     const { onChange } = mockForm(mockIssue())
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.click(screen.getByLabelText('FEATURE'))
     expect(onChange).toHaveBeenCalledWith('type', 'feature')
   })
 
   it('should render issue points', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByLabelText('Points *')).toHaveDisplayValue('5')
   })
 
   it('should update form values when changing points', async () => {
     const { onChange } = mockForm(mockIssue())
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.change(screen.getByLabelText('Points *'), { target: { value: 3 } })
     expect(onChange).toHaveBeenCalledWith('points', 3)
   })
 
   it('should render issue status', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
-    expect(screen.getByRole('button', { name: 'TODO' })).not.toHaveClass('Classes.OUTLINED')
-    expect(screen.getByRole('button', { name: 'TODO' })).toHaveClass('Classes.MINIMAL')
-    expect(screen.getByRole('button', { name: 'DOING' })).toHaveClass('Classes.OUTLINED')
-    expect(screen.getByRole('button', { name: 'DOING' })).not.toHaveClass('Classes.MINIMAL')
-    expect(screen.getByRole('button', { name: 'DONE' })).not.toHaveClass('Classes.OUTLINED')
-    expect(screen.getByRole('button', { name: 'DONE' })).toHaveClass('Classes.MINIMAL')
+    expect(screen.getByRole('button', { name: 'TODO' })).toHaveClass('todo')
+    expect(screen.getByRole('button', { name: 'DOING' })).toHaveClass('checked', 'doing')
+    expect(screen.getByRole('button', { name: 'DONE' })).toHaveClass('done')
   })
 
   it('should update form values when changing status', async () => {
     const { onChange } = mockForm(mockIssue())
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'TODO' }))
     expect(onChange).toHaveBeenCalledWith('status', 'todo')
   })
 
   it('should render issue summary', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByLabelText('Summary')).toHaveDisplayValue('description1')
   })
 
   it('should update form values when changing summary', async () => {
     const { onChange } = mockForm(mockIssue())
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.change(screen.getByLabelText('Summary'), { target: { value: 'description2' } })
     expect(onChange).toHaveBeenCalledWith('description', 'description2')
   })
 
   it('should enabled buttons when neither saving nor deleting', async () => {
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled()
@@ -154,7 +151,7 @@ describe('Issue', () => {
 
   it('should disable buttons when saving', async () => {
     mock(useFormSave).mockReturnValue([true, jest.fn()])
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled()
@@ -162,7 +159,7 @@ describe('Issue', () => {
 
   it('should disable buttons when deleting', async () => {
     mock(useFormDelete).mockReturnValue([true, jest.fn()])
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled()
@@ -171,7 +168,7 @@ describe('Issue', () => {
   it('should delete issue when clicking on delete button', async () => {
     const onDelete = jest.fn()
     mock(useFormDelete).mockReturnValue([false, onDelete])
-    renderInRouter(<Issue />)
+    render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
     expect(onDelete).toHaveBeenCalled()
