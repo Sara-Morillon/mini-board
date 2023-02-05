@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import { LinkProps, NavigateProps, NavLinkProps } from 'react-router-dom'
 
 jest.mock('react-router-dom', () => ({
@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
       {children}
     </a>
   ),
-  NavLink: ({ to, children, ...props }: Omit<NavLinkProps, 'className' | 'style'>) => (
+  NavLink: ({ to, children, ...props }: PropsWithChildren<Omit<NavLinkProps, 'className' | 'style' | 'children'>>) => (
     <a href={to.toString()} {...props}>
       {children}
     </a>
