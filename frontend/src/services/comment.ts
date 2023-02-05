@@ -5,7 +5,7 @@ function makeUrl(issueId: number) {
   return `/api/issues/${issueId}/comments`
 }
 
-export async function getComments(issueId: number): Promise<IComment[]> {
+export function getComments(issueId: number): Promise<IComment[]> {
   return request<IComment[]>({ url: makeUrl(issueId) }, [])
 }
 

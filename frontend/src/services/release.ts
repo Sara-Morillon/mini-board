@@ -5,12 +5,12 @@ function makeUrl(id?: string | number) {
   return id ? `/api/releases/${id}` : '/api/releases'
 }
 
-export async function getReleases(projectId: number): Promise<IRelease[]> {
+export function getReleases(projectId: number): Promise<IRelease[]> {
   return request<IRelease[]>({ url: makeUrl(), params: { projectId } }, [])
 }
 
-export async function getRelease(id?: string): Promise<IRelease | null> {
-  if (!id) return null
+export function getRelease(id?: string): Promise<IRelease | null> {
+  if (!id) return Promise.resolve(null)
   return request<IRelease | null>({ url: makeUrl(id) }, null)
 }
 

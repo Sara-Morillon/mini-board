@@ -5,12 +5,12 @@ function makeUrl(id?: string | number) {
   return id ? `/api/projects/${id}` : '/api/projects'
 }
 
-export async function getProjects(): Promise<IProject[]> {
+export function getProjects(): Promise<IProject[]> {
   return request<IProject[]>({ url: makeUrl() }, [])
 }
 
-export async function getProject(id?: string | number): Promise<IProject | null> {
-  if (!id) return null
+export function getProject(id?: string | number): Promise<IProject | null> {
+  if (!id) return Promise.resolve(null)
   return request<IProject | null>({ url: makeUrl(id) }, null)
 }
 

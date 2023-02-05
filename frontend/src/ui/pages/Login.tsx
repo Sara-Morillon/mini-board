@@ -7,7 +7,7 @@ export function Login(): JSX.Element {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
-    login(username, password).then(() => {
+    return login(username, password).then(() => {
       window.location.reload()
     })
   }

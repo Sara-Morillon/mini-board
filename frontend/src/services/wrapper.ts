@@ -9,7 +9,7 @@ function handleError<T>(error: AxiosError, defaultValue: T) {
   return defaultValue
 }
 
-export async function request<T>(config: AxiosRequestConfig, defaultValue: T): Promise<T> {
+export function request<T>(config: AxiosRequestConfig, defaultValue: T): Promise<T> {
   return axios
     .request<T>({ ...config, withCredentials: true })
     .then((res) => res.data)

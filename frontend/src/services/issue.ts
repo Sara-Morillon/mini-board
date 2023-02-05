@@ -5,7 +5,7 @@ function makeUrl(id?: string | number) {
   return id ? `/api/issues/${id}` : '/api/issues'
 }
 
-export async function getIssues(
+export function getIssues(
   projectId: number,
   releaseId?: number,
   page?: number,
@@ -17,8 +17,8 @@ export async function getIssues(
   )
 }
 
-export async function getIssue(id?: string): Promise<IIssue | null> {
-  if (!id) return null
+export function getIssue(id?: string): Promise<IIssue | null> {
+  if (!id) return Promise.resolve(null)
   return request<IIssue | null>({ url: makeUrl(id) }, null)
 }
 

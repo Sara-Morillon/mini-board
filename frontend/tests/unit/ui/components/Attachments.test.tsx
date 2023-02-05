@@ -23,7 +23,7 @@ describe('Attachments', () => {
     mock(getAttachments).mockResolvedValue([mockAttachment()])
     render(<Attachments issueId={1} />)
     await wait()
-    expect(screen.getByText('Download all').parentElement).toHaveAttribute('href', '/api/attachments?issueId=1')
+    expect(screen.getByRole('link', { name: 'Download all' })).toHaveAttribute('href', '/api/attachments?issueId=1')
   })
 
   it('should not render "Download all" button if no attachments', async () => {
@@ -40,7 +40,7 @@ describe('Attachments', () => {
     expect(saveAttachments).toHaveBeenCalledWith(1, ['file'])
   })
 
-  it('should refresh attachments after saving', async () => {
+  it('should refresh attachments after adding an attachment', async () => {
     render(<Attachments issueId={1} />)
     await wait()
     mock(getAttachments).mockClear()

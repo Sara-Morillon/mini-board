@@ -64,9 +64,7 @@ function Attachment({ attachment, refresh }: IAttachmentProps): JSX.Element {
   const downloadLink = `/api/attachments/${attachment.id}`
   const src = /image\/.*/.test(attachment.mime) ? downloadLink : '/empty.png'
 
-  const onDelete = useCallback(() => {
-    deleteAttachment(attachment).then(refresh)
-  }, [attachment, refresh])
+  const onDelete = useCallback(() => deleteAttachment(attachment).then(refresh), [attachment, refresh])
 
   return (
     <article className="m1 center">

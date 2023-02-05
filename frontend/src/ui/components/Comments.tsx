@@ -18,7 +18,7 @@ export function Comments({ issueId }: ICommentsProps) {
   const onSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault()
-      saveComment(issueId, content)
+      return saveComment(issueId, content)
         .then(refresh)
         .then(() => setContent(''))
     },
@@ -52,9 +52,7 @@ interface ICommentProps {
 }
 
 function Comment({ comment, refresh }: ICommentProps): JSX.Element {
-  const onDelete = useCallback(() => {
-    deleteComment(comment).then(refresh)
-  }, [comment, refresh])
+  const onDelete = useCallback(() => deleteComment(comment).then(refresh), [comment, refresh])
 
   return (
     <article className="my1">

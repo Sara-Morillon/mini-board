@@ -5,7 +5,7 @@ function makeUrl(issueId: number) {
   return `/api/issues/${issueId}/attachments`
 }
 
-export async function getAttachments(issueId: number): Promise<IAttachment[]> {
+export function getAttachments(issueId: number): Promise<IAttachment[]> {
   return request<IAttachment[]>({ url: makeUrl(issueId) }, [])
 }
 

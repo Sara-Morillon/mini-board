@@ -12,7 +12,7 @@ export function User(): JSX.Element {
   function onSubmit(e: FormEvent) {
     e.preventDefault()
     setLoading(true)
-    postUser(username, password).then(() => {
+    return postUser(username, password).then(() => {
       navigate('/users')
     })
   }
