@@ -1,10 +1,8 @@
-import { Classes } from '@blueprintjs/core'
-import { useTheme } from '@saramorillon/hooks'
 import { render, screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
 import { Info } from '../../../../src/ui/components/Info'
-import { mock, mockApp } from '../../../mocks'
+import { mockApp } from '../../../mocks'
 
 jest.mock('@saramorillon/hooks')
 
@@ -17,21 +15,6 @@ function getContainer() {
 }
 
 describe('Info', () => {
-  beforeEach(() => {
-    mock(useTheme).mockReturnValue('dark')
-  })
-
-  it('should set dark classname if theme is dark', () => {
-    render(<Info app={mockApp()} open toggle={jest.fn()} />, { container: getContainer() })
-    expect(screen.getByRole('dialog')).toHaveClass(Classes.DARK)
-  })
-
-  it('should not set dark classname if theme is light', () => {
-    mock(useTheme).mockReturnValue('light')
-    render(<Info app={mockApp()} open toggle={jest.fn()} />, { container: getContainer() })
-    expect(screen.getByRole('dialog')).not.toHaveClass(Classes.DARK)
-  })
-
   it('should render app name', () => {
     render(<Info app={mockApp()} open toggle={jest.fn()} />, { container: getContainer() })
     expect(screen.getByText('name')).toBeInTheDocument()

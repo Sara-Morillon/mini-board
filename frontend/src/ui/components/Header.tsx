@@ -10,11 +10,11 @@ export function Header(): JSX.Element {
   return (
     <>
       <nav aria-label="Main">
-        <Link to={'/'}>
+        <Link to="/">
           <img src="/favicon.svg" height={16} /> <strong>Mini Board</strong>
         </Link>
 
-        <Link to={'/users'} className="ml-auto">
+        <Link to="/users" className="ml-auto">
           <IconSettings /> Admin
         </Link>
 

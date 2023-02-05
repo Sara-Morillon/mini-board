@@ -1,12 +1,10 @@
 import { useFetch } from '@saramorillon/hooks'
-import { IconInfoCircle } from '@tabler/icons'
-import React, { useState } from 'react'
+import { IconGitBranch, IconWorld } from '@tabler/icons'
+import React from 'react'
 import { getApp } from '../../services/app'
-import { Info } from './Info'
 
 export function Footer(): JSX.Element | null {
   const [app] = useFetch(getApp, null)
-  const [open, setOpen] = useState(false)
 
   if (!app) return null
 
@@ -14,8 +12,16 @@ export function Footer(): JSX.Element | null {
     <footer className="center">
       <b>{app.name}</b>
       <small className="mx1">v{app.version}</small>
-      <IconInfoCircle onClick={() => setOpen(true)} cursor="pointer" />
-      <Info open={open} toggle={() => setOpen(false)} app={app} />
+      <br />
+      <a href={app.repository.url} target="_blank" rel="noopener noreferrer">
+        <IconGitBranch /> {app.repository.url}
+      </a>
+      <br />
+      <a href={app.author.url} target="_blank" rel="noopener noreferrer">
+        <IconWorld /> {app.author.url}
+      </a>
+      <br />
+      &copy; {app.author.name} {new Date().getFullYear()}
     </footer>
   )
 }

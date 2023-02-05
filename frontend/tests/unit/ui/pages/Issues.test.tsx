@@ -1,4 +1,3 @@
-import { Classes } from '@blueprintjs/core'
 import { screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
@@ -55,7 +54,7 @@ describe('Issues', () => {
     renderInRouter(<Issues />)
     await wait()
     expect(screen.getByText('release1')).toBeInTheDocument()
-    expect(screen.getByText('release1')).not.toHaveClass(Classes.TEXT_MUTED)
+    expect(screen.getByText('release1')).not.toHaveClass('Classes.TEXT_MUTED')
   })
 
   it('should render muted old issue release', async () => {
@@ -64,13 +63,13 @@ describe('Issues', () => {
     })
     renderInRouter(<Issues />)
     await wait()
-    expect(screen.getByText('release1')).toHaveClass(Classes.TEXT_MUTED)
+    expect(screen.getByText('release1')).toHaveClass('Classes.TEXT_MUTED')
   })
 
   it('should render issue status', async () => {
     renderInRouter(<Issues />)
     await wait()
     expect(screen.getByText('DOING')).toBeInTheDocument()
-    expect(screen.getByText('DOING').parentElement).toHaveClass(Classes.INTENT_PRIMARY)
+    expect(screen.getByText('DOING').parentElement).toHaveClass('Classes.INTENT_PRIMARY')
   })
 })

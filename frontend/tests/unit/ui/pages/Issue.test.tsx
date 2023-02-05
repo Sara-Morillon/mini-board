@@ -1,4 +1,3 @@
-import { Classes } from '@blueprintjs/core'
 import { useForm } from '@saramorillon/hooks'
 import { fireEvent, screen } from '@testing-library/react'
 import React from 'react'
@@ -116,12 +115,12 @@ describe('Issue', () => {
   it('should render issue status', async () => {
     renderInRouter(<Issue />)
     await wait()
-    expect(screen.getByRole('button', { name: 'TODO' })).not.toHaveClass(Classes.OUTLINED)
-    expect(screen.getByRole('button', { name: 'TODO' })).toHaveClass(Classes.MINIMAL)
-    expect(screen.getByRole('button', { name: 'DOING' })).toHaveClass(Classes.OUTLINED)
-    expect(screen.getByRole('button', { name: 'DOING' })).not.toHaveClass(Classes.MINIMAL)
-    expect(screen.getByRole('button', { name: 'DONE' })).not.toHaveClass(Classes.OUTLINED)
-    expect(screen.getByRole('button', { name: 'DONE' })).toHaveClass(Classes.MINIMAL)
+    expect(screen.getByRole('button', { name: 'TODO' })).not.toHaveClass('Classes.OUTLINED')
+    expect(screen.getByRole('button', { name: 'TODO' })).toHaveClass('Classes.MINIMAL')
+    expect(screen.getByRole('button', { name: 'DOING' })).toHaveClass('Classes.OUTLINED')
+    expect(screen.getByRole('button', { name: 'DOING' })).not.toHaveClass('Classes.MINIMAL')
+    expect(screen.getByRole('button', { name: 'DONE' })).not.toHaveClass('Classes.OUTLINED')
+    expect(screen.getByRole('button', { name: 'DONE' })).toHaveClass('Classes.MINIMAL')
   })
 
   it('should update form values when changing status', async () => {

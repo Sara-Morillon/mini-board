@@ -1,4 +1,3 @@
-import { Classes } from '@blueprintjs/core'
 import { fireEvent, screen } from '@testing-library/react'
 import React from 'react'
 import { useParams } from '../../../../src/hooks/useParams'
@@ -59,7 +58,7 @@ describe('Releases', () => {
     renderInRouter(<Releases />)
     await wait()
     expect(screen.getByText('DOING')).toBeInTheDocument()
-    expect(screen.getByText('DOING').parentElement).toHaveClass(Classes.INTENT_PRIMARY)
+    expect(screen.getByText('DOING').parentElement).toHaveClass('Classes.INTENT_PRIMARY')
   })
 
   it('should set issue opacity to of 0.7 when hovering element', async () => {

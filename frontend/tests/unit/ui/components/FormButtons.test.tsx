@@ -5,7 +5,7 @@ import { DeleteButton, SaveButton } from '../../../../src/ui/components/FormButt
 describe('SaveButton', () => {
   it('should render loading button', () => {
     render(<SaveButton loading disabled={false} />)
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+    expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true')
   })
 
   it('should render disabled button', () => {
@@ -17,7 +17,7 @@ describe('SaveButton', () => {
 describe('DeleteButton', () => {
   it('should render loading button', () => {
     render(<DeleteButton loading disabled={false} onClick={jest.fn()} />)
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+    expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true')
   })
 
   it('should render disabled button', () => {
