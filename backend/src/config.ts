@@ -53,8 +53,8 @@ export const config: IConfig = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https'],
-      fontSrc: ["'self'", 'https'],
+      styleSrc: ["'self'", "'unsafe-inline'", "'https'"],
+      fontSrc: ["'self'", "'https'"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
     },
   },
