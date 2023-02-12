@@ -44,6 +44,18 @@ describe('downloadAttachment', () => {
     expect(stream.pipe).toHaveBeenCalledWith(res)
   })
 
+  it('should stream attachment content without content disposition for images', async () => {
+    jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue({ ...mockAttachment, mime: 'image/' })
+    const stream = { pipe: jest.fn() } as unknown as ReadStream
+    jest.spyOn(fs, 'createReadStream').mockReturnValue(stream)
+    const req = getMockReq({ params: { id: '1' } })
+    const { res } = getMockRes()
+    await downloadAttachment(req, res)
+    expect(res.set).not.toHaveBeenCalledWith('Content-disposition', 'attachment; filename=filename')
+    expect(res.set).toHaveBeenCalledWith('Content-Type', 'image/')
+    expect(stream.pipe).toHaveBeenCalledWith(res)
+  })
+
   it('should return 500 status when failure', async () => {
     jest.spyOn(prisma.attachment, 'findUnique').mockRejectedValue(new Error())
     const req = getMockReq({ params: { id: '1' } })
