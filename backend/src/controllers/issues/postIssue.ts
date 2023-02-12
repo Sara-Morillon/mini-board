@@ -24,7 +24,8 @@ export async function postIssue(req: Request, res: Response): Promise<void> {
       const { projectId, releaseId, type, points, title, description } = schema.body.parse(req.body)
       const authorId = req.user.id
       const status = 'todo'
-      const priority = 0
+      const { _max } = await prisma.issue.aggregate({ where: { projectId, releaseId }, _max: { priority: true } })
+      const priority = _max.priority !== null ? _max.priority + 1 : 0
       const issue = await prisma.issue.create({
         data: { authorId, projectId, releaseId, priority, type, status, points, title, description },
       })

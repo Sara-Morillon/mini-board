@@ -13,8 +13,33 @@ describe('postIssue', () => {
     expect(res.sendStatus).toHaveBeenCalledWith(401)
   })
 
-  it('should create issue', async () => {
+  it('should create issue with max priority', async () => {
     jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: 7 } } as never)
+    const req = getMockReq({
+      body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
+      user: mockUser,
+    })
+    const { res } = getMockRes()
+    await postIssue(req, res)
+    expect(prisma.issue.create).toHaveBeenCalledWith({
+      data: {
+        authorId: 1,
+        projectId: 1,
+        releaseId: 1,
+        priority: 8,
+        type: 'bug',
+        status: 'todo',
+        points: 1,
+        title: 'title',
+        description: 'description',
+      },
+    })
+  })
+
+  it('should create issue with default 0 priority', async () => {
+    jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: null } } as never)
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
       user: mockUser,
