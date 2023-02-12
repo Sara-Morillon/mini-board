@@ -78,4 +78,14 @@ describe('Ticket', () => {
     render(<Ticket status="doing" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
     expect(screen.getByText('[P1-1] title1')).toHaveAttribute('href', '/project/1/issue/1')
   })
+
+  it('should render issue description', () => {
+    render(<Ticket status="doing" issue={mockIssueFull()} projectId={1} onMove={jest.fn()} />)
+    expect(screen.getByText('description1')).toBeInTheDocument()
+  })
+
+  it('should not render issue description for done issues', () => {
+    render(<Ticket status="doing" issue={mockIssueFull({ status: 'done' })} projectId={1} onMove={jest.fn()} />)
+    expect(screen.queryByText('description1')).not.toBeInTheDocument()
+  })
 })
