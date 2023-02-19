@@ -18,8 +18,8 @@
     "typeorm:dev": "node -r ts-node/register -r dotenv/config ./node_modules/typeorm/cli.js",
     "test": "jest --runInBand",
     "test:ci": "yarn test --ci --coverage",
-    "format": "prettier \"src/**/*.{ts,tsx}\" --write",
-    "lint": "eslint \"src/**/*.{ts,tsx}\""
+    "format": "prettier \"{src,tests}/**/*.{ts,tsx}\" --write",
+    "lint": "eslint \"{src,tests}/**/*.{ts,tsx}\""
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.5",
