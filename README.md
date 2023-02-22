@@ -25,7 +25,7 @@ You can use the [docker-compose.yml](./docker-compose.yml) provided as an exampl
 
 - Download the latest release of mini-board
 - Install packages using command `yarn install`
-- Rename [.env.template](./backend/.env.template) to `.env` and fill it with appropriate values
+- Rename [.env.template](./back/.env.template) to `.env` and fill it with appropriate values
 - Run project using command `yarn start:dev`
 
 ## Running Mini Board

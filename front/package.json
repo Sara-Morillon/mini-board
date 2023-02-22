@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "front",
   "private": true,
   "scripts": {
     "prebuild": "tsc",
