@@ -1,4 +1,4 @@
-name: Mini Git
+name: Mini Board
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - master
 
 jobs:
-  back:
+  backend:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -19,19 +19,19 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: yarn install
-        working-directory: back
+        working-directory: backend
       - name: Build
-        run: yarn build
-        working-directory: back
+        run: yarn tsc
+        working-directory: backend
       - name: Test
-        run: yarn test
-        working-directory: back
+        run: yarn jest --runInBand
+        working-directory: backend
 
-  front:
+  frontend:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -40,10 +40,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: yarn install
-        working-directory: front
+        working-directory: frontend
       - name: Build
-        run: yarn build
-        working-directory: front
+        run: yarn tsc
+        working-directory: frontend
       - name: Test
-        run: yarn test
-        working-directory: front
+        run: yarn jest --runInBand
+        working-directory: frontend
