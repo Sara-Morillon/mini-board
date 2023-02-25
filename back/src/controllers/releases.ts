@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
-import { start } from '../libs/logger'
 import { prisma } from '../prisma'
 
 const schema = {
@@ -22,7 +21,7 @@ const schema = {
 }
 
 export async function getReleases(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_releases', { req })
+  const { success, failure } = req.logger.start('get_releases')
   try {
     const { projectId } = schema.list.parse(req.query)
     const releases = await prisma.release.findMany({
@@ -38,7 +37,7 @@ export async function getReleases(req: Request, res: Response): Promise<void> {
 }
 
 export async function postRelease(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('post_release', { req })
+  const { success, failure } = req.logger.start('post_release')
   try {
     const { projectId, name, dueDate } = schema.post.parse(req.body)
     const release = await prisma.release.create({ data: { projectId, name, dueDate } })
@@ -51,7 +50,7 @@ export async function postRelease(req: Request, res: Response): Promise<void> {
 }
 
 export async function getRelease(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_release', { req })
+  const { success, failure } = req.logger.start('get_release')
   try {
     const { id } = schema.get.parse(req.params)
     const release = await prisma.release.findUnique({ where: { id } })
@@ -64,7 +63,7 @@ export async function getRelease(req: Request, res: Response): Promise<void> {
 }
 
 export async function patchRelease(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('put_release', { req })
+  const { success, failure } = req.logger.start('put_release')
   try {
     const { id } = schema.get.parse(req.params)
     const { name, dueDate } = schema.patch.parse(req.body)
@@ -78,7 +77,7 @@ export async function patchRelease(req: Request, res: Response): Promise<void> {
 }
 
 export async function deleteRelease(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('delete_release', { req })
+  const { success, failure } = req.logger.start('delete_release')
   try {
     const { id } = schema.get.parse(req.params)
     await prisma.release.delete({ where: { id } })

@@ -1,7 +1,7 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getMockRes } from '@jest-mock/express'
 import { deleteRelease, getRelease, getReleases, patchRelease, postRelease } from '../../../src/controllers/releases'
 import { prisma } from '../../../src/prisma'
-import { mockRelease } from '../../mocks'
+import { getMockReq, mockRelease } from '../../mocks'
 
 describe('getReleases', () => {
   it('should get releases', async () => {

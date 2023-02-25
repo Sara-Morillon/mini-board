@@ -1,7 +1,7 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getMockRes } from '@jest-mock/express'
 import { deleteProject, getProject, getProjects, patchProject, postProject } from '../../../src/controllers/projects'
 import { prisma } from '../../../src/prisma'
-import { mockProject } from '../../mocks'
+import { getMockReq, mockProject } from '../../mocks'
 
 describe('getProjects', () => {
   it('should get projects', async () => {

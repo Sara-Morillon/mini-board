@@ -1,7 +1,6 @@
+import { createHash } from 'crypto'
 import { Request, Response } from 'express'
 import { z } from 'zod'
-import { start } from '../libs/logger'
-import { hashPass } from '../libs/passport'
 import { prisma } from '../prisma'
 
 const schema = {
@@ -15,7 +14,7 @@ const schema = {
 }
 
 export async function getUsers(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_users', { req })
+  const { success, failure } = req.logger.start('get_users')
   try {
     const users = await prisma.user.findMany({ orderBy: { username: 'asc' } })
     res.json(users)
@@ -27,10 +26,12 @@ export async function getUsers(req: Request, res: Response): Promise<void> {
 }
 
 export async function postUser(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('post_user', { req })
+  const { success, failure } = req.logger.start('post_user')
   try {
     const { username, password } = schema.post.parse(req.body)
-    const user = await prisma.user.create({ data: { username, password: hashPass(password) } })
+    const user = await prisma.user.create({
+      data: { username, password: createHash('sha256').update(password).digest('hex') },
+    })
     res.status(201).json(user.id)
     success()
   } catch (error) {
@@ -40,7 +41,7 @@ export async function postUser(req: Request, res: Response): Promise<void> {
 }
 
 export async function deleteUser(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('delete_user', { req })
+  const { success, failure } = req.logger.start('delete_user')
   try {
     const { id } = schema.get.parse(req.params)
     await prisma.user.delete({ where: { id } })

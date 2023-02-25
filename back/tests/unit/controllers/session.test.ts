@@ -1,106 +1,112 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
-import passport from 'passport'
-import { getLogout, getSession, postLogin } from '../../../src/controllers/session'
-import { mock, mockUser } from '../../mocks'
+import { getMockRes } from '@jest-mock/express'
+import { getSession, login, logout } from '../../../src/controllers/session'
+import { prisma } from '../../../src/prisma'
+import { getMockReq, mockAction, mockSession, mockUser } from '../../mocks'
 
-jest.mock('passport')
-
-describe('postLogin', () => {
-  it('should authenticate', () => {
-    mock(passport.authenticate).mockReturnValue(jest.fn())
-    const req = getMockReq()
-    const { res, next } = getMockRes()
-    postLogin(req, res, next)
-    expect(passport.authenticate).toHaveBeenCalledWith('local', expect.any(Function))
+describe('login', () => {
+  beforeEach(() => {
+    jest.spyOn(prisma.user, 'findFirstOrThrow').mockResolvedValue(mockUser())
   })
 
-  it('should send 401 status if authentication error', () => {
-    mock(passport.authenticate).mockImplementation((s, fn) => {
-      fn('Error')
-      return jest.fn()
+  it('should get user', async () => {
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { res } = getMockRes()
+    await login(req, res)
+    expect(prisma.user.findFirstOrThrow).toHaveBeenCalledWith({
+      where: { username: 'username', password: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8' },
     })
-    const req = getMockReq()
-    const { res, next } = getMockRes()
-    postLogin(req, res, next)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
   })
 
-  it('should send 401 status if user is not found', () => {
-    mock(passport.authenticate).mockImplementation((s, fn) => {
-      fn(null, null)
-      return jest.fn()
-    })
-    const req = getMockReq()
-    const { res, next } = getMockRes()
-    postLogin(req, res, next)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
+  it('should set session user', async () => {
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { res } = getMockRes()
+    await login(req, res)
+    expect(req.session.user).toEqual(mockSession())
   })
 
-  it('should login', () => {
-    mock(passport.authenticate).mockImplementation((s, fn) => {
-      fn(null, mockUser)
-      return jest.fn()
-    })
-    const req = getMockReq({ login: jest.fn() })
-    const { res, next } = getMockRes()
-    postLogin(req, res, next)
-    expect(req.login).toHaveBeenCalledWith(mockUser, expect.any(Function))
-  })
-
-  it('should send 401 error if login fails', () => {
-    mock(passport.authenticate).mockImplementation((s, fn) => {
-      fn(null, mockUser)
-      return jest.fn()
-    })
-    const req = getMockReq({ login: jest.fn().mockImplementation((u, fn) => fn('Error')) })
-    const { res, next } = getMockRes()
-    postLogin(req, res, next)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
-  })
-
-  it('should send 204 status if login succeeds', () => {
-    mock(passport.authenticate).mockImplementation((s, fn) => {
-      fn(null, mockUser)
-      return jest.fn()
-    })
-    const req = getMockReq({ login: jest.fn().mockImplementation((u, fn) => fn()) })
-    const { res, next } = getMockRes()
-    postLogin(req, res, next)
+  it('should send 204 when login succeeds', async () => {
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { res } = getMockRes()
+    await login(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(204)
+  })
+
+  it('should send 401 when login fails', async () => {
+    jest.spyOn(prisma.user, 'findFirstOrThrow').mockRejectedValue('error')
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { res } = getMockRes()
+    await login(req, res)
+    expect(res.sendStatus).toHaveBeenCalledWith(401)
+  })
+
+  it('should log success when login succeeds', async () => {
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await login(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure when login fails', async () => {
+    jest.spyOn(prisma.user, 'findFirstOrThrow').mockRejectedValue('error')
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await login(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'error' })
   })
 })
 
 describe('getSession', () => {
-  it('should return user', () => {
-    const req = getMockReq({ user: mockUser })
-    const { res } = getMockRes()
-    getSession(req, res)
-    expect(res.json).toHaveBeenCalledWith(mockUser)
-  })
-
-  it('should send 500 status when failure', () => {
+  it('should return session user', () => {
     const req = getMockReq()
+    req.session.user = mockSession()
     const { res } = getMockRes()
-    res.json = jest.fn().mockImplementation(() => {
-      throw new Error()
-    })
     getSession(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(500)
+    expect(res.json).toHaveBeenCalledWith(mockSession())
   })
 })
 
-describe('getLogout', () => {
-  it('should logout', () => {
-    const req = getMockReq({ logout: jest.fn() })
+describe('logout', () => {
+  it('should destroy session', () => {
+    const req = getMockReq()
+    req.session.destroy = jest.fn().mockImplementation((fn) => fn())
     const { res } = getMockRes()
-    getLogout(req, res)
-    expect(req.logout).toHaveBeenCalled()
+    logout(req, res)
+    expect(req.session.destroy).toHaveBeenCalled()
   })
 
-  it('should return 204 status', () => {
-    const req = getMockReq({ logout: jest.fn() })
+  it('should clear cookie', () => {
+    const req = getMockReq()
+    req.session.destroy = jest.fn().mockImplementation((fn) => fn())
     const { res } = getMockRes()
-    getLogout(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(204)
+    logout(req, res)
+    expect(res.clearCookie).toHaveBeenCalledWith('cookie_name')
+  })
+
+  it('should redirect to app host', () => {
+    const req = getMockReq()
+    req.session.destroy = jest.fn().mockImplementation((fn) => fn())
+    const { res } = getMockRes()
+    logout(req, res)
+    expect(res.redirect).toHaveBeenCalledWith('http://app_host.io')
+  })
+
+  it('should log success when logout succeeds', () => {
+    const req = getMockReq()
+    req.session.destroy = jest.fn().mockImplementation((fn) => fn())
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    logout(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure when logout fails', () => {
+    const req = getMockReq()
+    req.session.destroy = jest.fn().mockImplementation((fn) => fn('error'))
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    logout(req, res)
+    expect(failure).toHaveBeenCalledWith('error')
   })
 })

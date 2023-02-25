@@ -1,7 +1,7 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getMockRes } from '@jest-mock/express'
 import { deleteComment, getComments, postComment } from '../../../src/controllers/comments'
 import { prisma } from '../../../src/prisma'
-import { mockComment, mockUser } from '../../mocks'
+import { getMockReq, mockComment, mockUser } from '../../mocks'
 
 describe('getComments', () => {
   it('should get comments', async () => {
@@ -36,6 +36,7 @@ describe('getComments', () => {
 describe('postComment', () => {
   it('should return 401 status if no user', async () => {
     const req = getMockReq({ params: { id: '1' }, body: { content: 'content' } })
+    req.session.user = undefined
     const { res } = getMockRes()
     await postComment(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(401)

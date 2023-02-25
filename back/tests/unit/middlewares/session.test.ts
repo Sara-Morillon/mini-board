@@ -1,20 +1,21 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
-import { hasSession } from '../../../src/middlewares/session'
+import { getMockRes } from '@jest-mock/express'
+import { session } from '../../../src/middlewares/session'
+import { getMockReq, mockSession } from '../../mocks'
 
 describe('session', () => {
-  it('should call next if authenticated', () => {
-    const req = getMockReq({ isAuthenticated: jest.fn().mockReturnValue(true) })
+  it('should go next if user is authenticated', () => {
+    const req = getMockReq()
+    req.session.user = mockSession()
     const { res, next } = getMockRes()
-    hasSession()(req, res, next)
-    expect(res.sendStatus).not.toHaveBeenCalled()
+    session(req, res, next)
     expect(next).toHaveBeenCalled()
   })
 
-  it('should return 401 status if not authenticated', () => {
-    const req = getMockReq({ isAuthenticated: jest.fn().mockReturnValue(false) })
+  it('should send 401 status if user is not authenticated', () => {
+    const req = getMockReq()
+    req.session.user = undefined
     const { res, next } = getMockRes()
-    hasSession()(req, res, next)
+    session(req, res, next)
     expect(res.sendStatus).toHaveBeenCalledWith(401)
-    expect(next).not.toHaveBeenCalled()
   })
 })

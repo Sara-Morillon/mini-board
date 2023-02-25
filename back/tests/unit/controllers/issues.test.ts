@@ -1,7 +1,7 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getMockRes } from '@jest-mock/express'
 import { deleteIssue, getIssue, getIssues, moveIssues, patchIssue, postIssue } from '../../../src/controllers/issues'
 import { prisma } from '../../../src/prisma'
-import { mockIssue, mockUser } from '../../mocks'
+import { getMockReq, mockIssue, mockUser } from '../../mocks'
 
 describe('getIssues', () => {
   it('should get issues', async () => {
@@ -51,6 +51,7 @@ describe('postIssue', () => {
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
     })
+    req.session.user = undefined
     const { res } = getMockRes()
     await postIssue(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(401)
@@ -160,6 +161,7 @@ describe('patchIssue', () => {
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
     })
+    req.session.user = undefined
     const { res } = getMockRes()
     await patchIssue(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(401)

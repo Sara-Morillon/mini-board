@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
-import { start } from '../libs/logger'
 import { prisma } from '../prisma'
 
 const schema = {
@@ -19,7 +18,7 @@ const schema = {
 }
 
 export async function getProjects(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_projects', { req })
+  const { success, failure } = req.logger.start('get_projects')
   try {
     const projects = await prisma.project.findMany({ orderBy: { updatedAt: 'desc' } })
     res.json(projects)
@@ -31,7 +30,7 @@ export async function getProjects(req: Request, res: Response): Promise<void> {
 }
 
 export async function postProject(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('post_project', { req })
+  const { success, failure } = req.logger.start('post_project')
   try {
     const { key, name, description } = schema.post.parse(req.body)
     const project = await prisma.project.create({ data: { key, name, description } })
@@ -44,7 +43,7 @@ export async function postProject(req: Request, res: Response): Promise<void> {
 }
 
 export async function getProject(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_project', { req })
+  const { success, failure } = req.logger.start('get_project')
   try {
     const { id } = schema.get.parse(req.params)
     const project = await prisma.project.findUnique({ where: { id } })
@@ -57,7 +56,7 @@ export async function getProject(req: Request, res: Response): Promise<void> {
 }
 
 export async function patchProject(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('put_project', { req })
+  const { success, failure } = req.logger.start('put_project')
   try {
     const { id } = schema.get.parse(req.params)
     const { name, description } = schema.patch.parse(req.body)
@@ -71,7 +70,7 @@ export async function patchProject(req: Request, res: Response): Promise<void> {
 }
 
 export async function deleteProject(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('delete_project', { req })
+  const { success, failure } = req.logger.start('delete_project')
   try {
     const { id } = schema.get.parse(req.params)
     await prisma.project.delete({ where: { id } })

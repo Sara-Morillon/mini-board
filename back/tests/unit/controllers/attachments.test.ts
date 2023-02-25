@@ -1,4 +1,4 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getMockRes } from '@jest-mock/express'
 import archiver from 'archiver'
 import fs, { ReadStream } from 'fs'
 import path from 'path'
@@ -10,7 +10,7 @@ import {
   postAttachments,
 } from '../../../src/controllers/attachments'
 import { prisma } from '../../../src/prisma'
-import { mock, mockAttachment, mockUser } from '../../mocks'
+import { getMockReq, mockAttachment, mockUser } from '../../mocks'
 
 jest.mock('archiver')
 
@@ -46,6 +46,7 @@ describe('postAttachments', () => {
       params: { id: '1' },
       files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
     })
+    req.session.user = undefined
     const { res } = getMockRes()
     await postAttachments(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(401)
@@ -141,7 +142,7 @@ describe('downloadAttachments', () => {
   it('should stream archive content', async () => {
     jest.spyOn(prisma.attachment, 'findMany').mockResolvedValue([mockAttachment])
     const archive = { pipe: jest.fn(), file: jest.fn(), finalize: jest.fn() }
-    mock(archiver).mockReturnValue(archive)
+    jest.mocked(archiver).mockReturnValue(archive as never)
     const req = getMockReq({ query: { issueId: '1' } })
     const { res } = getMockRes()
     await downloadAttachments(req, res)
@@ -153,7 +154,7 @@ describe('downloadAttachments', () => {
   it('should add attachments to archive', async () => {
     jest.spyOn(prisma.attachment, 'findMany').mockResolvedValue([mockAttachment])
     const archive = { pipe: jest.fn(), file: jest.fn(), finalize: jest.fn() }
-    mock(archiver).mockReturnValue(archive)
+    jest.mocked(archiver).mockReturnValue(archive as never)
     const req = getMockReq({ query: { issueId: '1' } })
     const { res } = getMockRes()
     await downloadAttachments(req, res)

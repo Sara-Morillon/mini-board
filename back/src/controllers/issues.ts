@@ -1,7 +1,6 @@
 import { Status, Type } from '@prisma/client'
 import { Request, Response } from 'express'
 import { z } from 'zod'
-import { start } from '../libs/logger'
 import { prisma } from '../prisma'
 
 const schema = {
@@ -37,7 +36,7 @@ const schema = {
 }
 
 export async function getIssues(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_issues', { req })
+  const { success, failure } = req.logger.start('get_issues')
   try {
     const { projectId, releaseId, page, limit } = schema.list.parse(req.query)
     const issues = await prisma.issue.findMany({
@@ -56,13 +55,13 @@ export async function getIssues(req: Request, res: Response): Promise<void> {
 }
 
 export async function postIssue(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('post_issue', { req })
+  const { success, failure } = req.logger.start('post_issue')
   try {
-    if (!req.user) {
+    if (!req.session.user) {
       res.sendStatus(401)
     } else {
       const { projectId, releaseId, type, points, title, description } = schema.post.parse(req.body)
-      const authorId = req.user.id
+      const authorId = req.session.user.id
       const status = 'todo'
       const { _max } = await prisma.issue.aggregate({ where: { projectId, releaseId }, _max: { priority: true } })
       const priority = _max.priority !== null ? _max.priority + 1 : 0
@@ -79,7 +78,7 @@ export async function postIssue(req: Request, res: Response): Promise<void> {
 }
 
 export async function getIssue(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_issue', { req })
+  const { success, failure } = req.logger.start('get_issue')
   try {
     const { id } = schema.get.parse(req.params)
     const issue = await prisma.issue.findUnique({ where: { id } })
@@ -92,14 +91,14 @@ export async function getIssue(req: Request, res: Response): Promise<void> {
 }
 
 export async function patchIssue(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('put_issue', { req })
+  const { success, failure } = req.logger.start('put_issue')
   try {
     const { id } = schema.get.parse(req.params)
     const { releaseId, type, status, points, title, description } = schema.patch.parse(req.body)
-    if (!req.user) {
+    if (!req.session.user) {
       res.sendStatus(401)
     } else {
-      const authorId = req.user.id
+      const authorId = req.session.user.id
       await prisma.issue.update({
         where: { id },
         data: { authorId, releaseId, type, status, points, title, description },
@@ -114,7 +113,7 @@ export async function patchIssue(req: Request, res: Response): Promise<void> {
 }
 
 export async function deleteIssue(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('delete_issue', { req })
+  const { success, failure } = req.logger.start('delete_issue')
   try {
     const { id } = schema.get.parse(req.params)
     await prisma.issue.delete({ where: { id } })
@@ -127,7 +126,7 @@ export async function deleteIssue(req: Request, res: Response): Promise<void> {
 }
 
 export async function moveIssues(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('move_issues', { req })
+  const { success, failure } = req.logger.start('move_issues')
   try {
     const { sourceId, targetId } = schema.move.parse(req.body)
 

@@ -12,7 +12,7 @@ model User {
   username  String    @unique(map: "uq_user_username") @db.VarChar(40)
   password  String    @db.Char(64)
   createdAt DateTime  @default(now()) @db.DateTime(6)
-  updatedAt DateTime  @default(now()) @updatedAt @db.DateTime(6)
+  updatedAt DateTime  @updatedAt @db.DateTime(6)
   comments  Comment[]
   issues    Issue[]
 

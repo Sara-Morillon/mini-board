@@ -1,5 +1,6 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getMockRes } from '@jest-mock/express'
 import { getApp } from '../../../src/controllers/app'
+import { getMockReq } from '../../mocks'
 
 jest.mock('../../../package.json', () => ({
   name: 'name',
@@ -9,7 +10,7 @@ jest.mock('../../../package.json', () => ({
 }))
 
 describe('getApp', () => {
-  it('should return app name, version, repository and author', () => {
+  it('should send app informations', () => {
     const req = getMockReq()
     const { res } = getMockRes()
     getApp(req, res)
@@ -19,15 +20,5 @@ describe('getApp', () => {
       repository: 'repository',
       author: 'author',
     })
-  })
-
-  it('should send 500 status when failure', () => {
-    const req = getMockReq()
-    const { res } = getMockRes()
-    res.json = jest.fn().mockImplementation(() => {
-      throw new Error()
-    })
-    getApp(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
 })

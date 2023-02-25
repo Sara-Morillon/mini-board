@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
-import { start } from '../libs/logger'
 import { prisma } from '../prisma'
 
 const schema = {
@@ -13,7 +12,7 @@ const schema = {
 }
 
 export async function getComments(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_comments', { req })
+  const { success, failure } = req.logger.start('get_comments')
   try {
     const { id } = schema.get.parse(req.params)
     const comments = await prisma.comment.findMany({
@@ -30,14 +29,14 @@ export async function getComments(req: Request, res: Response): Promise<void> {
 }
 
 export async function postComment(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('post_comment', { req })
+  const { success, failure } = req.logger.start('post_comment')
   try {
-    if (!req.user) {
+    if (!req.session.user) {
       res.sendStatus(401)
     } else {
       const { id } = schema.get.parse(req.params)
       const { content } = schema.post.parse(req.body)
-      const comment = await prisma.comment.create({ data: { authorId: req.user.id, issueId: id, content } })
+      const comment = await prisma.comment.create({ data: { authorId: req.session.user.id, issueId: id, content } })
       res.status(201).json(comment.id)
     }
     success()
@@ -48,7 +47,7 @@ export async function postComment(req: Request, res: Response): Promise<void> {
 }
 
 export async function deleteComment(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('delete_comment', { req })
+  const { success, failure } = req.logger.start('delete_comment')
   try {
     const { id } = schema.get.parse(req.params)
     await prisma.comment.delete({ where: { id } })

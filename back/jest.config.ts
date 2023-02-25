@@ -1,13 +1,13 @@
-const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, 'tests', '.env.test') })
+import dotenv from 'dotenv'
+import { join } from 'path'
 
-module.exports = {
+dotenv.config({ path: join(__dirname, 'tests', '.env.test') })
+
+export default {
   preset: 'ts-jest',
   clearMocks: true,
   resetMocks: true,
   restoreMocks: true,
-  displayName: 'node',
-  testEnvironment: 'node',
   modulePathIgnorePatterns: ['dist'],
   coveragePathIgnorePatterns: ['mocks'],
   testMatch: ['<rootDir>/tests/**/*.test.ts'],

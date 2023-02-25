@@ -3,9 +3,8 @@ import { Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
 import { z } from 'zod'
-import { config } from '../config'
-import { start } from '../libs/logger'
 import { prisma } from '../prisma'
+import { settings } from '../settings'
 
 const schema = {
   get: z.object({
@@ -24,7 +23,7 @@ const schema = {
 }
 
 export async function getAttachments(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('get_attachments', { req })
+  const { success, failure } = req.logger.start('get_attachments')
   try {
     const { id } = schema.get.parse(req.params)
     const attachments = await prisma.attachment.findMany({ where: { issueId: id }, orderBy: { createdAt: 'asc' } })
@@ -37,9 +36,9 @@ export async function getAttachments(req: Request, res: Response): Promise<void>
 }
 
 export async function postAttachments(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('post_attachment', { req })
+  const { success, failure } = req.logger.start('post_attachment')
   try {
-    if (!req.user) {
+    if (!req.session.user) {
       res.sendStatus(401)
     } else {
       const { id } = schema.get.parse(req.params)
@@ -59,7 +58,7 @@ export async function postAttachments(req: Request, res: Response): Promise<void
 }
 
 export async function deleteAttachment(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('delete_attachment', { req })
+  const { success, failure } = req.logger.start('delete_attachment')
   try {
     const { id } = schema.get.parse(req.params)
     await prisma.attachment.delete({ where: { id } })
@@ -72,7 +71,7 @@ export async function deleteAttachment(req: Request, res: Response): Promise<voi
 }
 
 export async function downloadAttachments(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('download_attachments', { req })
+  const { success, failure } = req.logger.start('download_attachments')
   try {
     const { issueId } = schema.download.parse(req.query)
     const attachments = await prisma.attachment.findMany({ where: { issueId } })
@@ -82,7 +81,7 @@ export async function downloadAttachments(req: Request, res: Response): Promise<
       const archive = archiver('zip')
       archive.pipe(res)
       for (const attachment of attachments) {
-        archive.file(path.join(config.uploadDir, attachment.filepath), { name: attachment.filename })
+        archive.file(path.join(settings.uploadDir, attachment.filepath), { name: attachment.filename })
       }
       res.set('Content-disposition', `attachment; filename=${issueId}_attachments.zip`)
       res.set('Content-Type', 'application/zip')
@@ -96,14 +95,14 @@ export async function downloadAttachments(req: Request, res: Response): Promise<
 }
 
 export async function downloadAttachment(req: Request, res: Response): Promise<void> {
-  const { success, failure } = start('download_attachment', { req })
+  const { success, failure } = req.logger.start('download_attachment')
   try {
     const { id } = schema.get.parse(req.params)
     const attachment = await prisma.attachment.findUnique({ where: { id } })
     if (!attachment) {
       res.sendStatus(404)
     } else {
-      const stream = fs.createReadStream(path.join(config.uploadDir, attachment.filepath))
+      const stream = fs.createReadStream(path.join(settings.uploadDir, attachment.filepath))
       if (!attachment.mime.includes('image/')) {
         res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
       }
