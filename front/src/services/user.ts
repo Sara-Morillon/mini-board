@@ -1,14 +1,15 @@
 import { IUser } from '../models/User'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-export function getUsers(): Promise<IUser[]> {
-  return request<IUser[]>({ url: '/api/users' }, [])
+export async function getUsers(): Promise<IUser[]> {
+  const { data } = await Axios.get<IUser[]>(`/api/users`)
+  return data
 }
 
-export function postUser(username: string, password: string): Promise<void> {
-  return request({ url: '/api/users', method: 'POST', data: { username, password } }, undefined)
+export async function postUser(username: string, password: string): Promise<void> {
+  await Axios.post(`/api/users`, { username, password })
 }
 
-export function deleteUser(user: IUser): Promise<void> {
-  return request({ url: `/api/users/${user.username}`, method: 'DELETE' }, undefined)
+export async function deleteUser(attachment: IUser): Promise<void> {
+  await Axios.delete(`/api/users/${attachment.id}`)
 }

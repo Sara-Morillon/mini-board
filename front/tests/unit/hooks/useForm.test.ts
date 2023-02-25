@@ -2,12 +2,12 @@ import { renderHook } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import { useLocation } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../../src/hooks/useForm'
-import { mock, mockNavigate } from '../../mocks'
+import { mockNavigate } from '../../mocks'
 
 describe('useFormSave', () => {
   beforeEach(() => {
     mockNavigate()
-    mock(useLocation).mockReturnValue({ pathname: 'pathname' })
+    jest.mocked(useLocation).mockReturnValue({ pathname: 'pathname' } as never)
   })
 
   it('should not be loading by default', () => {

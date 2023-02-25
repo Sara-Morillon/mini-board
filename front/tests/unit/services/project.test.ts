@@ -1,23 +1,30 @@
+import { Axios } from '../../../src/services/Axios'
 import { deleteProject, getProject, getProjects, saveProject } from '../../../src/services/project'
-import { request } from '../../../src/services/wrapper'
-import { mock, mockProject } from '../../mocks'
+import { mockProject } from '../../mocks'
 
-jest.mock('../../../src/services/wrapper')
+jest.mock('../../../src/services/Axios')
 
 describe('getProjects', () => {
+  beforeEach(() => {
+    jest.mocked(Axios.get).mockResolvedValue({ data: 'projects' })
+  })
+
   it('should get projects', async () => {
     await getProjects()
-    expect(request).toHaveBeenCalledWith({ url: '/api/projects' }, [])
+    expect(Axios.get).toHaveBeenCalledWith('/api/projects')
   })
 
   it('should return projects', async () => {
-    mock(request).mockResolvedValue('projects')
     const result = await getProjects()
     expect(result).toBe('projects')
   })
 })
 
 describe('getProject', () => {
+  beforeEach(() => {
+    jest.mocked(Axios.get).mockResolvedValue({ data: 'project' })
+  })
+
   it('should return null without id', async () => {
     const result = await getProject()
     expect(result).toBeNull()
@@ -25,11 +32,10 @@ describe('getProject', () => {
 
   it('should get project', async () => {
     await getProject('1')
-    expect(request).toHaveBeenCalledWith({ url: '/api/projects/1' }, null)
+    expect(Axios.get).toHaveBeenCalledWith('/api/projects/1')
   })
 
   it('should return project', async () => {
-    mock(request).mockResolvedValue('project')
     const result = await getProject('1')
     expect(result).toBe('project')
   })
@@ -38,25 +44,30 @@ describe('getProject', () => {
 describe('saveProject', () => {
   it('should post project without id', async () => {
     await saveProject(mockProject({ id: 0 }))
-    expect(request).toHaveBeenCalledWith({ url: '/api/projects', method: 'POST', data: mockProject({ id: 0 }) }, null)
+    expect(Axios.post).toHaveBeenCalledWith('/api/projects', mockProject({ id: 0 }))
+  })
+
+  it('should return created project path', async () => {
+    jest.mocked(Axios.post).mockResolvedValue('2')
+    const path = await saveProject(mockProject({ id: 0 }))
+    expect(path).toBe('/project/2')
   })
 
   it('should patch project with id', async () => {
     await saveProject(mockProject())
-    expect(request).toHaveBeenCalledWith({ url: '/api/projects/1', method: 'PATCH', data: mockProject() }, null)
+    expect(Axios.patch).toHaveBeenCalledWith('/api/projects/1', mockProject())
   })
 
-  it('should return project path', async () => {
-    mock(request).mockResolvedValue('2')
+  it('should return edited project path', async () => {
     const path = await saveProject(mockProject())
-    expect(path).toBe('/project/2')
+    expect(path).toBe('/project/1')
   })
 })
 
 describe('deleteProject', () => {
   it('should delete project', async () => {
     await deleteProject(mockProject())
-    expect(request).toHaveBeenCalledWith({ url: '/api/projects/1', method: 'DELETE' }, undefined)
+    expect(Axios.delete).toHaveBeenCalledWith('/api/projects/1')
   })
 
   it('should return projects path', async () => {

@@ -1,17 +1,19 @@
 import { getApp } from '../../../src/services/app'
-import { request } from '../../../src/services/wrapper'
-import { mock } from '../../mocks'
+import { Axios } from '../../../src/services/Axios'
 
-jest.mock('../../../src/services/wrapper')
+jest.mock('../../../src/services/Axios')
 
 describe('getApp', () => {
+  beforeEach(() => {
+    jest.mocked(Axios.get).mockResolvedValue({ data: 'app' })
+  })
+
   it('should get app', async () => {
     await getApp()
-    expect(request).toHaveBeenCalledWith({ url: '/api/app' }, null)
+    expect(Axios.get).toHaveBeenCalledWith('/api/app')
   })
 
   it('should return app', async () => {
-    mock(request).mockResolvedValue('app')
     const result = await getApp()
     expect(result).toBe('app')
   })

@@ -1,24 +1,25 @@
 import axios from 'axios'
-import { getSession, login, logout } from '../../../src/services/session'
-import { request } from '../../../src/services/wrapper'
-import { mock, mockLocation, restoreLocation } from '../../mocks'
+import { Axios } from '../../../src/services/Axios'
+import { getSession, login } from '../../../src/services/session'
 
-jest.mock('../../../src/services/wrapper')
+jest.mock('../../../src/services/Axios')
 
 describe('getSession', () => {
-  it('should get session', async () => {
+  beforeEach(() => {
     jest.spyOn(axios, 'get').mockResolvedValue({ data: 'session' })
+  })
+
+  it('should get session', async () => {
     await getSession()
-    expect(axios.get).toHaveBeenCalledWith('/api/session', { withCredentials: true })
+    expect(axios.get).toHaveBeenCalledWith('/api/session')
   })
 
   it('should return session', async () => {
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: 'session' })
     const result = await getSession()
     expect(result).toBe('session')
   })
 
-  it('should return null if cannot get session', async () => {
+  it('should return null if error', async () => {
     jest.spyOn(axios, 'get').mockRejectedValue(new Error())
     const result = await getSession()
     expect(result).toBeNull()
@@ -26,28 +27,8 @@ describe('getSession', () => {
 })
 
 describe('login', () => {
-  it('should log in', async () => {
+  it('should login', async () => {
     await login('username', 'password')
-    expect(request).toHaveBeenCalledWith(
-      { url: '/api/login', method: 'POST', data: { password: 'password', username: 'username' } },
-      undefined
-    )
-  })
-})
-
-describe('logout', () => {
-  it('should log out', async () => {
-    mockLocation({ reload: jest.fn() })
-    await logout()
-    expect(request).toHaveBeenCalledWith({ url: '/api/logout' }, undefined)
-    restoreLocation()
-  })
-
-  it('should reload page after logging out', async () => {
-    mock(request).mockResolvedValue(undefined)
-    mockLocation({ reload: jest.fn() })
-    await logout()
-    expect(window.location.reload).toHaveBeenCalled()
-    restoreLocation()
+    expect(Axios.post).toHaveBeenCalledWith('/api/login', { username: 'username', password: 'password' })
   })
 })

@@ -1,18 +1,15 @@
 import { IComment } from '../models/Comment'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-function makeUrl(issueId: number) {
-  return `/api/issues/${issueId}/comments`
-}
-
-export function getComments(issueId: number): Promise<IComment[]> {
-  return request<IComment[]>({ url: makeUrl(issueId) }, [])
+export async function getComments(issueId: number): Promise<IComment[]> {
+  const { data } = await Axios.get<IComment[]>(`/api/issues/${issueId}/comments`)
+  return data
 }
 
 export async function saveComment(issueId: number, content: string): Promise<void> {
-  await request<string | null>({ url: makeUrl(issueId), method: 'POST', data: { content } }, null)
+  await Axios.post(`/api/issues/${issueId}/comments`, { content })
 }
 
-export async function deleteComment(comment: IComment): Promise<void> {
-  await request({ url: `/api/comments/${comment.id}`, method: 'DELETE' }, undefined)
+export async function deleteComment(attachment: IComment): Promise<void> {
+  await Axios.delete(`/api/comments/${attachment.id}`)
 }

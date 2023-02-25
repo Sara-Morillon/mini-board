@@ -1,25 +1,28 @@
 import { IProject } from '../models/Project'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-function makeUrl(id?: string | number) {
-  return id ? `/api/projects/${id}` : '/api/projects'
+export async function getProjects(): Promise<IProject[]> {
+  const { data } = await Axios.get<IProject[]>('/api/projects')
+  return data
 }
 
-export function getProjects(): Promise<IProject[]> {
-  return request<IProject[]>({ url: makeUrl() }, [])
+export async function getProject(id?: string): Promise<IProject | null> {
+  if (!id) return null
+  const { data } = await Axios.get<IProject | null>(`/api/projects/${id}`)
+  return data
 }
 
-export function getProject(id?: string | number): Promise<IProject | null> {
-  if (!id) return Promise.resolve(null)
-  return request<IProject | null>({ url: makeUrl(id) }, null)
-}
-
-export async function saveProject(data: IProject): Promise<string> {
-  const id = await request<string | null>({ url: makeUrl(data.id), method: data.id ? 'PATCH' : 'POST', data }, null)
-  return `/project/${id}`
+export async function saveProject(project: IProject): Promise<string> {
+  if (project.id) {
+    await Axios.patch(`/api/projects/${project.id}`, project)
+    return `/project/${project.id}`
+  } else {
+    const id = await Axios.post('/api/projects', project)
+    return `/project/${id}`
+  }
 }
 
 export async function deleteProject(project: IProject): Promise<string> {
-  await request({ url: makeUrl(project.id), method: 'DELETE' }, undefined)
-  return '/projects'
+  await Axios.delete(`/api/projects/${project.id}`)
+  return `/projects`
 }

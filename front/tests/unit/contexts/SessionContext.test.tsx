@@ -1,18 +1,14 @@
 import { render, renderHook, screen } from '@testing-library/react'
-import React, { PropsWithChildren, useContext } from 'react'
+import React from 'react'
 import { SessionContext, SessionProvider, useSession } from '../../../src/contexts/SessionContext'
 import { getSession } from '../../../src/services/session'
-import { mock, mockUser, wait } from '../../mocks'
+import { mockSession, wait } from '../../mocks'
 
 jest.mock('../../../src/services/session')
 
-function wrapper({ children }: PropsWithChildren<unknown>) {
-  return <SessionContext.Provider value={mockUser()}>{children}</SessionContext.Provider>
-}
-
 describe('SessionContext', () => {
   beforeEach(() => {
-    mock(getSession).mockResolvedValue('session')
+    jest.mocked(getSession).mockResolvedValue(mockSession())
   })
 
   it('should show loader when loading', async () => {
@@ -27,20 +23,27 @@ describe('SessionContext', () => {
     expect(screen.getByText('In provider')).toBeInTheDocument()
   })
 
-  it('should return session', () => {
-    const { result } = renderHook(() => useContext(SessionContext), { wrapper })
-    expect(result.current).toEqual(mockUser())
+  it('should return session', async () => {
+    render(
+      <SessionProvider>
+        <SessionContext.Consumer>{(value) => <>{value?.id}</>}</SessionContext.Consumer>
+      </SessionProvider>
+    )
+    await wait()
+    expect(screen.getByText('1')).toBeInTheDocument()
   })
 })
 
 describe('useSession', () => {
   it('should throw if context is used outside a Provider', () => {
     jest.spyOn(console, 'error').mockImplementation(() => undefined)
-    expect(() => renderHook(() => useSession())).toThrow(new Error('No session found'))
+    expect(() => renderHook(() => useSession())).toThrow(new Error('Cannot use session outside SessionContext'))
   })
 
   it('should return session', () => {
-    const { result } = renderHook(() => useSession(), { wrapper })
-    expect(result.current).toEqual(mockUser())
+    const { result } = renderHook(() => useSession(), {
+      wrapper: ({ children }) => <SessionContext.Provider value={mockSession()}>{children}</SessionContext.Provider>,
+    })
+    expect(result.current).toEqual(mockSession())
   })
 })

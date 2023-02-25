@@ -1,27 +1,24 @@
 import { useFetch } from '@saramorillon/hooks'
 import React, { createContext, PropsWithChildren, useContext } from 'react'
-import { IUser } from '../models/User'
+import { ISession } from '../models/Session'
 import { getSession } from '../services/session'
-import { LoadContainer } from '../ui/components/LoadContainer'
 
-export const SessionContext = createContext<IUser | null>(null)
+export const SessionContext = createContext<ISession | null>(null)
 
 export function SessionProvider({ children }: PropsWithChildren<unknown>): JSX.Element {
-  const [session, { loading }] = useFetch<IUser | null>(getSession, null)
+  const [session, { loading }] = useFetch<ISession | null>(getSession, null)
 
-  return (
-    <SessionContext.Provider value={session}>
-      <LoadContainer loading={loading} className="m4">
-        {children}
-      </LoadContainer>
-    </SessionContext.Provider>
-  )
+  if (loading) {
+    return <div aria-busy aria-label="Loading..." />
+  }
+
+  return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>
 }
 
-export function useSession(): IUser {
+export function useSession(): ISession {
   const session = useContext(SessionContext)
   if (!session) {
-    throw new Error('No session found')
+    throw new Error('Cannot use session outside SessionContext')
   }
   return session
 }

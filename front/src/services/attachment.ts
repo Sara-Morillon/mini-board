@@ -1,12 +1,9 @@
 import { IAttachment } from '../models/Attachment'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-function makeUrl(issueId: number) {
-  return `/api/issues/${issueId}/attachments`
-}
-
-export function getAttachments(issueId: number): Promise<IAttachment[]> {
-  return request<IAttachment[]>({ url: makeUrl(issueId) }, [])
+export async function getAttachments(issueId: number): Promise<IAttachment[]> {
+  const { data } = await Axios.get<IAttachment[]>(`/api/issues/${issueId}/attachments`)
+  return data
 }
 
 export async function saveAttachments(issueId: number, files: File[] | FileList | null): Promise<void> {
@@ -15,10 +12,10 @@ export async function saveAttachments(issueId: number, files: File[] | FileList 
     for (const file of files) {
       data.append('files', file)
     }
-    await request<string | null>({ url: makeUrl(issueId), method: 'POST', data }, null)
+    await Axios.post(`/api/issues/${issueId}/attachments`, data)
   }
 }
 
 export async function deleteAttachment(attachment: IAttachment): Promise<void> {
-  await request({ url: `/api/attachments/${attachment.id}`, method: 'DELETE' }, undefined)
+  await Axios.delete(`/api/attachments/${attachment.id}`)
 }
