@@ -25,12 +25,9 @@ export function App(): JSX.Element | null {
           <Route element={<PrivateOutlet />}>
             <Route path="/projects" element={<Projects />} />
             <Route path="/project" element={<Project />} />
+
             <Route path="/project/:projectId" element={<NavOutlet />}>
               <Route index element={<Project />} />
-
-              <Route path="releases" element={<Releases />} />
-              <Route path="release" element={<Release />} />
-              <Route path="release/:id" element={<Release />} />
 
               <Route path="issues" element={<Issues />} />
               <Route path="issue" element={<Issue />} />
@@ -38,6 +35,10 @@ export function App(): JSX.Element | null {
 
               <Route path="board" element={<Board />} />
             </Route>
+
+            <Route path="/releases" element={<Releases />} />
+            <Route path="/release" element={<Release />} />
+            <Route path="/release/:id" element={<Release />} />
 
             <Route path="/users" element={<Users />} />
             <Route path="/user" element={<User />} />

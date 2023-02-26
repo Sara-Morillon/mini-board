@@ -10,12 +10,12 @@ describe('getReleases', () => {
   })
 
   it('should get releases', async () => {
-    await getReleases(1)
-    expect(Axios.get).toHaveBeenCalledWith('/api/releases', { params: { projectId: 1 } })
+    await getReleases()
+    expect(Axios.get).toHaveBeenCalledWith('/api/releases')
   })
 
   it('should return releases', async () => {
-    const result = await getReleases(1)
+    const result = await getReleases()
     expect(result).toBe('releases')
   })
 })
@@ -54,7 +54,7 @@ describe('saveRelease', () => {
 
   it('should return releases path', async () => {
     const path = await saveRelease(mockRelease())
-    expect(path).toBe('/project/1/releases')
+    expect(path).toBe('/releases')
   })
 })
 
@@ -66,6 +66,6 @@ describe('deleteRelease', () => {
 
   it('should return releases path', async () => {
     const path = await deleteRelease(mockRelease())
-    expect(path).toBe('/project/1/releases')
+    expect(path).toBe('/releases')
   })
 })

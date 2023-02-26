@@ -76,7 +76,6 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
           </label>
 
           <ReleaseSelector
-            projectId={projectId}
             label="Release *"
             value={values.releaseId}
             onChange={(releaseId) => onChange('releaseId', releaseId)}

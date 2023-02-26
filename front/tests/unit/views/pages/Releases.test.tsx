@@ -21,7 +21,7 @@ describe('Releases', () => {
   it('should render create button', async () => {
     render(<Releases />)
     await wait()
-    expect(screen.getByText('Create release')).toHaveAttribute('href', '/project/1/release')
+    expect(screen.getByText('Create release')).toHaveAttribute('href', '/release')
   })
 
   it('should render release points', async () => {
@@ -33,7 +33,7 @@ describe('Releases', () => {
   it('should render release name', async () => {
     render(<Releases />)
     await wait()
-    expect(screen.getByText('release1')).toHaveAttribute('href', '/project/1/release/1')
+    expect(screen.getByText('release1')).toHaveAttribute('href', '/release/1')
   })
 
   it('should render release due date', async () => {

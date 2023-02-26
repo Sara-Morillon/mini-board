@@ -16,7 +16,7 @@ export function Nav(): JSX.Element | null {
 
   return (
     <div role="tablist">
-      <Link role="tab" aria-selected={page === 'releases'} to={`/project/${projectId}/releases`}>
+      <Link role="tab" aria-selected={page === 'releases'} to={`/releases`}>
         Releases
       </Link>
       <Link role="tab" aria-selected={page === 'issues'} to={`/project/${projectId}/issues`}>

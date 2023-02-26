@@ -3,7 +3,6 @@ import c from 'classnames'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useParams } from '../../hooks/useParams'
 import { IIssue, IIssueFull } from '../../models/Issue'
 import { IRelease } from '../../models/Release'
 import { getIssues, moveIssue } from '../../services/issue'
@@ -12,9 +11,7 @@ import { CreateButton } from '../components/CreateButton'
 import { LoadContainer } from '../components/LoadContainer'
 
 export function Releases(): JSX.Element {
-  const { projectId } = useParams()
-  const fetch = useCallback(() => getReleases(projectId), [projectId])
-  const [releases, state, refresh] = useFetch(fetch, [])
+  const [releases, state, refresh] = useFetch(getReleases, [])
   const [loading, setLoading] = useState(false)
 
   const onMove = useCallback(
@@ -32,11 +29,11 @@ export function Releases(): JSX.Element {
   return (
     <>
       <div className="clearfix">
-        <CreateButton to={`/project/${projectId}/release`}>Create release</CreateButton>
+        <CreateButton to={`/release`}>Create release</CreateButton>
       </div>
       <LoadContainer loading={loading || state.loading}>
         {releases.map((release) => (
-          <Release key={release.id} release={release} projectId={projectId} onMove={onMove} />
+          <Release key={release.id} release={release} onMove={onMove} />
         ))}
       </LoadContainer>
     </>
@@ -45,12 +42,11 @@ export function Releases(): JSX.Element {
 
 interface IReleaseProps {
   release: IRelease
-  projectId: number
   onMove: (source: IIssueFull, target: IIssueFull) => void
 }
 
-function Release({ release, projectId, onMove }: IReleaseProps) {
-  const fetch = useCallback(() => getIssues(projectId, release.id), [projectId, release.id])
+function Release({ release, onMove }: IReleaseProps) {
+  const fetch = useCallback(() => getIssues(undefined, release.id), [release.id])
   const [{ issues }, { loading }] = useFetch(fetch, { issues: [], total: 0 })
 
   const totalPoints = issues.reduce((acc, curr) => acc + curr.points, 0)
@@ -64,13 +60,13 @@ function Release({ release, projectId, onMove }: IReleaseProps) {
       <h4 className="mt2">
         <small className="right">{points}</small>
         <b className="mr1">
-          <Link to={`/project/${projectId}/release/${release.id}`}>{release.name}</Link>
+          <Link to={`/release/${release.id}`}>{release.name}</Link>
         </b>
         <small>{dueDate}</small>
       </h4>
       <LoadContainer loading={loading}>
         {issues.map((issue) => (
-          <IssueCard key={issue.id} issue={issue} projectId={projectId} onMove={onMove} />
+          <IssueCard key={issue.id} issue={issue} onMove={onMove} />
         ))}
       </LoadContainer>
     </>
@@ -79,11 +75,10 @@ function Release({ release, projectId, onMove }: IReleaseProps) {
 
 interface IIssueCardProps {
   issue: IIssueFull
-  projectId: number
   onMove: (source: IIssueFull, target: IIssueFull) => void
 }
 
-function IssueCard({ issue, projectId, onMove }: IIssueCardProps) {
+function IssueCard({ issue, onMove }: IIssueCardProps) {
   const source = useMemo(() => JSON.stringify(issue), [issue])
   const onDrop = useCallback((data: string) => onMove(JSON.parse(data), issue), [onMove, issue])
   const [isDragged, dragEvents] = useDrag(source)
@@ -102,7 +97,7 @@ function IssueCard({ issue, projectId, onMove }: IIssueCardProps) {
     >
       <span className={c('mr1', issue.type)} />
       <div className="truncate flex-auto mr1">
-        <Link to={`/project/${projectId}/issue/${issue.id}`}>
+        <Link to={`/project/${issue.projectId}/issue/${issue.id}`}>
           [{issue.project.key}-{issue.id}] {issue.title}
         </Link>
       </div>

@@ -9,10 +9,7 @@ describe('getReleases', () => {
     const req = getMockReq({ query: { projectId: '1' } })
     const { res } = getMockRes()
     await getReleases(req, res)
-    expect(prisma.release.findMany).toHaveBeenCalledWith({
-      where: { projectId: 1 },
-      orderBy: { dueDate: 'desc' },
-    })
+    expect(prisma.release.findMany).toHaveBeenCalledWith({ orderBy: { dueDate: 'desc' } })
   })
 
   it('should return releases', async () => {
@@ -38,13 +35,7 @@ describe('postRelease', () => {
     const req = getMockReq({ body: { projectId: 1, name: 'name', dueDate: 'dueDate' } })
     const { res } = getMockRes()
     await postRelease(req, res)
-    expect(prisma.release.create).toHaveBeenCalledWith({
-      data: {
-        projectId: 1,
-        name: 'name',
-        dueDate: 'dueDate',
-      },
-    })
+    expect(prisma.release.create).toHaveBeenCalledWith({ data: { name: 'name', dueDate: 'dueDate' } })
   })
 
   it('should return 201 status and created release id', async () => {

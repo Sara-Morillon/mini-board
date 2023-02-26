@@ -15,7 +15,7 @@ export function Board(): JSX.Element {
   return (
     <>
       <div className="flex justify-between items-center">
-        <ReleaseSelector projectId={projectId} onChange={setReleaseId} className="p1 mt1" />
+        <ReleaseSelector onChange={setReleaseId} className="p1 mt1" />
         <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
       </div>
       {releaseId && <BoardTable releaseId={releaseId} projectId={projectId} />}

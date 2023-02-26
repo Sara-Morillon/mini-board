@@ -74,7 +74,6 @@ export function mockProject(project?: Partial<IProject>): IProject {
 export function mockRelease(release?: Partial<IRelease>): IRelease {
   return {
     id: 1,
-    projectId: 1,
     name: 'release1',
     dueDate: '2020-01-01T00:00:00.000Z',
     ...release,

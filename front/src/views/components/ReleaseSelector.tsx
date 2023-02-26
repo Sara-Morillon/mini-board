@@ -1,18 +1,16 @@
 import { useFetch } from '@saramorillon/hooks'
 import { format, parseISO } from 'date-fns'
-import React, { SelectHTMLAttributes, useCallback, useEffect } from 'react'
+import React, { SelectHTMLAttributes, useEffect } from 'react'
 import { getReleases } from '../../services/release'
 
 interface IReleaseSelectorProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'> {
-  projectId: number
   label?: string
   value?: number
   onChange: (releaseId: number) => void
 }
 
-export function ReleaseSelector({ projectId, label, value, onChange, placeholder, ...props }: IReleaseSelectorProps) {
-  const fetch = useCallback(() => getReleases(projectId), [projectId])
-  const [releases, { loading }] = useFetch(fetch, [])
+export function ReleaseSelector({ label, value, onChange, placeholder, ...props }: IReleaseSelectorProps) {
+  const [releases, { loading }] = useFetch(getReleases, [])
 
   useEffect(() => {
     if (releases.length && !value && !placeholder) {

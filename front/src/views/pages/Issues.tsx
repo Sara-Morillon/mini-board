@@ -29,13 +29,7 @@ export function Issues() {
   return (
     <>
       <div className="flex justify-between items-center">
-        <ReleaseSelector
-          projectId={projectId}
-          value={releaseId}
-          onChange={setReleaseId}
-          placeholder="All releases"
-          className="p1 mt1"
-        />
+        <ReleaseSelector value={releaseId} onChange={setReleaseId} placeholder="All releases" className="p1 mt1" />
         <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
       </div>
       <LoadContainer loading={loading}>

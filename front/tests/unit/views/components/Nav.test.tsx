@@ -14,7 +14,7 @@ describe('Nav', () => {
 
   it('should render "releases" tab', () => {
     render(<Nav />)
-    expect(screen.getByText('Releases')).toHaveAttribute('href', '/project/1/releases')
+    expect(screen.getByText('Releases')).toHaveAttribute('href', '/releases')
   })
 
   it('should activate "releases" tab when pathname includes "release"', () => {

@@ -3,14 +3,10 @@ import { z } from 'zod'
 import { prisma } from '../prisma'
 
 const schema = {
-  list: z.object({
-    projectId: z.string().transform(Number),
-  }),
   get: z.object({
     id: z.string().transform(Number),
   }),
   post: z.object({
-    projectId: z.number(),
     name: z.string(),
     dueDate: z.string(),
   }),
@@ -23,11 +19,7 @@ const schema = {
 export async function getReleases(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('get_releases')
   try {
-    const { projectId } = schema.list.parse(req.query)
-    const releases = await prisma.release.findMany({
-      where: { projectId },
-      orderBy: { dueDate: 'desc' },
-    })
+    const releases = await prisma.release.findMany({ orderBy: { dueDate: 'desc' } })
     res.json(releases)
     success()
   } catch (error) {
@@ -39,8 +31,8 @@ export async function getReleases(req: Request, res: Response): Promise<void> {
 export async function postRelease(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('post_release')
   try {
-    const { projectId, name, dueDate } = schema.post.parse(req.body)
-    const release = await prisma.release.create({ data: { projectId, name, dueDate } })
+    const { name, dueDate } = schema.post.parse(req.body)
+    const release = await prisma.release.create({ data: { name, dueDate } })
     res.status(201).json(release.id)
     success()
   } catch (error) {

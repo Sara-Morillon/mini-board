@@ -79,7 +79,6 @@ export const mockProject: Project = {
 
 export const mockRelease: Release = {
   id: 1,
-  projectId: 1,
   name: 'name',
   dueDate: new Date('2020-01-01T00:00:00.000Z'),
   createdAt: new Date('2018-01-01T00:00:00.000Z'),

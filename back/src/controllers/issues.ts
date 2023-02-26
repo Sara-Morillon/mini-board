@@ -5,10 +5,10 @@ import { prisma } from '../prisma'
 
 const schema = {
   list: z.object({
-    projectId: z.string().transform(Number),
-    releaseId: z.string().optional().transform(Number),
-    page: z.string().optional().transform(Number),
-    limit: z.string().optional().transform(Number),
+    projectId: z.string().transform(Number).optional(),
+    releaseId: z.string().transform(Number).optional(),
+    page: z.string().transform(Number).optional(),
+    limit: z.string().transform(Number).optional(),
   }),
   get: z.object({
     id: z.string().transform(Number),
@@ -40,12 +40,14 @@ export async function getIssues(req: Request, res: Response): Promise<void> {
   try {
     const { projectId, releaseId, page, limit } = schema.list.parse(req.query)
     const issues = await prisma.issue.findMany({
-      where: { projectId, ...(releaseId && { releaseId }) },
+      where: { ...(releaseId && { releaseId }), ...(projectId && { projectId }) },
       orderBy: [{ release: { dueDate: 'desc' } }, { priority: 'asc' }],
       include: { author: true, project: true, release: true },
       ...(page && limit && { take: limit, skip: (page - 1) * limit }),
     })
-    const total = await prisma.issue.count({ where: { projectId, ...(releaseId && { releaseId }) } })
+    const total = await prisma.issue.count({
+      where: { ...(releaseId && { releaseId }), ...(projectId && { projectId }) },
+    })
     res.json({ issues, total })
     success()
   } catch (error) {

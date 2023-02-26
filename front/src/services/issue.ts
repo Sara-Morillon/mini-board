@@ -2,7 +2,7 @@ import { IIssue, IIssueFull } from '../models/Issue'
 import { Axios } from './Axios'
 
 export async function getIssues(
-  projectId: number,
+  projectId?: number,
   releaseId?: number,
   page?: number,
   limit?: number
