@@ -19,7 +19,7 @@ export function Projects(): JSX.Element {
       {projects.map((project) => (
         <article key={project.id} className="mt2">
           <small className="right">Updated {format(parseISO(project.updatedAt), 'PP')}</small>
-          <Link to={`/project/${project.id}/issues`}>{project.name}</Link>
+          <Link to={`/project/${project.id}`}>{project.name}</Link>
           <br />
           <small>{project.description}</small>
         </article>

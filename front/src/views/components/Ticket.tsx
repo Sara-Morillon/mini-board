@@ -7,11 +7,10 @@ import { IIssueFull, Status } from '../../models/Issue'
 interface ITicketProps {
   status: Status
   issue: IIssueFull
-  projectId: number
   onMove: (source: IIssueFull, target: IIssueFull, status: Status) => void
 }
 
-export function Ticket({ status, issue, projectId, onMove }: ITicketProps): JSX.Element | null {
+export function Ticket({ status, issue, onMove }: ITicketProps): JSX.Element | null {
   const source = useMemo(() => JSON.stringify(issue), [issue])
   const onDrop = useCallback((data: string) => onMove(JSON.parse(data), issue, status), [onMove, issue, status])
   const [isDragged, dragEvents] = useDrag(source)
@@ -31,7 +30,7 @@ export function Ticket({ status, issue, projectId, onMove }: ITicketProps): JSX.
             {issue.points}
           </mark>
           <h5 className="truncate">
-            <Link to={`/project/${projectId}/issue/${issue.id}`}>
+            <Link to={`/issue/${issue.id}`}>
               [{issue.project.key}-{issue.id}] {issue.title}
             </Link>
           </h5>

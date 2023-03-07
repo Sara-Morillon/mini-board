@@ -1,36 +1,15 @@
 import { useFetch } from '@saramorillon/hooks'
 import React, { useCallback, useState } from 'react'
-import { useParams } from '../../hooks/useParams'
+import { useTitle } from '../../hooks/useTitle'
 import { IIssue, Status } from '../../models/Issue'
-import { getIssues, moveIssue, saveIssue } from '../../services/issue'
-import { CreateButton } from '../components/CreateButton'
+import { getBoard } from '../../services/board'
+import { moveIssue, saveIssue } from '../../services/issue'
 import { LoadContainer } from '../components/LoadContainer'
-import { ReleaseSelector } from '../components/ReleaseSelector'
 import { Ticket } from '../components/Ticket'
 
 export function Board(): JSX.Element {
-  const { projectId } = useParams()
-  const [releaseId, setReleaseId] = useState<number>()
-
-  return (
-    <>
-      <div className="flex justify-between items-center">
-        <ReleaseSelector onChange={setReleaseId} className="p1 mt1" />
-        <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
-      </div>
-      {releaseId && <BoardTable releaseId={releaseId} projectId={projectId} />}
-    </>
-  )
-}
-
-interface IBoardTableProps {
-  releaseId: number
-  projectId: number
-}
-
-function BoardTable({ releaseId, projectId }: IBoardTableProps): JSX.Element {
-  const fetch = useCallback(() => getIssues(projectId, releaseId), [projectId, releaseId])
-  const [{ issues }, state, refresh] = useFetch(fetch, { issues: [], total: 0 })
+  useTitle('Board')
+  const [issues, state, refresh] = useFetch(getBoard, [])
   const [loading, setLoading] = useState(false)
 
   const onMove = useCallback(
@@ -66,13 +45,13 @@ function BoardTable({ releaseId, projectId }: IBoardTableProps): JSX.Element {
           {issues.map((issue) => (
             <tr key={issue.id}>
               <td style={{ height: 1 }}>
-                <Ticket issue={issue} status="todo" projectId={projectId} onMove={onMove} />
+                <Ticket issue={issue} status="todo" onMove={onMove} />
               </td>
               <td style={{ height: 1 }}>
-                <Ticket issue={issue} status="doing" projectId={projectId} onMove={onMove} />
+                <Ticket issue={issue} status="doing" onMove={onMove} />
               </td>
               <td style={{ height: 1 }}>
-                <Ticket issue={issue} status="done" projectId={projectId} onMove={onMove} />
+                <Ticket issue={issue} status="done" onMove={onMove} />
               </td>
             </tr>
           ))}

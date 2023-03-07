@@ -1,30 +1,37 @@
-import { IconLogout, IconSettings } from '@tabler/icons'
+import { IconBulb, IconCards, IconLayoutKanban, IconLogout, IconRocket, IconSettings } from '@tabler/icons'
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useCurrentTitle } from '../../hooks/useTitle'
+import { Link, NavLink } from 'react-router-dom'
 
 export function Header(): JSX.Element {
-  const title = useCurrentTitle()
-
   return (
-    <>
-      <nav aria-label="Main">
-        <Link to="/">
-          <img src="/favicon.svg" height={16} /> <strong>Mini Board</strong>
-        </Link>
+    <nav aria-label="Main">
+      <Link to="/">
+        <img src="/favicon.svg" height={16} /> <strong>Mini Board</strong>
+      </Link>
 
-        <Link to="/users" className="ml-auto">
-          <IconSettings /> Admin
-        </Link>
+      <NavLink end to="/">
+        <IconLayoutKanban /> Board
+      </NavLink>
 
-        <a href="/api/logout">
-          <IconLogout /> Log out
-        </a>
-      </nav>
+      <NavLink end to="/issues">
+        <IconCards /> Issues
+      </NavLink>
 
-      <header>
-        <h1>{title}</h1>
-      </header>
-    </>
+      <NavLink end to="/releases">
+        <IconRocket /> Releases
+      </NavLink>
+
+      <NavLink end to="/projects">
+        <IconBulb /> Projects
+      </NavLink>
+
+      <NavLink end to="/users" className="ml-auto">
+        <IconSettings /> Admin
+      </NavLink>
+
+      <a href="/api/logout">
+        <IconLogout /> Log out
+      </a>
+    </nav>
   )
 }

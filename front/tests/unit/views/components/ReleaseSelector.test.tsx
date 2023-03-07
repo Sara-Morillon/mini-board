@@ -39,7 +39,7 @@ describe('ReleaseSelector', () => {
 
   it('should render disabled select when disabled', async () => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease()])
-    render(<ReleaseSelector onChange={jest.fn()} disabled />)
+    render(<ReleaseSelector onChange={jest.fn()} selectProps={{ disabled: true }} />)
     await wait()
     expect(screen.getByRole('combobox')).toBeDisabled()
   })
@@ -76,7 +76,7 @@ describe('ReleaseSelector', () => {
 
   it('should render placeholder', async () => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease()])
-    render(<ReleaseSelector onChange={jest.fn()} placeholder="Placeholder" />)
+    render(<ReleaseSelector onChange={jest.fn()} selectProps={{ placeholder: 'Placeholder' }} />)
     await wait()
     expect(screen.getByRole('combobox')).toHaveDisplayValue('Placeholder')
   })

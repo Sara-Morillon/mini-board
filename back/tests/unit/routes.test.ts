@@ -8,6 +8,7 @@ import {
   getAttachments,
   postAttachments,
 } from '../../src/controllers/attachments'
+import { getBoard } from '../../src/controllers/board'
 import { deleteComment, getComments, postComment } from '../../src/controllers/comments'
 import { deleteIssue, getIssue, getIssues, moveIssues, patchIssue, postIssue } from '../../src/controllers/issues'
 import { deleteProject, getProject, getProjects, patchProject, postProject } from '../../src/controllers/projects'
@@ -43,6 +44,8 @@ describe('routes', () => {
     expect(router.use).toHaveBeenCalledWith(session)
     expect(router.get).toHaveBeenCalledWith('/session', getSession)
     expect(router.get).toHaveBeenCalledWith('/logout', logout)
+
+    expect(router.get).toHaveBeenCalledWith('/board', getBoard)
 
     expect(router.get).toHaveBeenCalledWith('/projects', getProjects)
     expect(router.post).toHaveBeenCalledWith('/projects', postProject)

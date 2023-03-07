@@ -3,6 +3,7 @@ import c from 'classnames'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTitle } from '../../hooks/useTitle'
 import { IIssue, IIssueFull } from '../../models/Issue'
 import { IRelease } from '../../models/Release'
 import { getIssues, moveIssue } from '../../services/issue'
@@ -11,6 +12,7 @@ import { CreateButton } from '../components/CreateButton'
 import { LoadContainer } from '../components/LoadContainer'
 
 export function Releases(): JSX.Element {
+  useTitle('Releases')
   const [releases, state, refresh] = useFetch(getReleases, [])
   const [loading, setLoading] = useState(false)
 

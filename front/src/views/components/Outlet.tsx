@@ -1,13 +1,8 @@
-import { useFetch } from '@saramorillon/hooks'
-import React, { useCallback, useContext } from 'react'
-import { Navigate, Outlet, useParams } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Navigate, Outlet } from 'react-router-dom'
 import { SessionContext } from '../../contexts/SessionContext'
-import { useTitle } from '../../hooks/useTitle'
-import { getProject } from '../../services/project'
 import { Footer } from './Footer'
 import { Header } from './Header'
-import { LoadContainer } from './LoadContainer'
-import { Nav } from './Nav'
 
 export function PublicOutlet(): JSX.Element {
   const session = useContext(SessionContext)
@@ -33,19 +28,5 @@ export function PrivateOutlet(): JSX.Element {
       </main>
       <Footer />
     </>
-  )
-}
-
-export function NavOutlet() {
-  const { projectId } = useParams()
-  const fetch = useCallback(() => getProject(projectId), [projectId])
-  const [project, { loading }] = useFetch(fetch, null)
-  useTitle(project?.name || '')
-
-  return (
-    <LoadContainer loading={loading}>
-      <Nav />
-      <Outlet />
-    </LoadContainer>
   )
 }

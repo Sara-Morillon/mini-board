@@ -1,21 +1,20 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../../../src/hooks/useForm'
-import { useParams } from '../../../../src/hooks/useParams'
 import { getRelease, getReleases } from '../../../../src/services/release'
 import { Release } from '../../../../src/views/pages/Release'
 import { mockRelease, wait } from '../../../mocks'
 
 jest.mock('../../../../src/services/release')
-jest.mock('../../../../src/hooks/useParams')
 jest.mock('../../../../src/hooks/useForm')
 
 mockdate.set('2022-01-01T00:00:00.000Z')
 
 describe('Release', () => {
   beforeEach(() => {
-    jest.mocked(useParams).mockReturnValue({ projectId: 1, id: '1' })
+    jest.mocked(useParams).mockReturnValue({ id: '1' })
     jest.mocked(getRelease).mockResolvedValue(mockRelease())
     jest.mocked(getReleases).mockResolvedValue([mockRelease()])
     jest.mocked(useFormSave).mockReturnValue([false, jest.fn()])
@@ -26,6 +25,19 @@ describe('Release', () => {
     render(<Release />)
     await wait()
     expect(getRelease).toHaveBeenCalledWith('1')
+  })
+
+  it('should render title', async () => {
+    render(<Release />)
+    await wait()
+    expect(document.title).toBe('Mini Board - Edit release 1')
+  })
+
+  it('should render title when creating a release', async () => {
+    jest.mocked(useParams).mockReturnValue({})
+    render(<Release />)
+    await wait()
+    expect(document.title).toBe('Mini Board - Create release')
   })
 
   it('should use empty release if no release', async () => {

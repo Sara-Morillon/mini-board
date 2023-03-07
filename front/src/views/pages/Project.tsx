@@ -2,6 +2,7 @@ import { useFetch, useForm } from '@saramorillon/hooks'
 import React, { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
+import { useTitle } from '../../hooks/useTitle'
 import { IProject } from '../../models/Project'
 import { deleteProject, getProject, saveProject } from '../../services/project'
 import { DeleteButton, SaveButton } from '../components/FormButtons'
@@ -16,8 +17,9 @@ const empty: IProject = {
 }
 
 export function Project(): JSX.Element {
-  const { projectId } = useParams()
-  const fetch = useCallback(() => getProject(projectId), [projectId])
+  const { id } = useParams()
+  useTitle(id ? `Edit project ${id}` : 'Create project')
+  const fetch = useCallback(() => getProject(id), [id])
   const [project, { loading }, refresh] = useFetch(fetch, null)
 
   return (

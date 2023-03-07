@@ -1,12 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { useParams } from '../../../../src/hooks/useParams'
 import { getIssues, moveIssue } from '../../../../src/services/issue'
 import { getReleases } from '../../../../src/services/release'
 import { Releases } from '../../../../src/views/pages/Releases'
 import { mockIssueFull, mockRelease, wait } from '../../../mocks'
 
-jest.mock('../../../../src/hooks/useParams')
 jest.mock('../../../../src/services/issue')
 jest.mock('../../../../src/services/release')
 
@@ -15,7 +13,6 @@ describe('Releases', () => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease()])
     jest.mocked(getIssues).mockResolvedValue({ issues: [mockIssueFull()], total: 10 })
     jest.mocked(moveIssue).mockResolvedValue(undefined)
-    jest.mocked(useParams).mockReturnValue({ projectId: 1 })
   })
 
   it('should render create button', async () => {

@@ -10,6 +10,7 @@ import { deleteUser, getUsers } from '../../services/user'
 import { LoadContainer } from '../components/LoadContainer'
 
 export function Users(): JSX.Element {
+  useTitle('Users')
   const [users, { loading }, refresh] = useFetch(getUsers, [])
 
   return (
@@ -36,8 +37,6 @@ interface IUserProps {
 }
 
 function User({ user, refresh }: IUserProps): JSX.Element {
-  useTitle('Users')
-
   const session = useSession()
   const [loading, setLoading] = useState(false)
 

@@ -8,6 +8,7 @@ import {
   getAttachments,
   postAttachments,
 } from './controllers/attachments'
+import { getBoard } from './controllers/board'
 import { deleteComment, getComments, postComment } from './controllers/comments'
 import { deleteIssue, getIssue, getIssues, moveIssues, patchIssue, postIssue } from './controllers/issues'
 import { deleteProject, getProject, getProjects, patchProject, postProject } from './controllers/projects'
@@ -27,6 +28,8 @@ export function routes() {
 
   router.get('/session', getSession)
   router.get('/logout', logout)
+
+  router.get('/board', getBoard)
 
   router.get('/projects', getProjects)
   router.post('/projects', postProject)

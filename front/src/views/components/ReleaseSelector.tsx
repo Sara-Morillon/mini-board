@@ -1,34 +1,36 @@
 import { useFetch } from '@saramorillon/hooks'
 import { format, parseISO } from 'date-fns'
-import React, { SelectHTMLAttributes, useEffect } from 'react'
+import React, { LabelHTMLAttributes, SelectHTMLAttributes, useEffect } from 'react'
 import { getReleases } from '../../services/release'
 
-interface IReleaseSelectorProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'> {
+interface IReleaseSelectorProps {
   label?: string
   value?: number
   onChange: (releaseId: number) => void
+  labelProps?: LabelHTMLAttributes<HTMLLabelElement>
+  selectProps?: SelectHTMLAttributes<HTMLSelectElement>
 }
 
-export function ReleaseSelector({ label, value, onChange, placeholder, ...props }: IReleaseSelectorProps) {
+export function ReleaseSelector({ label, value, onChange, labelProps = {}, selectProps = {} }: IReleaseSelectorProps) {
   const [releases, { loading }] = useFetch(getReleases, [])
 
   useEffect(() => {
-    if (releases.length && !value && !placeholder) {
+    if (releases.length && !value && !selectProps.placeholder) {
       onChange(releases[0].id)
     }
-  }, [releases, value, placeholder, onChange])
+  }, [releases, value, selectProps.placeholder, onChange])
 
   return (
-    <label aria-busy={loading} className="mx-auto mb0">
+    <label aria-busy={loading} {...labelProps}>
       {label}
       <select
+        {...selectProps}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        {...props}
-        disabled={props.disabled || !releases.length}
+        disabled={selectProps.disabled || !releases.length}
       >
         {!loading && !releases.length && <option value="">No release found</option>}
-        {placeholder && releases.length && <option value="">{placeholder}</option>}
+        {selectProps.placeholder && releases.length && <option value="">{selectProps.placeholder}</option>}
         {releases.map((release) => (
           <option key={release.id} value={release.id}>
             {release.name} ({format(parseISO(release.dueDate), 'PP')})

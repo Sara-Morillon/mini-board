@@ -26,7 +26,7 @@ describe('Projects', () => {
   it('should render project title', async () => {
     render(<Projects />)
     await wait()
-    expect(screen.getByText('project1')).toHaveAttribute('href', '/project/1/issues')
+    expect(screen.getByText('project1')).toHaveAttribute('href', '/project/1')
   })
 
   it('should render project description', async () => {

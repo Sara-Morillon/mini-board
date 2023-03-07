@@ -1,37 +1,35 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
 import c from 'classnames'
-import React, { ChangeEvent, useCallback, useMemo } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
+import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
-import { useParams } from '../../hooks/useParams'
+import { useTitle } from '../../hooks/useTitle'
 import { IIssue, statuses, types } from '../../models/Issue'
 import { deleteIssue, getIssue, saveIssue } from '../../services/issue'
 import { Attachments } from '../components/Attachments'
 import { Comments } from '../components/Comments'
 import { DeleteButton, SaveButton } from '../components/FormButtons'
 import { LoadContainer } from '../components/LoadContainer'
+import { ProjectSelector } from '../components/ProjectSelector'
 import { ReleaseSelector } from '../components/ReleaseSelector'
 
-function useEmpty(projectId: number): IIssue {
-  return useMemo(
-    () => ({
-      id: 0,
-      projectId,
-      releaseId: 0,
-      authorId: 0,
-      priority: 0,
-      type: 'bug',
-      status: 'todo',
-      points: 0,
-      title: '',
-      description: '',
-      createdAt: '',
-    }),
-    [projectId]
-  )
+const empty: IIssue = {
+  id: 0,
+  projectId: 0,
+  releaseId: 0,
+  authorId: 0,
+  priority: 0,
+  type: 'bug',
+  status: 'todo',
+  points: 0,
+  title: '',
+  description: '',
+  createdAt: '',
 }
 
 export function Issue(): JSX.Element {
   const { id } = useParams()
+  useTitle(id ? `Edit issue ${id}` : 'Create issue')
   const fetch = useCallback(() => getIssue(id), [id])
   const [issue, { loading }, refresh] = useFetch(fetch, null)
 
@@ -48,9 +46,6 @@ interface IIssueFormProps {
 }
 
 function IssueForm({ issue, refresh }: IIssueFormProps) {
-  const { projectId } = useParams()
-  const empty = useEmpty(projectId)
-
   const [saveLoading, onSave] = useFormSave(saveIssue, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteIssue)
 
@@ -79,8 +74,14 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
             label="Release *"
             value={values.releaseId}
             onChange={(releaseId) => onChange('releaseId', releaseId)}
-            placeholder="Select a release"
-            required
+            selectProps={{ required: true, placeholder: 'Select a release' }}
+          />
+
+          <ProjectSelector
+            label="Project *"
+            value={values.projectId}
+            onChange={(projectId) => onChange('projectId', projectId)}
+            selectProps={{ required: true, placeholder: 'Select a project' }}
           />
         </div>
 

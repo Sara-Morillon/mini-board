@@ -1,27 +1,17 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
 import { formatDistanceToNow } from 'date-fns'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
+import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
-import { useParams } from '../../hooks/useParams'
+import { useTitle } from '../../hooks/useTitle'
 import { IRelease } from '../../models/Release'
 import { deleteRelease, getRelease, saveRelease } from '../../services/release'
 import { DeleteButton, SaveButton } from '../components/FormButtons'
 import { LoadContainer } from '../components/LoadContainer'
 
-function useEmpty(projectId: number): IRelease {
-  return useMemo(
-    () => ({
-      id: 0,
-      projectId,
-      name: '',
-      dueDate: new Date().toISOString(),
-    }),
-    [projectId]
-  )
-}
-
 export function Release(): JSX.Element {
   const { id } = useParams()
+  useTitle(id ? `Edit release ${id}` : 'Create release')
   const fetch = useCallback(() => getRelease(id), [id])
   const [release, { loading }, refresh] = useFetch(fetch, null)
 
@@ -38,13 +28,18 @@ interface IReleaseFormProps {
 }
 
 function ReleaseForm({ release, refresh }: IReleaseFormProps) {
-  const { projectId } = useParams()
-  const empty = useEmpty(projectId)
-
   const [saveLoading, onSave] = useFormSave(saveRelease, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteRelease)
 
-  const { submit, values, onChange } = useForm(onSave, release ?? empty)
+  const { submit, values, onChange } = useForm(
+    onSave,
+    release ?? {
+      id: 0,
+      projectId: 0,
+      name: '',
+      dueDate: new Date().toISOString(),
+    }
+  )
 
   return (
     <form onSubmit={submit} className="p3">

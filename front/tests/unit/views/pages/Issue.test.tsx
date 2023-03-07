@@ -1,26 +1,28 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../../../src/hooks/useForm'
-import { useParams } from '../../../../src/hooks/useParams'
 import { getAttachments } from '../../../../src/services/attachment'
 import { getComments } from '../../../../src/services/comment'
 import { getIssue } from '../../../../src/services/issue'
+import { getProjects } from '../../../../src/services/project'
 import { getReleases } from '../../../../src/services/release'
 import { Issue } from '../../../../src/views/pages/Issue'
-import { mockIssue, mockRelease, wait } from '../../../mocks'
+import { mockIssue, mockProject, mockRelease, wait } from '../../../mocks'
 
 jest.mock('../../../../src/services/issue')
 jest.mock('../../../../src/services/release')
+jest.mock('../../../../src/services/project')
 jest.mock('../../../../src/services/attachment')
 jest.mock('../../../../src/services/comment')
-jest.mock('../../../../src/hooks/useParams')
 jest.mock('../../../../src/hooks/useForm')
 
 describe('Issue', () => {
   beforeEach(() => {
-    jest.mocked(useParams).mockReturnValue({ projectId: 1, id: '1' })
+    jest.mocked(useParams).mockReturnValue({ id: '1' })
     jest.mocked(getIssue).mockResolvedValue(mockIssue())
     jest.mocked(getReleases).mockResolvedValue([mockRelease(), mockRelease({ id: 2 })])
+    jest.mocked(getProjects).mockResolvedValue([mockProject(), mockProject({ id: 2 })])
     jest.mocked(getComments).mockResolvedValue([])
     jest.mocked(getAttachments).mockResolvedValue([])
     jest.mocked(useFormSave).mockReturnValue([false, jest.fn()])
@@ -31,6 +33,19 @@ describe('Issue', () => {
     render(<Issue />)
     await wait()
     expect(getIssue).toHaveBeenCalledWith('1')
+  })
+
+  it('should render title', async () => {
+    render(<Issue />)
+    await wait()
+    expect(document.title).toBe('Mini Board - Edit issue 1')
+  })
+
+  it('should render title when creating an issue', async () => {
+    jest.mocked(useParams).mockReturnValue({})
+    render(<Issue />)
+    await wait()
+    expect(document.title).toBe('Mini Board - Create issue')
   })
 
   it('should use empty issue if no issue', async () => {
@@ -64,6 +79,19 @@ describe('Issue', () => {
     await wait()
     fireEvent.change(screen.getByLabelText('Release *'), { target: { value: '2' } })
     expect(screen.getByLabelText('Release *')).toHaveValue('2')
+  })
+
+  it('should render issue project', async () => {
+    render(<Issue />)
+    await wait()
+    expect(screen.getByLabelText('Project *')).toHaveValue('1')
+  })
+
+  it('should update form values when changing project', async () => {
+    render(<Issue />)
+    await wait()
+    fireEvent.change(screen.getByLabelText('Project *'), { target: { value: '2' } })
+    expect(screen.getByLabelText('Project *')).toHaveValue('2')
   })
 
   it('should render issue type', async () => {

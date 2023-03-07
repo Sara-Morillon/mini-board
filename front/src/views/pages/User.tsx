@@ -1,9 +1,11 @@
 import { IconDeviceFloppy } from '@tabler/icons'
 import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTitle } from '../../hooks/useTitle'
 import { postUser } from '../../services/user'
 
 export function User(): JSX.Element {
+  useTitle('Create user')
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [username, setUsername] = useState('')

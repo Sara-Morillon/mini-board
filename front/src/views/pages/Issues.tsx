@@ -4,7 +4,7 @@ import c from 'classnames'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useParams } from '../../hooks/useParams'
+import { useTitle } from '../../hooks/useTitle'
 import { getIssues } from '../../services/issue'
 import { CreateButton } from '../components/CreateButton'
 import { LoadContainer } from '../components/LoadContainer'
@@ -13,13 +13,13 @@ import { ReleaseSelector } from '../components/ReleaseSelector'
 const limit = 10
 
 export function Issues() {
+  useTitle('Issues')
   const [maxPage, setMaxPage] = useState(1)
   const { page, first, previous, next, last, canPrevious, canNext } = usePagination(maxPage)
 
-  const { projectId } = useParams()
   const [releaseId, setReleaseId] = useState<number>()
 
-  const fetch = useCallback(() => getIssues(projectId, releaseId, page, limit), [projectId, releaseId, page])
+  const fetch = useCallback(() => getIssues(undefined, releaseId, page, limit), [releaseId, page])
   const [{ issues, total }, { loading }] = useFetch(fetch, { issues: [], total: 0 })
 
   useEffect(() => {
@@ -29,8 +29,13 @@ export function Issues() {
   return (
     <>
       <div className="flex justify-between items-center">
-        <ReleaseSelector value={releaseId} onChange={setReleaseId} placeholder="All releases" className="p1 mt1" />
-        <CreateButton to={`/project/${projectId}/issue`}>Create issue</CreateButton>
+        <ReleaseSelector
+          value={releaseId}
+          onChange={setReleaseId}
+          selectProps={{ placeholder: 'All releases' }}
+          labelProps={{ className: 'p1 mt1' }}
+        />
+        <CreateButton to={`/issue`}>Create issue</CreateButton>
       </div>
       <LoadContainer loading={loading}>
         <table className="mt2">
@@ -50,7 +55,7 @@ export function Issues() {
                   <span title={issue.type} className={c('mr1', issue.type)} />
                 </td>
                 <td className="truncate" style={{ maxWidth: 0, width: '100%' }}>
-                  <Link to={`/project/${projectId}/issue/${issue.id}`}>
+                  <Link to={`/issue/${issue.id}`}>
                     [{issue.project.key}-{issue.id}] {issue.title}
                   </Link>
                 </td>
