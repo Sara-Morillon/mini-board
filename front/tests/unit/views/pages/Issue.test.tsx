@@ -52,73 +52,16 @@ describe('Issue', () => {
     jest.mocked(getIssue).mockResolvedValue(null)
     render(<Issue />)
     await wait()
-    expect(screen.getByLabelText('Title *')).toHaveValue('')
+    expect(screen.getByPlaceholderText('Title *')).toHaveValue('')
   })
 
-  it('should render issue title', async () => {
+  it('should not render issue status when creating an issue', async () => {
+    jest.mocked(getIssue).mockResolvedValue(null)
     render(<Issue />)
     await wait()
-    expect(screen.getByLabelText('Title *')).toHaveValue('title1')
-  })
-
-  it('should update form values when changing title', async () => {
-    render(<Issue />)
-    await wait()
-    fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'title2' } })
-    expect(screen.getByLabelText('Title *')).toHaveValue('title2')
-  })
-
-  it('should render issue release', async () => {
-    render(<Issue />)
-    await wait()
-    expect(screen.getByLabelText('Release *')).toHaveValue('1')
-  })
-
-  it('should update form values when changing release', async () => {
-    render(<Issue />)
-    await wait()
-    fireEvent.change(screen.getByLabelText('Release *'), { target: { value: '2' } })
-    expect(screen.getByLabelText('Release *')).toHaveValue('2')
-  })
-
-  it('should render issue project', async () => {
-    render(<Issue />)
-    await wait()
-    expect(screen.getByLabelText('Project *')).toHaveValue('1')
-  })
-
-  it('should update form values when changing project', async () => {
-    render(<Issue />)
-    await wait()
-    fireEvent.change(screen.getByLabelText('Project *'), { target: { value: '2' } })
-    expect(screen.getByLabelText('Project *')).toHaveValue('2')
-  })
-
-  it('should render issue type', async () => {
-    render(<Issue />)
-    await wait()
-    expect(screen.getByLabelText('BUG')).toBeChecked()
-    expect(screen.getByLabelText('FEATURE')).not.toBeChecked()
-  })
-
-  it('should update form values when changing type', async () => {
-    render(<Issue />)
-    await wait()
-    fireEvent.click(screen.getByLabelText('FEATURE'))
-    expect(screen.getByLabelText('FEATURE')).toBeChecked()
-  })
-
-  it('should render issue points', async () => {
-    render(<Issue />)
-    await wait()
-    expect(screen.getByLabelText('Points *')).toHaveValue(5)
-  })
-
-  it('should update form values when changing points', async () => {
-    render(<Issue />)
-    await wait()
-    fireEvent.change(screen.getByLabelText('Points *'), { target: { value: 3 } })
-    expect(screen.getByLabelText('Points *')).toHaveValue(3)
+    expect(screen.queryByRole('button', { name: 'TODO' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'DOING' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'DONE' })).not.toBeInTheDocument()
   })
 
   it('should render issue status', async () => {
@@ -129,24 +72,89 @@ describe('Issue', () => {
     expect(screen.getByRole('button', { name: 'DONE' })).toHaveClass('done')
   })
 
-  it('should update form values when changing status', async () => {
+  it('should update issue status', async () => {
     render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'TODO' }))
     expect(screen.getByRole('button', { name: 'TODO' })).toHaveClass('checked')
   })
 
+  it('should render issue type', async () => {
+    render(<Issue />)
+    await wait()
+    expect(screen.getByPlaceholderText('Type *')).toHaveValue('🔴 BUG')
+  })
+
+  it('should update issue type', async () => {
+    render(<Issue />)
+    await wait()
+    fireEvent.change(screen.getByPlaceholderText('Type *'), { target: { value: '🟡 FEATURE' } })
+    expect(screen.getByPlaceholderText('Type *')).toHaveValue('🟡 FEATURE')
+  })
+
+  it('should render issue title', async () => {
+    render(<Issue />)
+    await wait()
+    expect(screen.getByPlaceholderText('Title *')).toHaveValue('title1')
+  })
+
+  it('should update issue title', async () => {
+    render(<Issue />)
+    await wait()
+    fireEvent.change(screen.getByPlaceholderText('Title *'), { target: { value: 'title2' } })
+    expect(screen.getByPlaceholderText('Title *')).toHaveValue('title2')
+  })
+
+  it('should render issue project', async () => {
+    render(<Issue />)
+    await wait()
+    expect(screen.getByPlaceholderText('Project *')).toHaveValue('1')
+  })
+
+  it('should update issue project', async () => {
+    render(<Issue />)
+    await wait()
+    fireEvent.change(screen.getByPlaceholderText('Project *'), { target: { value: '2' } })
+    expect(screen.getByPlaceholderText('Project *')).toHaveValue('2')
+  })
+
+  it('should render issue release', async () => {
+    render(<Issue />)
+    await wait()
+    expect(screen.getByPlaceholderText('Release *')).toHaveValue('1')
+  })
+
+  it('should update issue release', async () => {
+    render(<Issue />)
+    await wait()
+    fireEvent.change(screen.getByPlaceholderText('Release *'), { target: { value: '2' } })
+    expect(screen.getByPlaceholderText('Release *')).toHaveValue('2')
+  })
+
+  it('should render issue points', async () => {
+    render(<Issue />)
+    await wait()
+    expect(screen.getByPlaceholderText('Points *')).toHaveValue(5)
+  })
+
+  it('should update issue points', async () => {
+    render(<Issue />)
+    await wait()
+    fireEvent.change(screen.getByPlaceholderText('Points *'), { target: { value: 3 } })
+    expect(screen.getByPlaceholderText('Points *')).toHaveValue(3)
+  })
+
   it('should render issue summary', async () => {
     render(<Issue />)
     await wait()
-    expect(screen.getByLabelText('Summary')).toHaveValue('description1')
+    expect(screen.getByPlaceholderText('Summary')).toHaveValue('description1')
   })
 
-  it('should update form values when changing summary', async () => {
+  it('should update issue summary', async () => {
     render(<Issue />)
     await wait()
-    fireEvent.change(screen.getByLabelText('Summary'), { target: { value: 'description2' } })
-    expect(screen.getByLabelText('Summary')).toHaveValue('description2')
+    fireEvent.change(screen.getByPlaceholderText('Summary'), { target: { value: 'description2' } })
+    expect(screen.getByPlaceholderText('Summary')).toHaveValue('description2')
   })
 
   it('should enabled buttons when neither saving nor deleting', async () => {

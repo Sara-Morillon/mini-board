@@ -1,10 +1,10 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
 import c from 'classnames'
-import React, { ChangeEvent, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useTitle } from '../../hooks/useTitle'
-import { IIssue, statuses, types } from '../../models/Issue'
+import { IIssue, statuses, typeIcons, types } from '../../models/Issue'
 import { deleteIssue, getIssue, saveIssue } from '../../services/issue'
 import { Attachments } from '../components/Attachments'
 import { Comments } from '../components/Comments'
@@ -51,53 +51,66 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
 
   const { submit, values, onChange } = useForm(onSave, issue ?? empty)
 
-  const onTypeChanged = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target
-      if (value === 'bug' || value === 'feature') {
-        onChange('type', value)
-      }
-    },
-    [onChange]
-  )
-
   return (
     <>
       <form onSubmit={submit}>
-        <div className="flex">
-          <label className="flex-auto mr1">
-            Title *
-            <input value={values.title} onChange={(e) => onChange('title', e.target.value)} required />
-          </label>
-
-          <ReleaseSelector
-            label="Release *"
-            value={values.releaseId}
-            onChange={(releaseId) => onChange('releaseId', releaseId)}
-            selectProps={{ required: true, placeholder: 'Select a release' }}
-          />
-
-          <ProjectSelector
-            label="Project *"
-            value={values.projectId}
-            onChange={(projectId) => onChange('projectId', projectId)}
-            selectProps={{ required: true, placeholder: 'Select a project' }}
-          />
-        </div>
-
-        <div className="flex">
-          <fieldset>
-            <legend className="mb2">Type *</legend>
-            {types.map((type) => (
-              <label key={type} className="mr2">
-                <input type="radio" name="type" value={type} checked={values.type === type} onChange={onTypeChanged} />{' '}
-                {type.toUpperCase()}
-              </label>
+        {issue && (
+          <fieldset className="right">
+            {statuses.map((status) => (
+              <button
+                key={status}
+                type="button"
+                onClick={() => onChange('status', status)}
+                className={c('mr1', status, { checked: values.status === status })}
+                {...(values.status !== status && { 'data-variant': 'outlined' })}
+              >
+                {status.toUpperCase()}
+              </button>
             ))}
           </fieldset>
+        )}
 
-          <label className="mr1">
-            Points *
+        <div className="flex" style={{ gap: '1rem', clear: 'both' }}>
+          <label>
+            <select
+              value={values.type}
+              onChange={(e) => onChange('type', e.target.value as 'bug' | 'feature')}
+              placeholder="Type *"
+            >
+              {types.map((type) => (
+                <option key={type}>
+                  {typeIcons[type]} {type.toUpperCase()}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex-auto">
+            <input
+              value={values.title}
+              onChange={(e) => onChange('title', e.target.value)}
+              required
+              placeholder="Title *"
+            />
+          </label>
+        </div>
+
+        <div className="flex" style={{ gap: '1rem' }}>
+          <ProjectSelector
+            value={values.projectId}
+            onChange={(projectId) => onChange('projectId', projectId)}
+            labelProps={{ className: 'flex-auto' }}
+            selectProps={{ required: true, placeholder: 'Project *' }}
+          />
+
+          <ReleaseSelector
+            value={values.releaseId}
+            onChange={(releaseId) => onChange('releaseId', releaseId)}
+            labelProps={{ className: 'flex-auto' }}
+            selectProps={{ required: true, placeholder: 'Release *' }}
+          />
+
+          <label>
             <input
               type="number"
               value={values.points.toString()}
@@ -105,32 +118,18 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
               min={0}
               step={1}
               required
+              placeholder="Points *"
             />
           </label>
-
-          <fieldset>
-            <legend className="mb1">Status *</legend>
-            {statuses.map((status) => (
-              <strong key={status}>
-                <button
-                  type="button"
-                  onClick={() => onChange('status', status)}
-                  className={c('mr1', status, { checked: values.status === status })}
-                >
-                  {status.toUpperCase()}
-                </button>
-              </strong>
-            ))}
-          </fieldset>
         </div>
 
-        <label>
-          Summary
+        <label className="flex-auto">
           <textarea
             id="summary"
             value={values.description}
             onChange={(e) => onChange('description', e.target.value)}
-            rows={5}
+            rows={10}
+            placeholder="Summary"
           />
         </label>
 
@@ -148,6 +147,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
           </div>
         </div>
       </form>
+
       {issue && (
         <>
           <Attachments issueId={issue.id} />
