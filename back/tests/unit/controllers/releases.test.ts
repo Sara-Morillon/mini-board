@@ -5,7 +5,7 @@ import { getMockReq, mockAction, mockRelease } from '../../mocks'
 
 describe('getReleases', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'findMany').mockResolvedValue([mockRelease])
+    jest.spyOn(prisma.release, 'findMany').mockResolvedValue([mockRelease()])
   })
 
   it('should get releases', async () => {
@@ -19,7 +19,7 @@ describe('getReleases', () => {
     const req = getMockReq({ query: { projectId: '1' } })
     const { res } = getMockRes()
     await getReleases(req, res)
-    expect(res.json).toHaveBeenCalledWith([mockRelease])
+    expect(res.json).toHaveBeenCalledWith([mockRelease()])
   })
 
   it('should return 500 status when failure', async () => {
@@ -50,7 +50,7 @@ describe('getReleases', () => {
 
 describe('postRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'create').mockResolvedValue(mockRelease)
+    jest.spyOn(prisma.release, 'create').mockResolvedValue(mockRelease())
   })
 
   it('should create release', async () => {
@@ -96,7 +96,7 @@ describe('postRelease', () => {
 
 describe('getRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'findUnique').mockResolvedValue(mockRelease)
+    jest.spyOn(prisma.release, 'findUnique').mockResolvedValue(mockRelease())
   })
 
   it('should get release', async () => {
@@ -110,7 +110,7 @@ describe('getRelease', () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getRelease(req, res)
-    expect(res.json).toHaveBeenCalledWith(mockRelease)
+    expect(res.json).toHaveBeenCalledWith(mockRelease())
   })
 
   it('should return 500 status when failure', async () => {
@@ -141,7 +141,7 @@ describe('getRelease', () => {
 
 describe('patchRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'update').mockResolvedValue(mockRelease)
+    jest.spyOn(prisma.release, 'update').mockResolvedValue(mockRelease())
   })
 
   it('should update release', async () => {
@@ -193,7 +193,7 @@ describe('patchRelease', () => {
 
 describe('deleteRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'delete').mockResolvedValue(mockRelease)
+    jest.spyOn(prisma.release, 'delete').mockResolvedValue(mockRelease())
   })
 
   it('should delete release', async () => {

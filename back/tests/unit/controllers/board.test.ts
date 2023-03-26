@@ -8,7 +8,7 @@ mockdate.set('2023-01-01T00:00:00.000Z')
 
 describe('getBoard', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue])
+    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue()])
   })
 
   it('should get issues', async () => {
@@ -26,7 +26,7 @@ describe('getBoard', () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getBoard(req, res)
-    expect(res.json).toHaveBeenCalledWith([mockIssue])
+    expect(res.json).toHaveBeenCalledWith([mockIssue()])
   })
 
   it('should return 500 status when failure', async () => {

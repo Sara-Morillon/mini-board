@@ -9,14 +9,14 @@ import {
   postAttachments,
 } from '../../../src/controllers/attachments'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockAction, mockArchiveStream, mockAttachment, mockReadStream, mockUser } from '../../mocks'
+import { getMockReq, mockAction, mockArchiveStream, mockAttachment, mockReadStream } from '../../mocks'
 
 jest.mock('archiver')
 jest.mock('archiver')
 
 describe('getAttachments', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.attachment, 'findMany').mockResolvedValue([mockAttachment])
+    jest.spyOn(prisma.attachment, 'findMany').mockResolvedValue([mockAttachment()])
   })
 
   it('should get attachments', async () => {
@@ -30,7 +30,7 @@ describe('getAttachments', () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getAttachments(req, res)
-    expect(res.json).toHaveBeenCalledWith([mockAttachment])
+    expect(res.json).toHaveBeenCalledWith([mockAttachment()])
   })
 
   it('should return 500 status when failure', async () => {
@@ -61,14 +61,13 @@ describe('getAttachments', () => {
 
 describe('postAttachments', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.attachment, 'create').mockResolvedValue(mockAttachment)
+    jest.spyOn(prisma.attachment, 'create').mockResolvedValue(mockAttachment())
   })
 
   it('should create attachment', async () => {
     const req = getMockReq({
       params: { id: '1' },
       files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postAttachments(req, res)
@@ -86,7 +85,6 @@ describe('postAttachments', () => {
     const req = getMockReq({
       params: { id: '1' },
       files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postAttachments(req, res)
@@ -98,7 +96,6 @@ describe('postAttachments', () => {
     const req = getMockReq({
       params: { id: '1' },
       files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postAttachments(req, res)
@@ -109,7 +106,6 @@ describe('postAttachments', () => {
     const req = getMockReq({
       params: { id: '1' },
       files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
-      user: mockUser,
     })
     const { success } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -122,7 +118,6 @@ describe('postAttachments', () => {
     const req = getMockReq({
       params: { id: '1' },
       files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
-      user: mockUser,
     })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -133,7 +128,7 @@ describe('postAttachments', () => {
 
 describe('deleteAttachment', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.attachment, 'delete').mockResolvedValue(mockAttachment)
+    jest.spyOn(prisma.attachment, 'delete').mockResolvedValue(mockAttachment())
   })
 
   it('should delete attachment', async () => {
@@ -178,7 +173,7 @@ describe('deleteAttachment', () => {
 
 describe('downloadAttachments', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.attachment, 'findMany').mockResolvedValue([mockAttachment])
+    jest.spyOn(prisma.attachment, 'findMany').mockResolvedValue([mockAttachment()])
     mockArchiveStream()
   })
 
@@ -244,7 +239,7 @@ describe('downloadAttachments', () => {
 
 describe('downloadAttachment', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue(mockAttachment)
+    jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue(mockAttachment())
     jest.spyOn(fs.promises, 'access').mockResolvedValue(undefined)
     mockReadStream()
   })
@@ -297,7 +292,7 @@ describe('downloadAttachment', () => {
   })
 
   it('should stream attachment content without content disposition for images', async () => {
-    jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue({ ...mockAttachment, mime: 'image/' })
+    jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue(mockAttachment({ mime: 'image/' }))
     const stream = mockReadStream()
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()

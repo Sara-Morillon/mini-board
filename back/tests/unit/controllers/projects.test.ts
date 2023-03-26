@@ -5,7 +5,7 @@ import { getMockReq, mockAction, mockProject } from '../../mocks'
 
 describe('getProjects', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'findMany').mockResolvedValue([mockProject])
+    jest.spyOn(prisma.project, 'findMany').mockResolvedValue([mockProject()])
   })
 
   it('should get projects', async () => {
@@ -19,7 +19,7 @@ describe('getProjects', () => {
     const req = getMockReq()
     const { res } = getMockRes()
     await getProjects(req, res)
-    expect(res.json).toHaveBeenCalledWith([mockProject])
+    expect(res.json).toHaveBeenCalledWith([mockProject()])
   })
 
   it('should return 500 status when failure', async () => {
@@ -50,7 +50,7 @@ describe('getProjects', () => {
 
 describe('postProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'create').mockResolvedValue(mockProject)
+    jest.spyOn(prisma.project, 'create').mockResolvedValue(mockProject())
   })
 
   it('should create project', async () => {
@@ -102,7 +102,7 @@ describe('postProject', () => {
 
 describe('getProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'findUnique').mockResolvedValue(mockProject)
+    jest.spyOn(prisma.project, 'findUnique').mockResolvedValue(mockProject())
   })
 
   it('should get project', async () => {
@@ -116,7 +116,7 @@ describe('getProject', () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getProject(req, res)
-    expect(res.json).toHaveBeenCalledWith(mockProject)
+    expect(res.json).toHaveBeenCalledWith(mockProject())
   })
 
   it('should return 500 status when failure', async () => {
@@ -147,7 +147,7 @@ describe('getProject', () => {
 
 describe('patchProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'update').mockResolvedValue(mockProject)
+    jest.spyOn(prisma.project, 'update').mockResolvedValue(mockProject())
   })
 
   it('should update project', async () => {
@@ -199,7 +199,7 @@ describe('patchProject', () => {
 
 describe('deleteProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'delete').mockResolvedValue(mockProject)
+    jest.spyOn(prisma.project, 'delete').mockResolvedValue(mockProject())
   })
 
   it('should delete project', async () => {

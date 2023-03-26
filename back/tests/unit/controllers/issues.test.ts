@@ -1,11 +1,11 @@
 import { getMockRes } from '@jest-mock/express'
 import { deleteIssue, getIssue, getIssues, moveIssues, patchIssue, postIssue } from '../../../src/controllers/issues'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockAction, mockIssue, mockUser } from '../../mocks'
+import { getMockReq, mockAction, mockIssue } from '../../mocks'
 
 describe('getIssues', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue])
+    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue()])
     jest.spyOn(prisma.issue, 'count').mockResolvedValue(1)
   })
 
@@ -33,7 +33,7 @@ describe('getIssues', () => {
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { res } = getMockRes()
     await getIssues(req, res)
-    expect(res.json).toHaveBeenCalledWith({ issues: [mockIssue], total: 1 })
+    expect(res.json).toHaveBeenCalledWith({ issues: [mockIssue()], total: 1 })
   })
 
   it('should return 500 status when failure', async () => {
@@ -64,14 +64,13 @@ describe('getIssues', () => {
 
 describe('postIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue())
     jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: 7 } } as never)
   })
 
   it('should create issue with max priority', async () => {
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postIssue(req, res)
@@ -94,7 +93,6 @@ describe('postIssue', () => {
     jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: {} } as never)
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postIssue(req, res)
@@ -116,7 +114,6 @@ describe('postIssue', () => {
   it('should return 201 status and created issue id', async () => {
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postIssue(req, res)
@@ -128,7 +125,6 @@ describe('postIssue', () => {
     jest.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await postIssue(req, res)
@@ -138,7 +134,6 @@ describe('postIssue', () => {
   it('should log success', async () => {
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { success } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -150,7 +145,6 @@ describe('postIssue', () => {
     jest.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -161,7 +155,7 @@ describe('postIssue', () => {
 
 describe('getIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(mockIssue())
   })
 
   it('should get issue', async () => {
@@ -175,7 +169,7 @@ describe('getIssue', () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getIssue(req, res)
-    expect(res.json).toHaveBeenCalledWith(mockIssue)
+    expect(res.json).toHaveBeenCalledWith(mockIssue())
   })
 
   it('should return 500 status when failure', async () => {
@@ -206,14 +200,13 @@ describe('getIssue', () => {
 
 describe('patchIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue())
   })
 
   it('should update issue', async () => {
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await patchIssue(req, res)
@@ -235,7 +228,6 @@ describe('patchIssue', () => {
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await patchIssue(req, res)
@@ -248,7 +240,6 @@ describe('patchIssue', () => {
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { res } = getMockRes()
     await patchIssue(req, res)
@@ -259,7 +250,6 @@ describe('patchIssue', () => {
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { success } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -272,7 +262,6 @@ describe('patchIssue', () => {
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
-      user: mockUser,
     })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -283,7 +272,7 @@ describe('patchIssue', () => {
 
 describe('deleteIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'delete').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'delete').mockResolvedValue(mockIssue())
   })
 
   it('should delete issue', async () => {
@@ -330,7 +319,7 @@ describe('moveIssue', () => {
   beforeEach(() => {
     jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(null)
     jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([])
-    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue)
+    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue())
   })
 
   it('should get source issue', async () => {
@@ -355,7 +344,7 @@ describe('moveIssue', () => {
   })
 
   it('should do nothing if target issue is not found', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(mockIssue)
+    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(mockIssue())
     const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
     const { res } = getMockRes()
     await moveIssues(req, res)
@@ -364,10 +353,10 @@ describe('moveIssue', () => {
 
   it('should save all issues with updated release and priority', async () => {
     const issues = [
-      mockIssue,
-      { ...mockIssue, id: 2, releaseId: 1, priority: 1 },
-      { ...mockIssue, id: 3, releaseId: 2 },
-      { ...mockIssue, id: 4, releaseId: 2, priority: 1 },
+      mockIssue(),
+      mockIssue({ id: 2, releaseId: 1, priority: 1 }),
+      mockIssue({ id: 3, releaseId: 2 }),
+      mockIssue({ id: 4, releaseId: 2, priority: 1 }),
     ]
     jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(issues[0])
     jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(issues[2])
