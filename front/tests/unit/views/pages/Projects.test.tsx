@@ -17,13 +17,13 @@ describe('Projects', () => {
     expect(screen.getByText('Create project')).toHaveAttribute('href', '/project')
   })
 
-  it('should render project date', async () => {
+  it('should render project key', async () => {
     render(<Projects />)
     await wait()
-    expect(screen.getByText('Updated Jan 1, 2018')).toBeInTheDocument()
+    expect(screen.getByText('[P1]')).toBeInTheDocument()
   })
 
-  it('should render project title', async () => {
+  it('should render project name', async () => {
     render(<Projects />)
     await wait()
     expect(screen.getByText('project1')).toHaveAttribute('href', '/project/1')
@@ -33,5 +33,11 @@ describe('Projects', () => {
     render(<Projects />)
     await wait()
     expect(screen.getByText('description1')).toBeInTheDocument()
+  })
+
+  it('should render project date', async () => {
+    render(<Projects />)
+    await wait()
+    expect(screen.getByText('Jan 1, 2018')).toBeInTheDocument()
   })
 })

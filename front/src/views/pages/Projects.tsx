@@ -12,18 +12,37 @@ export function Projects(): JSX.Element {
   const [projects, { loading }] = useFetch(getProjects, [])
 
   return (
-    <LoadContainer loading={loading}>
+    <>
       <div className="clearfix">
         <CreateButton to="/project">Create project</CreateButton>
       </div>
-      {projects.map((project) => (
-        <article key={project.id} className="mt2">
-          <small className="right">Updated {format(parseISO(project.updatedAt), 'PP')}</small>
-          <Link to={`/project/${project.id}`}>{project.name}</Link>
-          <br />
-          <small>{project.description}</small>
-        </article>
-      ))}
-    </LoadContainer>
+
+      <LoadContainer loading={loading}>
+        <table className="mt2">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Last update</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((project) => (
+              <tr key={project.id}>
+                <td>[{project.key}]</td>
+                <td>
+                  <Link to={`/project/${project.id}`}>{project.name}</Link>
+                </td>
+                <td>{project.description}</td>
+                <td>
+                  <small>{format(parseISO(project.updatedAt), 'PP')}</small>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </LoadContainer>
+    </>
   )
 }
