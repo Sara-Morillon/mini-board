@@ -13,7 +13,6 @@ describe('session', () => {
 
   it('should send 401 status if user is not authenticated', () => {
     const req = getMockReq()
-    req.session.user = undefined
     const { res, next } = getMockRes()
     session(req, res, next)
     expect(res.sendStatus).toHaveBeenCalledWith(401)

@@ -34,14 +34,6 @@ describe('getComments', () => {
 })
 
 describe('postComment', () => {
-  it('should return 401 status if no user', async () => {
-    const req = getMockReq({ params: { id: '1' }, body: { content: 'content' } })
-    req.session.user = undefined
-    const { res } = getMockRes()
-    await postComment(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
-  })
-
   it('should create comment', async () => {
     jest.spyOn(prisma.comment, 'create').mockResolvedValue(mockComment)
     const req = getMockReq({ params: { id: '1' }, body: { content: 'content' }, user: mockUser })

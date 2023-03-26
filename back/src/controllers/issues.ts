@@ -59,19 +59,15 @@ export async function getIssues(req: Request, res: Response): Promise<void> {
 export async function postIssue(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('post_issue')
   try {
-    if (!req.session.user) {
-      res.sendStatus(401)
-    } else {
-      const { projectId, releaseId, type, points, title, description } = schema.post.parse(req.body)
-      const authorId = req.session.user.id
-      const status = 'todo'
-      const { _max } = await prisma.issue.aggregate({ where: { projectId, releaseId }, _max: { priority: true } })
-      const priority = _max.priority !== null ? _max.priority + 1 : 0
-      const issue = await prisma.issue.create({
-        data: { authorId, projectId, releaseId, priority, type, status, points, title, description },
-      })
-      res.status(201).json(issue.id)
-    }
+    const { projectId, releaseId, type, points, title, description } = schema.post.parse(req.body)
+    const authorId = req.user.id
+    const status = 'todo'
+    const { _max } = await prisma.issue.aggregate({ where: { projectId, releaseId }, _max: { priority: true } })
+    const priority = _max.priority !== null ? _max.priority + 1 : 0
+    const issue = await prisma.issue.create({
+      data: { authorId, projectId, releaseId, priority, type, status, points, title, description },
+    })
+    res.status(201).json(issue.id)
     success()
   } catch (error) {
     res.sendStatus(500)
@@ -97,16 +93,12 @@ export async function patchIssue(req: Request, res: Response): Promise<void> {
   try {
     const { id } = schema.get.parse(req.params)
     const { releaseId, type, status, points, title, description } = schema.patch.parse(req.body)
-    if (!req.session.user) {
-      res.sendStatus(401)
-    } else {
-      const authorId = req.session.user.id
-      await prisma.issue.update({
-        where: { id },
-        data: { authorId, releaseId, type, status, points, title, description },
-      })
-      res.status(200).json(id)
-    }
+    const authorId = req.user.id
+    await prisma.issue.update({
+      where: { id },
+      data: { authorId, releaseId, type, status, points, title, description },
+    })
+    res.status(200).json(id)
     success()
   } catch (error) {
     res.sendStatus(500)

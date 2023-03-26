@@ -5,7 +5,8 @@ import { SessionData } from 'express-session'
 
 export function getMockReq(...params: Parameters<typeof _getMockReq>): ReturnType<typeof _getMockReq> {
   const req = _getMockReq(...params)
-  req.session = { user: mockSession() } as never
+  req.session = {} as never
+  req.user = mockSession()
   req.logger = new Logger({ silent: true })
   return req
 }

@@ -42,17 +42,6 @@ describe('getAttachments', () => {
 })
 
 describe('postAttachments', () => {
-  it('should return 401 status if no user', async () => {
-    const req = getMockReq({
-      params: { id: '1' },
-      files: [{ originalname: 'filename', filename: 'filepath', mimetype: 'mimetype' }],
-    })
-    req.session.user = undefined
-    const { res } = getMockRes()
-    await postAttachments(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
-  })
-
   it('should create attachment', async () => {
     jest.spyOn(prisma.attachment, 'create').mockResolvedValue(mockAttachment)
     const req = getMockReq({

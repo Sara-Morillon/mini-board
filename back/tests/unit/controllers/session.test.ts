@@ -60,7 +60,6 @@ describe('login', () => {
 describe('getSession', () => {
   it('should return session user', () => {
     const req = getMockReq()
-    req.session.user = mockSession()
     const { res } = getMockRes()
     getSession(req, res)
     expect(res.json).toHaveBeenCalledWith(mockSession())

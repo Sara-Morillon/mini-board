@@ -38,18 +38,14 @@ export async function getAttachments(req: Request, res: Response): Promise<void>
 export async function postAttachments(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('post_attachment')
   try {
-    if (!req.session.user) {
-      res.sendStatus(401)
-    } else {
-      const { id } = schema.get.parse(req.params)
-      const files = schema.files.parse(req.files)
-      for (const file of files) {
-        await prisma.attachment.create({
-          data: { issueId: id, filename: file.originalname, filepath: file.filename, mime: file.mimetype },
-        })
-      }
-      res.sendStatus(201)
+    const { id } = schema.get.parse(req.params)
+    const files = schema.files.parse(req.files)
+    for (const file of files) {
+      await prisma.attachment.create({
+        data: { issueId: id, filename: file.originalname, filepath: file.filename, mime: file.mimetype },
+      })
     }
+    res.sendStatus(201)
     success()
   } catch (error) {
     res.sendStatus(500)

@@ -47,16 +47,6 @@ describe('getIssues', () => {
 })
 
 describe('postIssue', () => {
-  it('should return 401 status if no user', async () => {
-    const req = getMockReq({
-      body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
-    })
-    req.session.user = undefined
-    const { res } = getMockRes()
-    await postIssue(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
-  })
-
   it('should create issue with max priority', async () => {
     jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
     jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: 7 } } as never)
@@ -156,17 +146,6 @@ describe('getIssue', () => {
 })
 
 describe('patchIssue', () => {
-  it('should return 401 status if no user', async () => {
-    const req = getMockReq({
-      params: { id: '1' },
-      body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
-    })
-    req.session.user = undefined
-    const { res } = getMockRes()
-    await patchIssue(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(401)
-  })
-
   it('should update issue', async () => {
     jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue)
     const req = getMockReq({

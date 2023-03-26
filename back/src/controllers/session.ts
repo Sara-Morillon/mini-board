@@ -31,7 +31,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 export function getSession(req: Request, res: Response): void {
   const { success } = req.logger.start('get_session')
-  res.json(req.session.user)
+  res.json(req.user)
   success()
 }
 
