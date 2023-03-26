@@ -13,6 +13,7 @@ import { prisma } from '../../../src/prisma'
 import { getMockReq, mockAttachment, mockUser } from '../../mocks'
 
 jest.mock('archiver')
+jest.mock('archiver')
 
 describe('getAttachments', () => {
   it('should get attachments', async () => {
@@ -172,9 +173,13 @@ describe('downloadAttachments', () => {
 })
 
 describe('downloadAttachment', () => {
-  it('should get attachment', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue(mockAttachment)
+    jest.spyOn(fs.promises, 'access').mockResolvedValue(undefined)
     jest.spyOn(fs, 'createReadStream').mockReturnValue({} as ReadStream)
+  })
+
+  it('should get attachment', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await downloadAttachment(req, res)
@@ -183,6 +188,21 @@ describe('downloadAttachment', () => {
 
   it('should return 404 if attachment was not found', async () => {
     jest.spyOn(prisma.attachment, 'findUnique').mockResolvedValue(null)
+    const req = getMockReq({ params: { id: '1' } })
+    const { res } = getMockRes()
+    await downloadAttachment(req, res)
+    expect(res.sendStatus).toHaveBeenCalledWith(404)
+  })
+
+  it('should try to access attachement file', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    const { res } = getMockRes()
+    await downloadAttachment(req, res)
+    expect(fs.promises.access).toHaveBeenCalledWith(path.join('upload_dir', 'filepath'), fs.constants.R_OK)
+  })
+
+  it('should return 404 if attachement file cannot be read', async () => {
+    jest.spyOn(fs.promises, 'access').mockRejectedValue(new Error('500'))
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await downloadAttachment(req, res)

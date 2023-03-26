@@ -102,12 +102,18 @@ export async function downloadAttachment(req: Request, res: Response): Promise<v
     if (!attachment) {
       res.sendStatus(404)
     } else {
-      const stream = fs.createReadStream(path.join(settings.uploadDir, attachment.filepath))
-      if (!attachment.mime.includes('image/')) {
-        res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
+      const filepath = path.join(settings.uploadDir, attachment.filepath)
+      try {
+        await fs.promises.access(filepath, fs.constants.R_OK)
+        const stream = fs.createReadStream(filepath)
+        if (!attachment.mime.includes('image/')) {
+          res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
+        }
+        res.set('Content-Type', attachment.mime)
+        stream.pipe(res)
+      } catch (error) {
+        res.sendStatus(404)
       }
-      res.set('Content-Type', attachment.mime)
-      stream.pipe(res)
     }
     success()
   } catch (error) {
