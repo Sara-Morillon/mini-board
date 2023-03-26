@@ -41,27 +41,30 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
   const { submit, values, onChange } = useForm(onSave, project ?? empty)
 
   return (
-    <form onSubmit={submit} className="p3">
+    <form onSubmit={submit} className="max-width-4 mx-auto">
       <div className="flex">
         <label>
-          Key *
           <input
             value={values.key}
             onChange={(e) => onChange('key', e.target.value)}
             required
             disabled={Boolean(project)}
+            placeholder="Key *"
           />
         </label>
 
         <label className="ml1 flex-auto">
-          Name *
-          <input value={values.name} onChange={(e) => onChange('name', e.target.value)} required />
+          <input value={values.name} onChange={(e) => onChange('name', e.target.value)} required placeholder="Name *" />
         </label>
       </div>
 
       <label>
-        Description
-        <textarea value={values.description} onChange={(e) => onChange('description', e.target.value)} rows={5} />
+        <textarea
+          value={values.description}
+          onChange={(e) => onChange('description', e.target.value)}
+          rows={5}
+          placeholder="Description"
+        />
       </label>
 
       <div className="clearfix">

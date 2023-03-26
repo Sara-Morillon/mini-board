@@ -40,49 +40,49 @@ describe('Project', () => {
   it('should render project key', async () => {
     render(<Project />)
     await wait()
-    expect(screen.getByLabelText('Key *')).toHaveValue('P1')
-    expect(screen.getByLabelText('Key *')).toBeDisabled()
+    expect(screen.getByPlaceholderText('Key *')).toHaveValue('P1')
+    expect(screen.getByPlaceholderText('Key *')).toBeDisabled()
   })
 
   it('should enable project key if creating new project', async () => {
     jest.mocked(getProject).mockResolvedValue(null)
     render(<Project />)
     await wait()
-    expect(screen.getByLabelText('Key *')).toBeEnabled()
+    expect(screen.getByPlaceholderText('Key *')).toBeEnabled()
   })
 
   it('should update form values when changing key', async () => {
     jest.mocked(getProject).mockResolvedValue(null)
     render(<Project />)
     await wait()
-    fireEvent.change(screen.getByLabelText('Key *'), { target: { value: 'key2' } })
-    expect(screen.getByLabelText('Key *')).toHaveValue('key2')
+    fireEvent.change(screen.getByPlaceholderText('Key *'), { target: { value: 'key2' } })
+    expect(screen.getByPlaceholderText('Key *')).toHaveValue('key2')
   })
 
   it('should render project name', async () => {
     render(<Project />)
     await wait()
-    expect(screen.getByLabelText('Name *')).toHaveValue('project1')
+    expect(screen.getByPlaceholderText('Name *')).toHaveValue('project1')
   })
 
   it('should update form values when changing name', async () => {
     render(<Project />)
     await wait()
-    fireEvent.change(screen.getByLabelText('Name *'), { target: { value: 'name2' } })
-    expect(screen.getByLabelText('Name *')).toHaveValue('name2')
+    fireEvent.change(screen.getByPlaceholderText('Name *'), { target: { value: 'name2' } })
+    expect(screen.getByPlaceholderText('Name *')).toHaveValue('name2')
   })
 
   it('should render project description', async () => {
     render(<Project />)
     await wait()
-    expect(screen.getByLabelText('Description')).toHaveValue('description1')
+    expect(screen.getByPlaceholderText('Description')).toHaveValue('description1')
   })
 
   it('should update form values when changing description', async () => {
     render(<Project />)
     await wait()
-    fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'description2' } })
-    expect(screen.getByLabelText('Description')).toHaveValue('description2')
+    fireEvent.change(screen.getByPlaceholderText('Description'), { target: { value: 'description2' } })
+    expect(screen.getByPlaceholderText('Description')).toHaveValue('description2')
   })
 
   it('should enabled buttons when neither saving nor deleting', async () => {
