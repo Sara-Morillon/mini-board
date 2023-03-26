@@ -20,7 +20,14 @@ interface IDeleteButtonProps extends ISaveButtonProps {
 
 export function DeleteButton({ onClick, loading, disabled }: IDeleteButtonProps) {
   return (
-    <button type="button" onClick={onClick} aria-busy={loading} disabled={disabled} className="ml1">
+    <button
+      type="button"
+      onClick={onClick}
+      aria-busy={loading}
+      disabled={disabled}
+      data-variant="outlined"
+      className="ml1"
+    >
       <IconTrash /> Delete
     </button>
   )
