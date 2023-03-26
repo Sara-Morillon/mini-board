@@ -9,7 +9,7 @@ export function Footer(): JSX.Element | null {
   if (!app) return null
 
   return (
-    <footer className="center">
+    <footer>
       <b>{app.name}</b> v{app.version} &copy; {app.author.name} {new Date().getFullYear()}
       <br />
       <a href={app.repository.url} target="_blank" rel="noopener noreferrer">
