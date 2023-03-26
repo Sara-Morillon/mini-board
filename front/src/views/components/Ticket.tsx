@@ -34,7 +34,6 @@ export function Ticket({ status, issue, onMove }: ITicketProps): JSX.Element | n
               [{issue.project.key}-{issue.id}] {issue.title}
             </Link>
           </h5>
-          {issue.status !== 'done' && <p className="truncate mt1 mb0">{issue.description}</p>}
         </>
       )}
     </article>

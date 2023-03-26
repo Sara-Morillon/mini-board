@@ -19,7 +19,7 @@ describe('Ticket', () => {
 
   it('should not render issue if status does not match', () => {
     render(<Ticket status="done" issue={mockIssueFull()} onMove={jest.fn()} />)
-    expect(screen.queryByText('description1')).not.toBeInTheDocument()
+    expect(screen.queryByText('[P1-1] title1')).not.toBeInTheDocument()
   })
 
   it('should not be draggable if status does not match', () => {
@@ -34,7 +34,7 @@ describe('Ticket', () => {
 
   it('should render issue if status does match', () => {
     render(<Ticket status="doing" issue={mockIssueFull()} onMove={jest.fn()} />)
-    expect(screen.getByText('description1')).toBeInTheDocument()
+    expect(screen.getByText('[P1-1] title1')).toBeInTheDocument()
   })
 
   it('should be draggable if status does match', () => {
@@ -77,15 +77,5 @@ describe('Ticket', () => {
   it('should render issue link', () => {
     render(<Ticket status="doing" issue={mockIssueFull()} onMove={jest.fn()} />)
     expect(screen.getByText('[P1-1] title1')).toHaveAttribute('href', '/issue/1')
-  })
-
-  it('should render issue description', () => {
-    render(<Ticket status="doing" issue={mockIssueFull()} onMove={jest.fn()} />)
-    expect(screen.getByText('description1')).toBeInTheDocument()
-  })
-
-  it('should not render issue description for done issues', () => {
-    render(<Ticket status="doing" issue={mockIssueFull({ status: 'done' })} onMove={jest.fn()} />)
-    expect(screen.queryByText('description1')).not.toBeInTheDocument()
   })
 })
