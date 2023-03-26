@@ -32,7 +32,7 @@ describe('Issues', () => {
   it('should render issue type', async () => {
     render(<Issues />)
     await wait()
-    expect(screen.getByTitle('bug')).toBeInTheDocument()
+    expect(screen.getByText('🔴')).toBeInTheDocument()
   })
 
   it('should render issue title', async () => {

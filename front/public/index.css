@@ -9,28 +9,6 @@ table {
   width: 100%;
 }
 
-/* Type bullet */
-
-span.bug,
-span.feature {
-  display: block;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  opacity: 0.7;
-}
-
-span.bug {
-  background-color: rgb(211, 47, 47);
-  border-color: rgb(154, 0, 7);
-}
-
-span.feature {
-  background-color: rgb(251, 192, 45);
-  border-color: rgb(196, 144, 0);
-}
-
 /* Type card */
 
 .ticket {

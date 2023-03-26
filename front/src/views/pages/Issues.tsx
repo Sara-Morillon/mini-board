@@ -1,16 +1,16 @@
 import { useFetch, usePagination } from '@saramorillon/hooks'
 import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight } from '@tabler/icons'
-import c from 'classnames'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTitle } from '../../hooks/useTitle'
+import { typeIcons } from '../../models/Issue'
 import { getIssues } from '../../services/issue'
 import { CreateButton } from '../components/CreateButton'
 import { LoadContainer } from '../components/LoadContainer'
 import { ReleaseSelector } from '../components/ReleaseSelector'
 
-const limit = 10
+const limit = 15
 
 export function Issues() {
   useTitle('Issues')
@@ -51,9 +51,7 @@ export function Issues() {
           <tbody>
             {issues.map((issue) => (
               <tr key={issue.id}>
-                <td>
-                  <span title={issue.type} className={c('mr1', issue.type)} />
-                </td>
+                <td>{typeIcons[issue.type]}</td>
                 <td className="truncate" style={{ maxWidth: 0, width: '100%' }}>
                   <Link to={`/issue/${issue.id}`}>
                     [{issue.project.key}-{issue.id}] {issue.title}
