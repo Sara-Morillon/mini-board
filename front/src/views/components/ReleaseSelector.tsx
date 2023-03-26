@@ -33,7 +33,7 @@ export function ReleaseSelector({ label, value, onChange, labelProps = {}, selec
         {selectProps.placeholder && releases.length && <option value="">{selectProps.placeholder}</option>}
         {releases.map((release) => (
           <option key={release.id} value={release.id}>
-            {release.name} ({format(parseISO(release.dueDate), 'PP')})
+            {format(parseISO(release.dueDate), 'PP')} ({release.name})
           </option>
         ))}
       </select>

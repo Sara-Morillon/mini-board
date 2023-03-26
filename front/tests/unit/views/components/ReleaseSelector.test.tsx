@@ -48,15 +48,15 @@ describe('ReleaseSelector', () => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease(), mockRelease({ id: 2, name: 'release2' })])
     render(<ReleaseSelector onChange={jest.fn()} />)
     await wait()
-    expect(screen.getByText('release1 (Jan 1, 2020)')).toBeInTheDocument()
-    expect(screen.getByText('release2 (Jan 1, 2020)')).toBeInTheDocument()
+    expect(screen.getByText('Jan 1, 2020 (release1)')).toBeInTheDocument()
+    expect(screen.getByText('Jan 1, 2020 (release2)')).toBeInTheDocument()
   })
 
   it('should select first release by default when no placeholder', async () => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease()])
     render(<ReleaseSelector onChange={jest.fn()} />)
     await wait()
-    expect(screen.getByRole('combobox')).toHaveDisplayValue('release1 (Jan 1, 2020)')
+    expect(screen.getByRole('combobox')).toHaveDisplayValue('Jan 1, 2020 (release1)')
   })
 
   it('should trigger change with first release by default when no placeholder', async () => {
@@ -71,7 +71,7 @@ describe('ReleaseSelector', () => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease(), mockRelease({ id: 2, name: 'release2' })])
     render(<ReleaseSelector value={2} onChange={jest.fn()} />)
     await wait()
-    expect(screen.getByRole('combobox')).toHaveDisplayValue('release2 (Jan 1, 2020)')
+    expect(screen.getByRole('combobox')).toHaveDisplayValue('Jan 1, 2020 (release2)')
   })
 
   it('should render placeholder', async () => {
