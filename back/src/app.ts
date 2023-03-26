@@ -8,6 +8,7 @@ import { render } from './controllers/render'
 import { logger } from './middlewares/logger'
 import { routes } from './routes'
 import { settings } from './settings'
+import { parseError } from './utils/parseError'
 
 export class App {
   private logger = new Logger(settings.logs, { app: settings.app })
@@ -29,7 +30,7 @@ export class App {
       await new Promise<void>((resolve) => app.listen(settings.app.port, resolve))
       success()
     } catch (error) {
-      failure(error)
+      failure(parseError(error))
     }
   }
 }

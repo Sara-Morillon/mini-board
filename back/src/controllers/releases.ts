@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../prisma'
+import { parseError } from '../utils/parseError'
 
 const schema = {
   get: z.object({
@@ -24,7 +25,7 @@ export async function getReleases(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -37,7 +38,7 @@ export async function postRelease(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -50,7 +51,7 @@ export async function getRelease(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -64,7 +65,7 @@ export async function patchRelease(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -77,6 +78,6 @@ export async function deleteRelease(req: Request, res: Response): Promise<void> 
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }

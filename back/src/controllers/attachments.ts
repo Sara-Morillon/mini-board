@@ -5,6 +5,7 @@ import path from 'path'
 import { z } from 'zod'
 import { prisma } from '../prisma'
 import { settings } from '../settings'
+import { parseError } from '../utils/parseError'
 
 const schema = {
   get: z.object({
@@ -31,7 +32,7 @@ export async function getAttachments(req: Request, res: Response): Promise<void>
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -49,7 +50,7 @@ export async function postAttachments(req: Request, res: Response): Promise<void
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -62,7 +63,7 @@ export async function deleteAttachment(req: Request, res: Response): Promise<voi
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -73,20 +74,21 @@ export async function downloadAttachments(req: Request, res: Response): Promise<
     const attachments = await prisma.attachment.findMany({ where: { issueId } })
     if (!attachments.length) {
       res.sendStatus(404)
-    } else {
-      const archive = archiver('zip')
-      archive.pipe(res)
-      for (const attachment of attachments) {
-        archive.file(path.join(settings.uploadDir, attachment.filepath), { name: attachment.filename })
-      }
-      res.set('Content-disposition', `attachment; filename=${issueId}_attachments.zip`)
-      res.set('Content-Type', 'application/zip')
-      await archive.finalize()
+      failure('Not found')
+      return
     }
+    const archive = archiver('zip')
+    archive.pipe(res)
+    for (const attachment of attachments) {
+      archive.file(path.join(settings.uploadDir, attachment.filepath), { name: attachment.filename })
+    }
+    res.set('Content-disposition', `attachment; filename=${issueId}_attachments.zip`)
+    res.set('Content-Type', 'application/zip')
+    await archive.finalize()
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -97,23 +99,26 @@ export async function downloadAttachment(req: Request, res: Response): Promise<v
     const attachment = await prisma.attachment.findUnique({ where: { id } })
     if (!attachment) {
       res.sendStatus(404)
-    } else {
-      const filepath = path.join(settings.uploadDir, attachment.filepath)
-      try {
-        await fs.promises.access(filepath, fs.constants.R_OK)
-        const stream = fs.createReadStream(filepath)
-        if (!attachment.mime.includes('image/')) {
-          res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
-        }
-        res.set('Content-Type', attachment.mime)
-        stream.pipe(res)
-      } catch (error) {
-        res.sendStatus(404)
-      }
+      failure('Not found')
+      return
     }
+    const filepath = path.join(settings.uploadDir, attachment.filepath)
+    try {
+      await fs.promises.access(filepath, fs.constants.R_OK)
+    } catch (error) {
+      res.sendStatus(404)
+      failure('Not found')
+      return
+    }
+    const stream = fs.createReadStream(filepath)
+    if (!attachment.mime.includes('image/')) {
+      res.set('Content-disposition', `attachment; filename=${attachment.filename}`)
+    }
+    res.set('Content-Type', attachment.mime)
+    stream.pipe(res)
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }

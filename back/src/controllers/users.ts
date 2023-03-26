@@ -2,6 +2,7 @@ import { createHash } from 'crypto'
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../prisma'
+import { parseError } from '../utils/parseError'
 
 const schema = {
   get: z.object({
@@ -21,7 +22,7 @@ export async function getUsers(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -36,7 +37,7 @@ export async function postUser(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -49,6 +50,6 @@ export async function deleteUser(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }

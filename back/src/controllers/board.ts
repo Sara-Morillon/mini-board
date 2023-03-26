@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { prisma } from '../prisma'
+import { parseError } from '../utils/parseError'
 
 export async function getBoard(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('get_board')
@@ -13,6 +14,6 @@ export async function getBoard(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }

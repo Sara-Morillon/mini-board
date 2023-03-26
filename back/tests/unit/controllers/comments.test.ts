@@ -1,11 +1,14 @@
 import { getMockRes } from '@jest-mock/express'
 import { deleteComment, getComments, postComment } from '../../../src/controllers/comments'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockComment, mockUser } from '../../mocks'
+import { getMockReq, mockAction, mockComment, mockUser } from '../../mocks'
 
 describe('getComments', () => {
-  it('should get comments', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.comment, 'findMany').mockResolvedValue([mockComment])
+  })
+
+  it('should get comments', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getComments(req, res)
@@ -17,7 +20,6 @@ describe('getComments', () => {
   })
 
   it('should return comments', async () => {
-    jest.spyOn(prisma.comment, 'findMany').mockResolvedValue([mockComment])
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getComments(req, res)
@@ -25,17 +27,37 @@ describe('getComments', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.comment, 'findMany').mockRejectedValue(new Error())
+    jest.spyOn(prisma.comment, 'findMany').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getComments(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getComments(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.comment, 'findMany').mockRejectedValue('Error')
+    const req = getMockReq({ params: { id: '1' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getComments(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('postComment', () => {
-  it('should create comment', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.comment, 'create').mockResolvedValue(mockComment)
+  })
+
+  it('should create comment', async () => {
     const req = getMockReq({ params: { id: '1' }, body: { content: 'content' }, user: mockUser })
     const { res } = getMockRes()
     await postComment(req, res)
@@ -49,7 +71,6 @@ describe('postComment', () => {
   })
 
   it('should return 201 status and created comment id', async () => {
-    jest.spyOn(prisma.comment, 'create').mockResolvedValue(mockComment)
     const req = getMockReq({ params: { id: '1' }, body: { content: 'content' }, user: mockUser })
     const { res } = getMockRes()
     await postComment(req, res)
@@ -58,17 +79,37 @@ describe('postComment', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.comment, 'create').mockRejectedValue(new Error())
+    jest.spyOn(prisma.comment, 'create').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' }, body: { content: 'content' }, user: mockUser })
     const { res } = getMockRes()
     await postComment(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({ params: { id: '1' }, body: { content: 'content' }, user: mockUser })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await postComment(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.comment, 'create').mockRejectedValue('Error')
+    const req = getMockReq({ params: { id: '1' }, body: { content: 'content' }, user: mockUser })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await postComment(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('deleteComment', () => {
-  it('should delete comment', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.comment, 'delete').mockResolvedValue(mockComment)
+  })
+
+  it('should delete comment', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteComment(req, res)
@@ -76,7 +117,6 @@ describe('deleteComment', () => {
   })
 
   it('should return 204 status', async () => {
-    jest.spyOn(prisma.comment, 'delete').mockResolvedValue(mockComment)
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteComment(req, res)
@@ -84,10 +124,27 @@ describe('deleteComment', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.comment, 'delete').mockRejectedValue(new Error())
+    jest.spyOn(prisma.comment, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteComment(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
+  })
+
+  it('should log success', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await deleteComment(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.comment, 'delete').mockRejectedValue('Error')
+    const req = getMockReq({ params: { id: '1' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await deleteComment(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
   })
 })

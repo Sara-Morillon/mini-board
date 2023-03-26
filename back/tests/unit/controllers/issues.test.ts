@@ -1,12 +1,15 @@
 import { getMockRes } from '@jest-mock/express'
 import { deleteIssue, getIssue, getIssues, moveIssues, patchIssue, postIssue } from '../../../src/controllers/issues'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockIssue, mockUser } from '../../mocks'
+import { getMockReq, mockAction, mockIssue, mockUser } from '../../mocks'
 
 describe('getIssues', () => {
-  it('should get issues', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue])
     jest.spyOn(prisma.issue, 'count').mockResolvedValue(1)
+  })
+
+  it('should get issues', async () => {
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { res } = getMockRes()
     await getIssues(req, res)
@@ -20,8 +23,6 @@ describe('getIssues', () => {
   })
 
   it('should count issues', async () => {
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue])
-    jest.spyOn(prisma.issue, 'count').mockResolvedValue(1)
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { res } = getMockRes()
     await getIssues(req, res)
@@ -29,8 +30,6 @@ describe('getIssues', () => {
   })
 
   it('should return issues', async () => {
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue])
-    jest.spyOn(prisma.issue, 'count').mockResolvedValue(1)
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { res } = getMockRes()
     await getIssues(req, res)
@@ -38,18 +37,38 @@ describe('getIssues', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'findMany').mockRejectedValue(new Error())
+    jest.spyOn(prisma.issue, 'findMany').mockRejectedValue('Error')
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { res } = getMockRes()
     await getIssues(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getIssues(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.issue, 'findMany').mockRejectedValue('Error')
+    const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getIssues(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('postIssue', () => {
-  it('should create issue with max priority', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
     jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: 7 } } as never)
+  })
+
+  it('should create issue with max priority', async () => {
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
       user: mockUser,
@@ -72,8 +91,7 @@ describe('postIssue', () => {
   })
 
   it('should create issue with default 0 priority', async () => {
-    jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
-    jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: null } } as never)
+    jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: {} } as never)
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
       user: mockUser,
@@ -85,7 +103,7 @@ describe('postIssue', () => {
         authorId: 1,
         projectId: 1,
         releaseId: 1,
-        priority: 0,
+        priority: 1,
         type: 'bug',
         status: 'todo',
         points: 1,
@@ -96,7 +114,6 @@ describe('postIssue', () => {
   })
 
   it('should return 201 status and created issue id', async () => {
-    jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue)
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
       user: mockUser,
@@ -108,7 +125,7 @@ describe('postIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'create').mockRejectedValue(new Error())
+    jest.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
       user: mockUser,
@@ -117,11 +134,37 @@ describe('postIssue', () => {
     await postIssue(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({
+      body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
+      user: mockUser,
+    })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await postIssue(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
+    const req = getMockReq({
+      body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
+      user: mockUser,
+    })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await postIssue(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('getIssue', () => {
-  it('should get issue', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(mockIssue)
+  })
+
+  it('should get issue', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getIssue(req, res)
@@ -129,7 +172,6 @@ describe('getIssue', () => {
   })
 
   it('should return issue', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(mockIssue)
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getIssue(req, res)
@@ -137,17 +179,37 @@ describe('getIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue(new Error())
+    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getIssue(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getIssue(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
+    const req = getMockReq({ params: { id: '1' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getIssue(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('patchIssue', () => {
-  it('should update issue', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue)
+  })
+
+  it('should update issue', async () => {
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
@@ -170,7 +232,6 @@ describe('patchIssue', () => {
   })
 
   it('should return 200 status and updated issue id', async () => {
-    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue)
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
@@ -183,7 +244,7 @@ describe('patchIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'update').mockRejectedValue(new Error())
+    jest.spyOn(prisma.issue, 'update').mockRejectedValue('Error')
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
@@ -193,11 +254,39 @@ describe('patchIssue', () => {
     await patchIssue(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({
+      params: { id: '1' },
+      body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
+      user: mockUser,
+    })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await patchIssue(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.issue, 'update').mockRejectedValue('Error')
+    const req = getMockReq({
+      params: { id: '1' },
+      body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
+      user: mockUser,
+    })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await patchIssue(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('deleteIssue', () => {
-  it('should delete issue', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.issue, 'delete').mockResolvedValue(mockIssue)
+  })
+
+  it('should delete issue', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteIssue(req, res)
@@ -205,7 +294,6 @@ describe('deleteIssue', () => {
   })
 
   it('should return 204 status', async () => {
-    jest.spyOn(prisma.issue, 'delete').mockResolvedValue(mockIssue)
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteIssue(req, res)
@@ -213,11 +301,28 @@ describe('deleteIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'delete').mockRejectedValue(new Error())
+    jest.spyOn(prisma.issue, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteIssue(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
+  })
+
+  it('should log success', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await deleteIssue(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.issue, 'delete').mockRejectedValue('Error')
+    const req = getMockReq({ params: { id: '1' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await deleteIssue(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
   })
 })
 
@@ -284,10 +389,27 @@ describe('moveIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue(new Error())
+    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
     const { res } = getMockRes()
     await moveIssues(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
+  })
+
+  it('should log success', async () => {
+    const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await moveIssues(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
+    const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await moveIssues(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
   })
 })

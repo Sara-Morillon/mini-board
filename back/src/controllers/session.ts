@@ -20,12 +20,11 @@ export async function login(req: Request, res: Response): Promise<void> {
       where: { username, password: createHash('sha256').update(password).digest('hex') },
     })
     req.session.user = { id: user.id }
-    success()
     res.sendStatus(204)
-  } catch (e) {
-    const error = parseError(e)
-    failure(error)
+    success()
+  } catch (error) {
     res.sendStatus(401)
+    failure(parseError(error))
   }
 }
 

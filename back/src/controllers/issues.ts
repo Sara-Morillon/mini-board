@@ -2,6 +2,7 @@ import { Status, Type } from '@prisma/client'
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../prisma'
+import { parseError } from '../utils/parseError'
 
 const schema = {
   list: z.object({
@@ -52,7 +53,7 @@ export async function getIssues(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -63,7 +64,7 @@ export async function postIssue(req: Request, res: Response): Promise<void> {
     const authorId = req.user.id
     const status = 'todo'
     const { _max } = await prisma.issue.aggregate({ where: { projectId, releaseId }, _max: { priority: true } })
-    const priority = _max.priority !== null ? _max.priority + 1 : 0
+    const priority = (_max.priority ?? 0) + 1
     const issue = await prisma.issue.create({
       data: { authorId, projectId, releaseId, priority, type, status, points, title, description },
     })
@@ -71,7 +72,7 @@ export async function postIssue(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -84,7 +85,7 @@ export async function getIssue(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -102,7 +103,7 @@ export async function patchIssue(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -115,7 +116,7 @@ export async function deleteIssue(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }
 
@@ -156,6 +157,6 @@ export async function moveIssues(req: Request, res: Response): Promise<void> {
     success()
   } catch (error) {
     res.sendStatus(500)
-    failure(error)
+    failure(parseError(error))
   }
 }

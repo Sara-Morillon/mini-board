@@ -1,7 +1,9 @@
 import { getMockReq as _getMockReq } from '@jest-mock/express'
 import { Attachment, Comment, Issue, Project, Release, User } from '@prisma/client'
 import { Logger } from '@saramorillon/logger'
+import archiver from 'archiver'
 import { SessionData } from 'express-session'
+import fs, { ReadStream } from 'fs'
 
 export function getMockReq(...params: Parameters<typeof _getMockReq>): ReturnType<typeof _getMockReq> {
   const req = _getMockReq(...params)
@@ -84,4 +86,16 @@ export const mockRelease: Release = {
   dueDate: new Date('2020-01-01T00:00:00.000Z'),
   createdAt: new Date('2018-01-01T00:00:00.000Z'),
   updatedAt: new Date('2019-01-01T00:00:00.000Z'),
+}
+
+export function mockReadStream() {
+  const stream = { pipe: jest.fn() } as unknown as ReadStream
+  jest.spyOn(fs, 'createReadStream').mockReturnValue(stream)
+  return stream
+}
+
+export function mockArchiveStream() {
+  const archive = { pipe: jest.fn(), file: jest.fn(), finalize: jest.fn() }
+  jest.mocked(archiver).mockReturnValue(archive as never)
+  return archive
 }

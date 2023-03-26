@@ -32,14 +32,14 @@ describe('login', () => {
   })
 
   it('should send 401 when login fails', async () => {
-    jest.spyOn(prisma.user, 'findFirstOrThrow').mockRejectedValue('error')
+    jest.spyOn(prisma.user, 'findFirstOrThrow').mockRejectedValue('Error')
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { res } = getMockRes()
     await login(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(401)
   })
 
-  it('should log success when login succeeds', async () => {
+  it('should log success', async () => {
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { success } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -47,13 +47,13 @@ describe('login', () => {
     expect(success).toHaveBeenCalled()
   })
 
-  it('should log failure when login fails', async () => {
-    jest.spyOn(prisma.user, 'findFirstOrThrow').mockRejectedValue('error')
+  it('should log failure', async () => {
+    jest.spyOn(prisma.user, 'findFirstOrThrow').mockRejectedValue('Error')
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
     await login(req, res)
-    expect(failure).toHaveBeenCalledWith({ message: 'error' })
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
   })
 })
 
@@ -91,7 +91,7 @@ describe('logout', () => {
     expect(res.redirect).toHaveBeenCalledWith('http://app_host.io')
   })
 
-  it('should log success when logout succeeds', () => {
+  it('should log success', () => {
     const req = getMockReq()
     req.session.destroy = jest.fn().mockImplementation((fn) => fn())
     const { success } = mockAction(req.logger)
@@ -100,7 +100,7 @@ describe('logout', () => {
     expect(success).toHaveBeenCalled()
   })
 
-  it('should log failure when logout fails', () => {
+  it('should log failure', () => {
     const req = getMockReq()
     req.session.destroy = jest.fn().mockImplementation((fn) => fn('error'))
     const { failure } = mockAction(req.logger)

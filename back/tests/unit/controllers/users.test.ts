@@ -1,11 +1,14 @@
 import { getMockRes } from '@jest-mock/express'
 import { deleteUser, getUsers, postUser } from '../../../src/controllers/users'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockUser } from '../../mocks'
+import { getMockReq, mockAction, mockUser } from '../../mocks'
 
 describe('getUsers', () => {
-  it('should get users', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.user, 'findMany').mockResolvedValue([mockUser()])
+  })
+
+  it('should get users', async () => {
     const req = getMockReq()
     const { res } = getMockRes()
     await getUsers(req, res)
@@ -13,7 +16,6 @@ describe('getUsers', () => {
   })
 
   it('should return users', async () => {
-    jest.spyOn(prisma.user, 'findMany').mockResolvedValue([mockUser()])
     const req = getMockReq()
     const { res } = getMockRes()
     await getUsers(req, res)
@@ -21,17 +23,37 @@ describe('getUsers', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.user, 'findMany').mockRejectedValue(new Error())
+    jest.spyOn(prisma.user, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { res } = getMockRes()
     await getUsers(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq()
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getUsers(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.user, 'findMany').mockRejectedValue('Error')
+    const req = getMockReq()
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await getUsers(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('postUser', () => {
-  it('should create user', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.user, 'create').mockResolvedValue(mockUser())
+  })
+
+  it('should create user', async () => {
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { res } = getMockRes()
     await postUser(req, res)
@@ -44,7 +66,6 @@ describe('postUser', () => {
   })
 
   it('should return 201 status and created user id', async () => {
-    jest.spyOn(prisma.user, 'create').mockResolvedValue(mockUser())
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { res } = getMockRes()
     await postUser(req, res)
@@ -53,17 +74,37 @@ describe('postUser', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.user, 'create').mockRejectedValue(new Error())
+    jest.spyOn(prisma.user, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { res } = getMockRes()
     await postUser(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
+
+  it('should log success', async () => {
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await postUser(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.user, 'create').mockRejectedValue('Error')
+    const req = getMockReq({ body: { username: 'username', password: 'password' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await postUser(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
+  })
 })
 
 describe('deleteUser', () => {
-  it('should delete user', async () => {
+  beforeEach(() => {
     jest.spyOn(prisma.user, 'delete').mockResolvedValue(mockUser())
+  })
+
+  it('should delete user', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteUser(req, res)
@@ -71,7 +112,6 @@ describe('deleteUser', () => {
   })
 
   it('should return 204 status', async () => {
-    jest.spyOn(prisma.user, 'delete').mockResolvedValue(mockUser())
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteUser(req, res)
@@ -79,10 +119,27 @@ describe('deleteUser', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.user, 'delete').mockRejectedValue(new Error())
+    jest.spyOn(prisma.user, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteUser(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
+  })
+
+  it('should log success', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    const { success } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await deleteUser(req, res)
+    expect(success).toHaveBeenCalled()
+  })
+
+  it('should log failure', async () => {
+    jest.spyOn(prisma.user, 'delete').mockRejectedValue('Error')
+    const req = getMockReq({ params: { id: '1' } })
+    const { failure } = mockAction(req.logger)
+    const { res } = getMockRes()
+    await deleteUser(req, res)
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
   })
 })
