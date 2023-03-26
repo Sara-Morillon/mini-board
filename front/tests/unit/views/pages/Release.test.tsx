@@ -44,39 +44,39 @@ describe('Release', () => {
     jest.mocked(getRelease).mockResolvedValue(null)
     render(<Release />)
     await wait()
-    expect(screen.getByLabelText('Name *')).toHaveValue('')
+    expect(screen.getByPlaceholderText('Name *')).toHaveValue('')
   })
 
   it('should render release name', async () => {
     render(<Release />)
     await wait()
-    expect(screen.getByLabelText('Name *')).toHaveValue('release1')
+    expect(screen.getByPlaceholderText('Name *')).toHaveValue('release1')
   })
 
   it('should update form values when changing name', async () => {
     render(<Release />)
     await wait()
-    fireEvent.change(screen.getByLabelText('Name *'), { target: { value: 'name2' } })
-    expect(screen.getByLabelText('Name *')).toHaveValue('name2')
+    fireEvent.change(screen.getByPlaceholderText('Name *'), { target: { value: 'name2' } })
+    expect(screen.getByPlaceholderText('Name *')).toHaveValue('name2')
   })
 
   it('should render release due date', async () => {
     render(<Release />)
     await wait()
-    expect(screen.getByLabelText((content: string) => content.includes('Due date *'))).toHaveValue('2020-01-01')
+    expect(screen.getByPlaceholderText('Due date *')).toHaveValue('2020-01-01')
   })
 
   it('should render now as default due date', async () => {
     jest.mocked(getRelease).mockResolvedValue(null)
     render(<Release />)
     await wait()
-    expect(screen.getByLabelText((content: string) => content.includes('Due date *'))).toHaveValue('2022-01-01')
+    expect(screen.getByPlaceholderText('Due date *')).toHaveValue('2022-01-01')
   })
 
   it('should update form values when changing due date', async () => {
     render(<Release />)
     await wait()
-    const input = screen.getByLabelText((content: string) => content.includes('Due date *'))
+    const input = screen.getByPlaceholderText('Due date *')
     fireEvent.change(input, { target: { value: '2022-01-01' } })
     expect(input).toHaveValue('2022-01-01')
   })

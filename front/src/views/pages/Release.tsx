@@ -44,16 +44,15 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
   return (
     <form onSubmit={submit} className="p3">
       <label>
-        Name *
-        <input value={values.name} onChange={(e) => onChange('name', e.target.value)} required />
+        <input value={values.name} onChange={(e) => onChange('name', e.target.value)} required placeholder="Name *" />
       </label>
 
       <label>
-        Due date *
         <input
           type="date"
           value={values.dueDate.substring(0, 10)}
           onChange={(e) => onChange('dueDate', `${e.target.value}T00:00:00.000Z`)}
+          placeholder="Due date *"
         />
         {values.dueDate && <small>{formatDistanceToNow(new Date(values.dueDate), { addSuffix: true })}</small>}
       </label>
