@@ -23,7 +23,7 @@ export function PrivateOutlet(): JSX.Element {
   return (
     <>
       <Header />
-      <main className="mx-auto" style={{ minHeight: 'calc(100vh - 162px - 96px - 55px)', minWidth: '60rem' }}>
+      <main style={{ minHeight: 'calc(100vh - 162px - 96px - 55px)' }}>
         <Outlet />
       </main>
       <Footer />
