@@ -30,13 +30,13 @@ export function Board(): JSX.Element {
       <table className="mt2" style={{ tableLayout: 'fixed' }}>
         <thead>
           <tr>
-            <th>
+            <th className="center">
               To do <Count issues={issues} status="todo" />
             </th>
-            <th>
+            <th className="center">
               Doing <Count issues={issues} status="doing" />
             </th>
-            <th>
+            <th className="center">
               Done <Count issues={issues} status="done" />
             </th>
           </tr>
