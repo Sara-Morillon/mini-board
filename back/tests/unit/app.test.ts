@@ -79,11 +79,11 @@ describe('run', () => {
 
   it('should log failure', async () => {
     jest.mocked(express).mockImplementation(() => {
-      throw new Error('Error')
+      throw 'Error'
     })
     const app = new App()
     const { failure } = mockAction(app['logger'])
     await app.run()
-    expect(failure).toHaveBeenCalledWith({ message: 'Error', stack: expect.any(String) })
+    expect(failure).toHaveBeenCalledWith({ message: 'Error' })
   })
 })
