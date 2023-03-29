@@ -72,11 +72,13 @@ describe('Issue', () => {
     expect(screen.getByRole('button', { name: 'DONE' })).toHaveClass('done')
   })
 
-  it('should update issue status', async () => {
+  it('should save issue when changing status', async () => {
+    const onSave = jest.fn()
+    jest.mocked(useFormSave).mockReturnValue([false, onSave])
     render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'TODO' }))
-    expect(screen.getByRole('button', { name: 'TODO' })).toHaveClass('checked')
+    expect(onSave).toHaveBeenCalledWith(mockIssue({ status: 'todo' }))
   })
 
   it('should render issue type', async () => {
@@ -157,7 +159,7 @@ describe('Issue', () => {
     expect(screen.getByPlaceholderText('Summary')).toHaveValue('description2')
   })
 
-  it('should enabled buttons when neither saving nor deleting', async () => {
+  it('should enable buttons when neither saving nor deleting', async () => {
     render(<Issue />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
@@ -170,6 +172,16 @@ describe('Issue', () => {
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled()
+  })
+
+  it('should save issue when clicking on save button', async () => {
+    const onSave = jest.fn()
+    jest.mocked(useFormSave).mockReturnValue([false, onSave])
+    render(<Issue />)
+    await wait()
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    await wait()
+    expect(onSave).toHaveBeenCalledWith(mockIssue())
   })
 
   it('should disable buttons when deleting', async () => {

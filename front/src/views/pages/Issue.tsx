@@ -53,23 +53,23 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
 
   return (
     <>
-      <form onSubmit={submit}>
-        {issue && (
-          <fieldset className="right">
-            {statuses.map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => onChange('status', status)}
-                className={c('mr1', status, { checked: values.status === status })}
-                {...(values.status !== status && { 'data-variant': 'outlined' })}
-              >
-                {status.toUpperCase()}
-              </button>
-            ))}
-          </fieldset>
-        )}
+      {issue && (
+        <fieldset className="right">
+          {statuses.map((status) => (
+            <button
+              key={status}
+              type="button"
+              onClick={() => onSave({ ...values, status })}
+              className={c('mr1', status, { checked: values.status === status })}
+              {...(values.status !== status && { 'data-variant': 'outlined' })}
+            >
+              {status.toUpperCase()}
+            </button>
+          ))}
+        </fieldset>
+      )}
 
+      <form onSubmit={submit}>
         <div className="flex" style={{ gap: '1rem', clear: 'both' }}>
           <label>
             <select
