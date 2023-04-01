@@ -20,6 +20,12 @@ describe('Board', () => {
     expect(screen.getByRole('table')).toBeInTheDocument()
   })
 
+  it('should render loader when loading', async () => {
+    render(<Board />)
+    expect(screen.getByLabelText('Loading...')).toBeInTheDocument()
+    await wait()
+  })
+
   it('should render count of issues in each column', async () => {
     jest
       .mocked(getBoard)

@@ -4,7 +4,6 @@ import { useTitle } from '../../hooks/useTitle'
 import { IIssue, Status } from '../../models/Issue'
 import { getBoard } from '../../services/board'
 import { moveIssue, saveIssue } from '../../services/issue'
-import { LoadContainer } from '../components/LoadContainer'
 import { Ticket } from '../components/Ticket'
 
 export function Board(): JSX.Element {
@@ -26,8 +25,13 @@ export function Board(): JSX.Element {
   )
 
   return (
-    <LoadContainer loading={loading || state.loading}>
-      <table className="mt2" style={{ tableLayout: 'fixed' }}>
+    <div className="relative">
+      {(state.loading || loading) && (
+        <div className="absolute top-0 right-0 bottom-0 left-0 p4" style={{ zIndex: 1, fontSize: '3rem' }}>
+          <div aria-busy aria-label="Loading..." />
+        </div>
+      )}
+      <table className="mt2" style={{ tableLayout: 'fixed', opacity: state.loading || loading ? 0.5 : 1 }}>
         <thead>
           <tr>
             <th className="center">
@@ -57,7 +61,7 @@ export function Board(): JSX.Element {
           ))}
         </tbody>
       </table>
-    </LoadContainer>
+    </div>
   )
 }
 
