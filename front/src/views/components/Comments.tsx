@@ -1,9 +1,8 @@
-import { useFetch } from '@saramorillon/hooks'
 import { IconTrash } from '@tabler/icons'
 import React, { FormEvent, useCallback, useState } from 'react'
 import { IComment } from '../../models/Comment'
 import { deleteComment, getComments, saveComment } from '../../services/comment'
-import { LoadContainer } from './LoadContainer'
+import { FetchContainer } from './FetchContainer'
 
 interface ICommentsProps {
   issueId: number
@@ -11,37 +10,27 @@ interface ICommentsProps {
 
 export function Comments({ issueId }: ICommentsProps) {
   const fetch = useCallback(() => getComments(issueId), [issueId])
-  const [comments, { loading }, refresh] = useFetch(fetch, [])
-
-  const [content, setContent] = useState('')
-
-  const onSubmit = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault()
-      return saveComment(issueId, content)
-        .then(refresh)
-        .then(() => setContent(''))
-    },
-    [issueId, content, refresh]
-  )
 
   return (
     <>
       <hr className="my2" />
       <h3>Comments</h3>
-      <LoadContainer loading={loading}>
-        {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} refresh={refresh} />
-        ))}
-      </LoadContainer>
-      <form name="add-comment" onSubmit={onSubmit}>
-        <label>
-          <textarea placeholder="Add a comment" value={content} onChange={(e) => setContent(e.target.value)} required />
-        </label>
-        <button type="submit" className="right">
-          Send
-        </button>
-      </form>
+      <FetchContainer
+        fetchFn={fetch}
+        defaultValue={[]}
+        loadingMessage="Loading comments"
+        errorMessage="An error occurred while loading comments"
+        notFoundMessage="Comments not found"
+      >
+        {(comments, refresh) => (
+          <>
+            {comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} refresh={refresh} />
+            ))}
+            <CommentForm issueId={issueId} refresh={refresh} />
+          </>
+        )}
+      </FetchContainer>
     </>
   )
 }
@@ -64,5 +53,35 @@ function Comment({ comment, refresh }: ICommentProps): JSX.Element {
       </button>
       <p>{comment.content}</p>
     </article>
+  )
+}
+
+interface ICommentFormProps {
+  issueId: number
+  refresh: () => void
+}
+
+function CommentForm({ issueId, refresh }: ICommentFormProps) {
+  const [content, setContent] = useState('')
+
+  const onSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault()
+      return saveComment(issueId, content)
+        .then(refresh)
+        .then(() => setContent(''))
+    },
+    [issueId, content, refresh]
+  )
+
+  return (
+    <form name="add-comment" onSubmit={onSubmit}>
+      <label>
+        <textarea placeholder="Add a comment" value={content} onChange={(e) => setContent(e.target.value)} required />
+      </label>
+      <button type="submit" className="right">
+        Send
+      </button>
+    </form>
   )
 }

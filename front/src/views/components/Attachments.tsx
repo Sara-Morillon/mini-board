@@ -1,9 +1,8 @@
-import { useFetch } from '@saramorillon/hooks'
 import { IconDownload, IconTrash, IconUpload } from '@tabler/icons'
-import React, { ChangeEvent, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { IAttachment } from '../../models/Attachment'
 import { deleteAttachment, getAttachments, saveAttachments } from '../../services/attachment'
-import { LoadContainer } from './LoadContainer'
+import { FetchContainer } from './FetchContainer'
 
 interface IAttachementsProps {
   issueId: number
@@ -11,46 +10,49 @@ interface IAttachementsProps {
 
 export function Attachments({ issueId }: IAttachementsProps) {
   const fetch = useCallback(() => getAttachments(issueId), [issueId])
-  const [attachments, { loading }, refresh] = useFetch(fetch, [])
-
-  const addAttachments = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => saveAttachments(issueId, e.target.files).then(refresh),
-    [issueId, refresh]
-  )
 
   return (
     <>
       <hr className="my2" />
-      <h3>
-        <div className="flex right">
-          <label className="m0 mr1 relative add-attachments">
-            <small>
-              <IconUpload /> Add attachments
-            </small>
-            <input
-              type="file"
-              className="absolute left-0 right-0 top-0 bottom-0 m0"
-              multiple
-              onChange={addAttachments}
-            />
-          </label>
-          {attachments.length > 0 && (
-            <a href={`/api/attachments?issueId=${issueId}`}>
-              <small>
-                <IconDownload /> Download all
-              </small>
-            </a>
-          )}
-        </div>
-        Attachments
-      </h3>
-      <LoadContainer loading={loading}>
-        <div className="flex items-stretch">
-          {attachments.map((attachment) => (
-            <Attachment key={attachment.id} attachment={attachment} refresh={refresh} />
-          ))}
-        </div>
-      </LoadContainer>
+      <h3>Attachments</h3>
+      <FetchContainer
+        fetchFn={fetch}
+        defaultValue={[]}
+        loadingMessage="Loading attachments"
+        errorMessage="An error occurred while loading attachments"
+        notFoundMessage="Attachments not found"
+      >
+        {(attachments, refresh) => (
+          <>
+            <div className="flex justify-end">
+              <label className="m0 mr1 relative add-attachments">
+                <small>
+                  <IconUpload /> Add attachments
+                </small>
+                <input
+                  type="file"
+                  className="absolute left-0 right-0 top-0 bottom-0 m0"
+                  multiple
+                  onChange={(e) => saveAttachments(issueId, e.target.files).then(refresh)}
+                />
+              </label>
+              {attachments.length > 0 && (
+                <a href={`/api/attachments?issueId=${issueId}`}>
+                  <small>
+                    <IconDownload /> Download all
+                  </small>
+                </a>
+              )}
+            </div>
+
+            <div className="flex items-stretch">
+              {attachments.map((attachment) => (
+                <Attachment key={attachment.id} attachment={attachment} refresh={refresh} />
+              ))}
+            </div>
+          </>
+        )}
+      </FetchContainer>
     </>
   )
 }
