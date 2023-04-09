@@ -4,5 +4,5 @@ $name = Select-Object -InputObject ${json} -ExpandProperty "name"
 echo "Pushing ${name} v${version}"
 docker build -t saramorillon/${name} .
 docker image tag saramorillon/${name} saramorillon/${name}:${version}
-docker push -a saramorillon/${name}
+docker push saramorillon/${name}:${version}
 echo "Done"
