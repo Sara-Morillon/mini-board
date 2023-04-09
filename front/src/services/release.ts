@@ -7,7 +7,7 @@ export async function getReleases(): Promise<IRelease[]> {
 }
 
 export async function getRelease(id?: string): Promise<IRelease | null> {
-  if (!id) return null
+  if (!id) return { id: 0, name: '', dueDate: new Date().toISOString() }
   const { data } = await Axios.get<IRelease | null>(`/api/releases/${id}`)
   return data
 }

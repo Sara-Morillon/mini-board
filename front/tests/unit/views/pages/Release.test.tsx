@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import mockdate from 'mockdate'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../../../src/hooks/useForm'
@@ -9,8 +8,6 @@ import { mockRelease, wait } from '../../../mocks'
 
 jest.mock('../../../../src/services/release')
 jest.mock('../../../../src/hooks/useForm')
-
-mockdate.set('2022-01-01T00:00:00.000Z')
 
 describe('Release', () => {
   beforeEach(() => {
@@ -40,13 +37,6 @@ describe('Release', () => {
     expect(document.title).toBe('Mini Board - Create release')
   })
 
-  it('should use empty release if no release', async () => {
-    jest.mocked(getRelease).mockResolvedValue(null)
-    render(<Release />)
-    await wait()
-    expect(screen.getByPlaceholderText('Name *')).toHaveValue('')
-  })
-
   it('should render release name', async () => {
     render(<Release />)
     await wait()
@@ -64,13 +54,6 @@ describe('Release', () => {
     render(<Release />)
     await wait()
     expect(screen.getByPlaceholderText('Due date *')).toHaveValue('2020-01-01')
-  })
-
-  it('should render now as default due date', async () => {
-    jest.mocked(getRelease).mockResolvedValue(null)
-    render(<Release />)
-    await wait()
-    expect(screen.getByPlaceholderText('Due date *')).toHaveValue('2022-01-01')
   })
 
   it('should update form values when changing due date', async () => {

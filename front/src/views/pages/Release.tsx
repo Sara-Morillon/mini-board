@@ -1,4 +1,4 @@
-import { useFetch, useForm } from '@saramorillon/hooks'
+import { useForm } from '@saramorillon/hooks'
 import { formatDistanceToNow } from 'date-fns'
 import React, { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
@@ -6,24 +6,29 @@ import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useTitle } from '../../hooks/useTitle'
 import { IRelease } from '../../models/Release'
 import { deleteRelease, getRelease, saveRelease } from '../../services/release'
+import { FetchContainer } from '../components/FetchContainer'
 import { DeleteButton, SaveButton } from '../components/FormButtons'
-import { LoadContainer } from '../components/LoadContainer'
 
 export function Release(): JSX.Element {
   const { id } = useParams()
   useTitle(id ? `Edit release ${id}` : 'Create release')
   const fetch = useCallback(() => getRelease(id), [id])
-  const [release, { loading }, refresh] = useFetch(fetch, null)
 
   return (
-    <LoadContainer loading={loading}>
-      <ReleaseForm release={release} refresh={refresh} />
-    </LoadContainer>
+    <FetchContainer
+      fetchFn={fetch}
+      defaultValue={null}
+      loadingMessage="Loading releases"
+      errorMessage="An error occurred while loading releases"
+      notFoundMessage="Release not found"
+    >
+      {(release, refresh) => <ReleaseForm release={release} refresh={refresh} />}
+    </FetchContainer>
   )
 }
 
 interface IReleaseFormProps {
-  release: IRelease | null
+  release: IRelease
   refresh: () => void
 }
 
@@ -31,15 +36,7 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
   const [saveLoading, onSave] = useFormSave(saveRelease, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteRelease)
 
-  const { submit, values, onChange } = useForm(
-    onSave,
-    release ?? {
-      id: 0,
-      projectId: 0,
-      name: '',
-      dueDate: new Date().toISOString(),
-    }
-  )
+  const { submit, values, onChange } = useForm(onSave, release)
 
   return (
     <form onSubmit={submit} className="p3">

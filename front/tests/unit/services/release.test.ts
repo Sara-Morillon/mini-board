@@ -1,8 +1,11 @@
+import mockdate from 'mockdate'
 import { Axios } from '../../../src/services/Axios'
 import { deleteRelease, getRelease, getReleases, saveRelease } from '../../../src/services/release'
 import { mockRelease } from '../../mocks'
 
 jest.mock('../../../src/services/Axios')
+
+mockdate.set('2022-01-01T00:00:00.000Z')
 
 describe('getReleases', () => {
   beforeEach(() => {
@@ -25,9 +28,9 @@ describe('getRelease', () => {
     jest.mocked(Axios.get).mockResolvedValue({ data: 'release' })
   })
 
-  it('should return null without id', async () => {
+  it('should return empty release without id', async () => {
     const result = await getRelease()
-    expect(result).toBeNull()
+    expect(result).toEqual({ id: 0, name: '', dueDate: '2022-01-01T00:00:00.000Z' })
   })
 
   it('should get release', async () => {
