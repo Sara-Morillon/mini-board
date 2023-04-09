@@ -9,6 +9,7 @@ import { getIssues } from '../../services/issue'
 import { CreateButton } from '../components/CreateButton'
 import { FetchContainer } from '../components/FetchContainer'
 import { NotFound } from '../components/Helpers'
+import { ProjectSelector } from '../components/ProjectSelector'
 import { ReleaseSelector } from '../components/ReleaseSelector'
 
 const limit = 15
@@ -18,21 +19,33 @@ export function Issues() {
 
   const [maxPage, setMaxPage] = useState(1)
   const pagination = usePagination(maxPage)
+  const [projectId, setProjectId] = useState<number>()
   const [releaseId, setReleaseId] = useState<number>()
 
-  const fetch = useCallback(() => getIssues(undefined, releaseId, pagination.page, limit), [releaseId, pagination.page])
+  const fetch = useCallback(
+    () => getIssues(projectId, releaseId, pagination.page, limit),
+    [projectId, releaseId, pagination.page]
+  )
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <CreateButton to="/issue">Create issue</CreateButton>
+
+      <div className="flex">
+        <ProjectSelector
+          value={projectId}
+          onChange={setProjectId}
+          selectProps={{ className: 'mt0 mb0', placeholder: 'All projects' }}
+          labelProps={{ className: 'mt0 mb0 mr1' }}
+        />
         <ReleaseSelector
           value={releaseId}
           onChange={setReleaseId}
-          selectProps={{ placeholder: 'All releases' }}
-          labelProps={{ className: 'p1 mt1' }}
+          selectProps={{ className: 'mt0 mb0', placeholder: 'All releases' }}
+          labelProps={{ className: 'mt0 mb0 mr1' }}
         />
-        <CreateButton to={`/issue`}>Create issue</CreateButton>
       </div>
+
       <FetchContainer
         fetchFn={fetch}
         defaultValue={null}
@@ -62,7 +75,7 @@ interface IIssuesTableProps {
   setMaxPage: Dispatch<SetStateAction<number>>
 }
 
-export function IssuesTable({ issues, total, pagination, maxPage, setMaxPage }: IIssuesTableProps): JSX.Element {
+function IssuesTable({ issues, total, pagination, maxPage, setMaxPage }: IIssuesTableProps): JSX.Element {
   useEffect(() => {
     setMaxPage(Math.ceil(total / limit))
   }, [setMaxPage, total])
