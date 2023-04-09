@@ -7,6 +7,7 @@ import { IUser } from '../../models/User'
 import { deleteUser, getUsers } from '../../services/user'
 import { CreateButton } from '../components/CreateButton'
 import { FetchContainer } from '../components/FetchContainer'
+import { NotFound } from '../components/Helpers'
 
 export function Users(): JSX.Element {
   useTitle('Users')
@@ -25,9 +26,11 @@ export function Users(): JSX.Element {
       >
         {(users, refresh) => (
           <>
-            {users.map((user) => (
-              <User key={user.username} user={user} refresh={refresh} />
-            ))}
+            {users.length ? (
+              users.map((user) => <User key={user.username} user={user} refresh={refresh} />)
+            ) : (
+              <NotFound message="No user found" />
+            )}
           </>
         )}
       </FetchContainer>

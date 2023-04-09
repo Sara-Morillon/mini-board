@@ -6,6 +6,7 @@ import { IRelease } from '../../models/Release'
 import { getReleases } from '../../services/release'
 import { CreateButton } from '../components/CreateButton'
 import { FetchContainer } from '../components/FetchContainer'
+import { NotFound } from '../components/Helpers'
 
 export function Releases(): JSX.Element {
   useTitle('Releases')
@@ -17,7 +18,7 @@ export function Releases(): JSX.Element {
       </div>
       <FetchContainer
         fetchFn={getReleases}
-        defaultValue={null}
+        defaultValue={[]}
         loadingMessage="Loading releases"
         errorMessage="An error occurred while loading releases"
         notFoundMessage="Releases not found"
@@ -33,6 +34,14 @@ interface IReleasesTableProps {
 }
 
 export function ReleasesTable({ releases }: IReleasesTableProps): JSX.Element {
+  if (!releases.length) {
+    return (
+      <div className="center">
+        <NotFound message="No release found" />
+      </div>
+    )
+  }
+
   return (
     <table className="mt2">
       <thead>

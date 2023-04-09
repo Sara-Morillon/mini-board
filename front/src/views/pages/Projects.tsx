@@ -6,6 +6,7 @@ import { IProject } from '../../models/Project'
 import { getProjects } from '../../services/project'
 import { CreateButton } from '../components/CreateButton'
 import { FetchContainer } from '../components/FetchContainer'
+import { NotFound } from '../components/Helpers'
 
 export function Projects(): JSX.Element {
   useTitle('Projects')
@@ -17,7 +18,7 @@ export function Projects(): JSX.Element {
       </div>
       <FetchContainer
         fetchFn={getProjects}
-        defaultValue={null}
+        defaultValue={[]}
         loadingMessage="Loading projects"
         errorMessage="An error occurred while loading projects"
         notFoundMessage="Projects not found"
@@ -33,6 +34,14 @@ interface IProjectsTableProps {
 }
 
 export function ProjectsTable({ projects }: IProjectsTableProps): JSX.Element {
+  if (!projects.length) {
+    return (
+      <div className="center">
+        <NotFound message="No project found" />
+      </div>
+    )
+  }
+
   return (
     <table className="mt2">
       <thead>

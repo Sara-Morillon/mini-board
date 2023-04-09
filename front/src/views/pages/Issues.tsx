@@ -8,6 +8,7 @@ import { IIssueFull, typeIcons } from '../../models/Issue'
 import { getIssues } from '../../services/issue'
 import { CreateButton } from '../components/CreateButton'
 import { FetchContainer } from '../components/FetchContainer'
+import { NotFound } from '../components/Helpers'
 import { ReleaseSelector } from '../components/ReleaseSelector'
 
 const limit = 15
@@ -65,6 +66,14 @@ export function IssuesTable({ issues, total, pagination, maxPage, setMaxPage }: 
   useEffect(() => {
     setMaxPage(Math.ceil(total / limit))
   }, [setMaxPage, total])
+
+  if (!issues.length) {
+    return (
+      <div className="center">
+        <NotFound message="No issue found" />
+      </div>
+    )
+  }
 
   return (
     <table className="mt2">
