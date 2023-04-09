@@ -5,4 +5,5 @@ echo "Pushing ${name} v${version}"
 docker build -t saramorillon/${name} .
 docker image tag saramorillon/${name} saramorillon/${name}:${version}
 docker push saramorillon/${name}:${version}
+docker push saramorillon/${name}:latest
 echo "Done"
