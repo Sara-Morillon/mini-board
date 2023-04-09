@@ -17,7 +17,7 @@ describe('getBoard', () => {
     await getBoard(req, res)
     expect(prisma.release.findFirst).toHaveBeenCalledWith({
       where: { dueDate: { gt: new Date('2023-01-01T00:00:00.000Z') } },
-      orderBy: [{ dueDate: 'desc' }],
+      orderBy: [{ dueDate: 'asc' }],
       include: { issues: { orderBy: { priority: 'asc' }, include: { author: true, project: true } } },
     })
   })

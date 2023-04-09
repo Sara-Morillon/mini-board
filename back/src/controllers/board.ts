@@ -7,7 +7,7 @@ export async function getBoard(req: Request, res: Response): Promise<void> {
   try {
     const issues = await prisma.release.findFirst({
       where: { dueDate: { gt: new Date() } },
-      orderBy: [{ dueDate: 'desc' }],
+      orderBy: [{ dueDate: 'asc' }],
       include: { issues: { orderBy: { priority: 'asc' }, include: { author: true, project: true } } },
     })
     res.json(issues)
