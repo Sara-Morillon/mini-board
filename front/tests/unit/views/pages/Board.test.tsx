@@ -3,14 +3,14 @@ import React from 'react'
 import { getBoard } from '../../../../src/services/board'
 import { moveIssue, saveIssue } from '../../../../src/services/issue'
 import { Board } from '../../../../src/views/pages/Board'
-import { mockIssueFull, wait } from '../../../mocks'
+import { mockIssueFull, mockReleaseFull, wait } from '../../../mocks'
 
 jest.mock('../../../../src/services/board')
 jest.mock('../../../../src/services/issue')
 
 describe('Board', () => {
   beforeEach(() => {
-    jest.mocked(getBoard).mockResolvedValue([])
+    jest.mocked(getBoard).mockResolvedValue(mockReleaseFull())
     jest.mocked(saveIssue).mockResolvedValue('')
   })
 
@@ -27,16 +27,18 @@ describe('Board', () => {
   })
 
   it('should render count of issues in each column', async () => {
-    jest
-      .mocked(getBoard)
-      .mockResolvedValue([
-        mockIssueFull({ status: 'todo' }),
-        mockIssueFull({ id: 2, status: 'todo' }),
-        mockIssueFull({ id: 3 }),
-        mockIssueFull({ id: 4 }),
-        mockIssueFull({ id: 5 }),
-        mockIssueFull({ id: 6, status: 'done' }),
-      ])
+    jest.mocked(getBoard).mockResolvedValue(
+      mockReleaseFull({
+        issues: [
+          mockIssueFull({ status: 'todo' }),
+          mockIssueFull({ id: 2, status: 'todo' }),
+          mockIssueFull({ id: 3 }),
+          mockIssueFull({ id: 4 }),
+          mockIssueFull({ id: 5 }),
+          mockIssueFull({ id: 6, status: 'done' }),
+        ],
+      })
+    )
     render(<Board />)
     await wait()
     expect(screen.getByText('To do')).toHaveTextContent('To do 2')
@@ -45,7 +47,6 @@ describe('Board', () => {
   })
 
   it('should do nothing when changing nothing', async () => {
-    jest.mocked(getBoard).mockResolvedValue([mockIssueFull()])
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[1], {
@@ -57,7 +58,11 @@ describe('Board', () => {
   })
 
   it('should not save issue when changing priority', async () => {
-    jest.mocked(getBoard).mockResolvedValue([mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })])
+    jest.mocked(getBoard).mockResolvedValue(
+      mockReleaseFull({
+        issues: [mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })],
+      })
+    )
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[4], {
@@ -68,7 +73,6 @@ describe('Board', () => {
   })
 
   it('should save issue when changing a status', async () => {
-    jest.mocked(getBoard).mockResolvedValue([mockIssueFull()])
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[0], {
@@ -79,7 +83,11 @@ describe('Board', () => {
   })
 
   it('should move issue when changing priority', async () => {
-    jest.mocked(getBoard).mockResolvedValue([mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })])
+    jest.mocked(getBoard).mockResolvedValue(
+      mockReleaseFull({
+        issues: [mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })],
+      })
+    )
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[4], {
@@ -90,7 +98,6 @@ describe('Board', () => {
   })
 
   it('should not move issue when changing a status', async () => {
-    jest.mocked(getBoard).mockResolvedValue([mockIssueFull()])
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[0], {

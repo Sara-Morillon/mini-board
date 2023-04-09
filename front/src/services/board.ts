@@ -1,7 +1,7 @@
-import { IIssueFull } from '../models/Issue'
+import { IReleaseFull } from '../models/Release'
 import { Axios } from './Axios'
 
-export async function getBoard(): Promise<IIssueFull[]> {
-  const { data } = await Axios.get<IIssueFull[]>('/api/board')
+export async function getBoard(): Promise<IReleaseFull> {
+  const { data } = await Axios.get<IReleaseFull>('/api/board')
   return data
 }

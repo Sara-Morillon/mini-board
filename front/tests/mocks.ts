@@ -5,7 +5,7 @@ import { IAttachment } from '../src/models/Attachment'
 import { IComment } from '../src/models/Comment'
 import { IIssue, IIssueFull } from '../src/models/Issue'
 import { IProject } from '../src/models/Project'
-import { IRelease } from '../src/models/Release'
+import { IRelease, IReleaseFull } from '../src/models/Release'
 import { ISession } from '../src/models/Session'
 import { IUser } from '../src/models/User'
 
@@ -76,6 +76,16 @@ export function mockRelease(release?: Partial<IRelease>): IRelease {
     id: 1,
     name: 'release1',
     dueDate: '2020-01-01T00:00:00.000Z',
+    ...release,
+  }
+}
+
+export function mockReleaseFull(release?: Partial<IReleaseFull>): IReleaseFull {
+  return {
+    id: 1,
+    name: 'release1',
+    dueDate: '2020-01-01T00:00:00.000Z',
+    issues: [mockIssueFull()],
     ...release,
   }
 }
