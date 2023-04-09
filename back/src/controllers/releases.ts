@@ -4,6 +4,12 @@ import { prisma } from '../prisma'
 import { parseError } from '../utils/parseError'
 
 const schema = {
+  list: z.object({
+    all: z
+      .enum(['true', 'false'])
+      .transform((value) => value === 'true')
+      .optional(),
+  }),
   get: z.object({
     id: z.string().transform(Number),
   }),
@@ -20,7 +26,11 @@ const schema = {
 export async function getReleases(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('get_releases')
   try {
-    const releases = await prisma.release.findMany({ orderBy: { dueDate: 'desc' } })
+    const { all } = schema.list.parse(req.query)
+    const releases = await prisma.release.findMany({
+      ...(!all && { where: { dueDate: { gte: new Date() } } }),
+      orderBy: { dueDate: 'desc' },
+    })
     res.json(releases)
     success()
   } catch (error) {

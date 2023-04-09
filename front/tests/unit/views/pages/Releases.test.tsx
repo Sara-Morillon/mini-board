@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { getReleases } from '../../../../src/services/release'
 import { Releases } from '../../../../src/views/pages/Releases'
@@ -9,6 +9,20 @@ jest.mock('../../../../src/services/release')
 describe('Releases', () => {
   beforeEach(() => {
     jest.mocked(getReleases).mockResolvedValue([mockRelease()])
+  })
+
+  it('should get  releases', async () => {
+    render(<Releases />)
+    await wait()
+    expect(getReleases).toHaveBeenCalledWith(false)
+  })
+
+  it('should get all releases', async () => {
+    render(<Releases />)
+    await wait()
+    fireEvent.click(screen.getByLabelText('Show all releases'))
+    await wait()
+    expect(getReleases).toHaveBeenLastCalledWith(true)
   })
 
   it('should render create button', async () => {

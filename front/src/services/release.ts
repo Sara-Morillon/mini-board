@@ -1,8 +1,8 @@
 import { IRelease } from '../models/Release'
 import { Axios } from './Axios'
 
-export async function getReleases(): Promise<IRelease[]> {
-  const { data } = await Axios.get<IRelease[]>('/api/releases')
+export async function getReleases(all?: boolean): Promise<IRelease[]> {
+  const { data } = await Axios.get<IRelease[]>('/api/releases', { params: { all } })
   return data
 }
 

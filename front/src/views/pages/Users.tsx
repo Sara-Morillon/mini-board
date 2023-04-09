@@ -14,9 +14,10 @@ export function Users(): JSX.Element {
 
   return (
     <>
-      <div className="clearfix">
+      <div className="clearfix mb2">
         <CreateButton to="/user">Create user</CreateButton>
       </div>
+
       <FetchContainer
         fetchFn={getUsers}
         defaultValue={null}

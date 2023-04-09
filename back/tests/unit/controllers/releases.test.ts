@@ -1,22 +1,35 @@
 import { getMockRes } from '@jest-mock/express'
+import mockdate from 'mockdate'
 import { deleteRelease, getRelease, getReleases, patchRelease, postRelease } from '../../../src/controllers/releases'
 import { prisma } from '../../../src/prisma'
 import { getMockReq, mockAction, mockRelease } from '../../mocks'
+
+mockdate.set('2023-01-01T00:00:00.000Z')
 
 describe('getReleases', () => {
   beforeEach(() => {
     jest.spyOn(prisma.release, 'findMany').mockResolvedValue([mockRelease()])
   })
 
-  it('should get releases', async () => {
-    const req = getMockReq({ query: { projectId: '1' } })
+  it('should get open releases', async () => {
+    const req = getMockReq()
+    const { res } = getMockRes()
+    await getReleases(req, res)
+    expect(prisma.release.findMany).toHaveBeenCalledWith({
+      where: { dueDate: { gte: new Date('2023-01-01T00:00:00.000Z') } },
+      orderBy: { dueDate: 'desc' },
+    })
+  })
+
+  it('should get all releases', async () => {
+    const req = getMockReq({ query: { all: 'true' } })
     const { res } = getMockRes()
     await getReleases(req, res)
     expect(prisma.release.findMany).toHaveBeenCalledWith({ orderBy: { dueDate: 'desc' } })
   })
 
   it('should return releases', async () => {
-    const req = getMockReq({ query: { projectId: '1' } })
+    const req = getMockReq()
     const { res } = getMockRes()
     await getReleases(req, res)
     expect(res.json).toHaveBeenCalledWith([mockRelease()])
@@ -24,14 +37,14 @@ describe('getReleases', () => {
 
   it('should return 500 status when failure', async () => {
     jest.spyOn(prisma.release, 'findMany').mockRejectedValue('Error')
-    const req = getMockReq({ query: { projectId: '1' } })
+    const req = getMockReq()
     const { res } = getMockRes()
     await getReleases(req, res)
     expect(res.sendStatus).toHaveBeenCalledWith(500)
   })
 
   it('should log success', async () => {
-    const req = getMockReq({ query: { projectId: '1' } })
+    const req = getMockReq()
     const { success } = mockAction(req.logger)
     const { res } = getMockRes()
     await getReleases(req, res)
@@ -40,7 +53,7 @@ describe('getReleases', () => {
 
   it('should log failure', async () => {
     jest.spyOn(prisma.release, 'findMany').mockRejectedValue('Error')
-    const req = getMockReq({ query: { projectId: '1' } })
+    const req = getMockReq()
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
     await getReleases(req, res)

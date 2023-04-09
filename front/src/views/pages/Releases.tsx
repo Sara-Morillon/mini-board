@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTitle } from '../../hooks/useTitle'
 import { IRelease } from '../../models/Release'
@@ -11,13 +11,19 @@ import { NotFound } from '../components/Helpers'
 export function Releases(): JSX.Element {
   useTitle('Releases')
 
+  const [all, setAll] = useState(false)
+  const fetch = useCallback(() => getReleases(all), [all])
+
   return (
     <>
-      <div className="clearfix">
-        <CreateButton to="/release">Create release</CreateButton>
-      </div>
+      <CreateButton to="/release">Create release</CreateButton>
+
+      <label className="mt0">
+        <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} /> Show all releases
+      </label>
+
       <FetchContainer
-        fetchFn={getReleases}
+        fetchFn={fetch}
         defaultValue={[]}
         loadingMessage="Loading releases"
         errorMessage="An error occurred while loading releases"
@@ -33,7 +39,7 @@ interface IReleasesTableProps {
   releases: IRelease[]
 }
 
-export function ReleasesTable({ releases }: IReleasesTableProps): JSX.Element {
+function ReleasesTable({ releases }: IReleasesTableProps): JSX.Element {
   if (!releases.length) {
     return (
       <div className="center">

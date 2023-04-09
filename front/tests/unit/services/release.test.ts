@@ -14,7 +14,12 @@ describe('getReleases', () => {
 
   it('should get releases', async () => {
     await getReleases()
-    expect(Axios.get).toHaveBeenCalledWith('/api/releases')
+    expect(Axios.get).toHaveBeenCalledWith('/api/releases', { params: {} })
+  })
+
+  it('should get all releases', async () => {
+    await getReleases(true)
+    expect(Axios.get).toHaveBeenCalledWith('/api/releases', { params: { all: true } })
   })
 
   it('should return releases', async () => {

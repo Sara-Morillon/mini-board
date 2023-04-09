@@ -16,6 +16,7 @@ export function Projects(): JSX.Element {
       <div className="clearfix">
         <CreateButton to="/project">Create project</CreateButton>
       </div>
+
       <FetchContainer
         fetchFn={getProjects}
         defaultValue={[]}
@@ -33,7 +34,7 @@ interface IProjectsTableProps {
   projects: IProject[]
 }
 
-export function ProjectsTable({ projects }: IProjectsTableProps): JSX.Element {
+ function ProjectsTable({ projects }: IProjectsTableProps): JSX.Element {
   if (!projects.length) {
     return (
       <div className="center">
