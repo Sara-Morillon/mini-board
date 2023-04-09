@@ -27,7 +27,7 @@ describe('getProject', () => {
 
   it('should return null without id', async () => {
     const result = await getProject()
-    expect(result).toBeNull()
+    expect(result).toEqual({ id: 0, key: '', name: '', description: '', updatedAt: '' })
   })
 
   it('should get project', async () => {

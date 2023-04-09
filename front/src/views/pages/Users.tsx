@@ -1,32 +1,36 @@
-import { useFetch } from '@saramorillon/hooks'
-import { IconPlus, IconTrash } from '@tabler/icons'
+import { IconTrash } from '@tabler/icons'
 import { format, parseISO } from 'date-fns'
 import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useSession } from '../../contexts/SessionContext'
 import { useTitle } from '../../hooks/useTitle'
 import { IUser } from '../../models/User'
 import { deleteUser, getUsers } from '../../services/user'
-import { LoadContainer } from '../components/LoadContainer'
+import { CreateButton } from '../components/CreateButton'
+import { FetchContainer } from '../components/FetchContainer'
 
 export function Users(): JSX.Element {
   useTitle('Users')
-  const [users, { loading }, refresh] = useFetch(getUsers, [])
 
   return (
     <>
-      <Link className="mb2 right" to="/user">
-        <IconPlus />
-        Create user
-      </Link>
-
-      <div className="clearfix" />
-
-      <LoadContainer loading={loading} className="center">
-        {users.map((user) => (
-          <User key={user.username} user={user} refresh={refresh} />
-        ))}
-      </LoadContainer>
+      <div className="clearfix">
+        <CreateButton to="/user">Create user</CreateButton>
+      </div>
+      <FetchContainer
+        fetchFn={getUsers}
+        defaultValue={null}
+        loadingMessage="Loading users"
+        errorMessage="An error occurred while loading users"
+        notFoundMessage="Users not found"
+      >
+        {(users, refresh) => (
+          <>
+            {users.map((user) => (
+              <User key={user.username} user={user} refresh={refresh} />
+            ))}
+          </>
+        )}
+      </FetchContainer>
     </>
   )
 }
@@ -43,9 +47,7 @@ function User({ user, refresh }: IUserProps): JSX.Element {
   const onDelete = useCallback(() => {
     setLoading(true)
     deleteUser(user)
-      .then(() => {
-        refresh()
-      })
+      .then(refresh)
       .finally(() => {
         setLoading(false)
       })

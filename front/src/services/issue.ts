@@ -14,7 +14,21 @@ export async function getIssues(
 }
 
 export async function getIssue(id?: string): Promise<IIssue | null> {
-  if (!id) return null
+  if (!id) {
+    return {
+      id: 0,
+      projectId: 0,
+      releaseId: 0,
+      authorId: 0,
+      priority: 0,
+      type: 'bug',
+      status: 'todo',
+      points: 0,
+      title: '',
+      description: '',
+      createdAt: '',
+    }
+  }
   const { data } = await Axios.get<IIssue | null>(`/api/issues/${id}`)
   return data
 }

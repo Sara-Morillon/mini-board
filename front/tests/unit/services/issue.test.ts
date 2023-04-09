@@ -27,7 +27,19 @@ describe('getIssue', () => {
 
   it('should return null without id', async () => {
     const result = await getIssue()
-    expect(result).toBeNull()
+    expect(result).toEqual({
+      id: 0,
+      projectId: 0,
+      releaseId: 0,
+      authorId: 0,
+      priority: 0,
+      type: 'bug',
+      status: 'todo',
+      points: 0,
+      title: '',
+      description: '',
+      createdAt: '',
+    })
   })
 
   it('should get issue', async () => {

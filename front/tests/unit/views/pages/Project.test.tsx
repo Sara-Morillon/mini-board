@@ -45,14 +45,14 @@ describe('Project', () => {
   })
 
   it('should enable project key if creating new project', async () => {
-    jest.mocked(getProject).mockResolvedValue(null)
+    jest.mocked(getProject).mockResolvedValue(mockProject({ id: 0 }))
     render(<Project />)
     await wait()
     expect(screen.getByPlaceholderText('Key *')).toBeEnabled()
   })
 
   it('should update form values when changing key', async () => {
-    jest.mocked(getProject).mockResolvedValue(null)
+    jest.mocked(getProject).mockResolvedValue(mockProject({ id: 0 }))
     render(<Project />)
     await wait()
     fireEvent.change(screen.getByPlaceholderText('Key *'), { target: { value: 'key2' } })

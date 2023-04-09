@@ -1,36 +1,33 @@
-import { useFetch, useForm } from '@saramorillon/hooks'
+import { useForm } from '@saramorillon/hooks'
 import React, { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useTitle } from '../../hooks/useTitle'
 import { IProject } from '../../models/Project'
 import { deleteProject, getProject, saveProject } from '../../services/project'
+import { FetchContainer } from '../components/FetchContainer'
 import { DeleteButton, SaveButton } from '../components/FormButtons'
-import { LoadContainer } from '../components/LoadContainer'
-
-const empty: IProject = {
-  id: 0,
-  key: '',
-  name: '',
-  description: '',
-  updatedAt: '',
-}
 
 export function Project(): JSX.Element {
   const { id } = useParams()
   useTitle(id ? `Edit project ${id}` : 'Create project')
   const fetch = useCallback(() => getProject(id), [id])
-  const [project, { loading }, refresh] = useFetch(fetch, null)
 
   return (
-    <LoadContainer loading={loading}>
-      <ProjectForm project={project} refresh={refresh} />
-    </LoadContainer>
+    <FetchContainer
+      fetchFn={fetch}
+      defaultValue={null}
+      loadingMessage="Loading project"
+      errorMessage="An error occurred while loading project"
+      notFoundMessage="Project not found"
+    >
+      {(project, refresh) => <ProjectForm project={project} refresh={refresh} />}
+    </FetchContainer>
   )
 }
 
 interface IProjectFormProps {
-  project: IProject | null
+  project: IProject
   refresh: () => void
 }
 
@@ -38,7 +35,7 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
   const [saveLoading, onSave] = useFormSave(saveProject, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteProject)
 
-  const { submit, values, onChange } = useForm(onSave, project ?? empty)
+  const { submit, values, onChange } = useForm(onSave, project)
 
   return (
     <form onSubmit={submit} className="max-width-4 mx-auto">
@@ -48,7 +45,7 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
             value={values.key}
             onChange={(e) => onChange('key', e.target.value)}
             required
-            disabled={Boolean(project)}
+            disabled={Boolean(project.id)}
             placeholder="Key *"
           />
         </label>
@@ -71,7 +68,7 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
         <div className="right">
           <SaveButton loading={saveLoading} disabled={saveLoading || deleteLoading} />
 
-          {project && (
+          {project.id && (
             <DeleteButton
               onClick={() => onDelete(project)}
               loading={deleteLoading}

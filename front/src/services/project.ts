@@ -7,7 +7,7 @@ export async function getProjects(): Promise<IProject[]> {
 }
 
 export async function getProject(id?: string): Promise<IProject | null> {
-  if (!id) return null
+  if (!id) return { id: 0, key: '', name: '', description: '', updatedAt: '' }
   const { data } = await Axios.get<IProject | null>(`/api/projects/${id}`)
   return data
 }

@@ -18,8 +18,8 @@ export function Release(): JSX.Element {
     <FetchContainer
       fetchFn={fetch}
       defaultValue={null}
-      loadingMessage="Loading releases"
-      errorMessage="An error occurred while loading releases"
+      loadingMessage="Loading release"
+      errorMessage="An error occurred while loading release"
       notFoundMessage="Release not found"
     >
       {(release, refresh) => <ReleaseForm release={release} refresh={refresh} />}
@@ -58,7 +58,7 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
         <div className="right">
           <SaveButton loading={saveLoading} disabled={saveLoading || deleteLoading} />
 
-          {release && (
+          {release.id && (
             <DeleteButton
               onClick={() => onDelete(release)}
               loading={deleteLoading}

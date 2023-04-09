@@ -48,15 +48,8 @@ describe('Issue', () => {
     expect(document.title).toBe('Mini Board - Create issue')
   })
 
-  it('should use empty issue if no issue', async () => {
-    jest.mocked(getIssue).mockResolvedValue(null)
-    render(<Issue />)
-    await wait()
-    expect(screen.getByPlaceholderText('Title *')).toHaveValue('')
-  })
-
   it('should not render issue status when creating an issue', async () => {
-    jest.mocked(getIssue).mockResolvedValue(null)
+    jest.mocked(getIssue).mockResolvedValue(mockIssue({ id: 0 }))
     render(<Issue />)
     await wait()
     expect(screen.queryByRole('button', { name: 'TODO' })).not.toBeInTheDocument()

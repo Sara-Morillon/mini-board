@@ -1,4 +1,4 @@
-import { useFetch, useForm } from '@saramorillon/hooks'
+import { useForm } from '@saramorillon/hooks'
 import c from 'classnames'
 import React, { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
@@ -8,40 +8,31 @@ import { IIssue, statuses, typeIcons, types } from '../../models/Issue'
 import { deleteIssue, getIssue, saveIssue } from '../../services/issue'
 import { Attachments } from '../components/Attachments'
 import { Comments } from '../components/Comments'
+import { FetchContainer } from '../components/FetchContainer'
 import { DeleteButton, SaveButton } from '../components/FormButtons'
-import { LoadContainer } from '../components/LoadContainer'
 import { ProjectSelector } from '../components/ProjectSelector'
 import { ReleaseSelector } from '../components/ReleaseSelector'
-
-const empty: IIssue = {
-  id: 0,
-  projectId: 0,
-  releaseId: 0,
-  authorId: 0,
-  priority: 0,
-  type: 'bug',
-  status: 'todo',
-  points: 0,
-  title: '',
-  description: '',
-  createdAt: '',
-}
 
 export function Issue(): JSX.Element {
   const { id } = useParams()
   useTitle(id ? `Edit issue ${id}` : 'Create issue')
   const fetch = useCallback(() => getIssue(id), [id])
-  const [issue, { loading }, refresh] = useFetch(fetch, null)
 
   return (
-    <LoadContainer loading={loading}>
-      <IssueForm issue={issue} refresh={refresh} />
-    </LoadContainer>
+    <FetchContainer
+      fetchFn={fetch}
+      defaultValue={null}
+      loadingMessage="Loading issue"
+      errorMessage="An error occurred while loading issue"
+      notFoundMessage="Issue not found"
+    >
+      {(issue, refresh) => <IssueForm issue={issue} refresh={refresh} />}
+    </FetchContainer>
   )
 }
 
 interface IIssueFormProps {
-  issue: IIssue | null
+  issue: IIssue
   refresh: () => void
 }
 
@@ -49,11 +40,11 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
   const [saveLoading, onSave] = useFormSave(saveIssue, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteIssue)
 
-  const { submit, values, onChange } = useForm(onSave, issue ?? empty)
+  const { submit, values, onChange } = useForm(onSave, issue)
 
   return (
     <>
-      {issue && (
+      {issue.id && (
         <fieldset className="right">
           {statuses.map((status) => (
             <button
@@ -137,7 +128,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
           <div className="right">
             <SaveButton loading={saveLoading} disabled={saveLoading || deleteLoading} />
 
-            {issue && (
+            {issue.id && (
               <DeleteButton
                 onClick={() => onDelete(issue)}
                 loading={deleteLoading}
@@ -148,7 +139,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
         </div>
       </form>
 
-      {issue && (
+      {issue.id && (
         <>
           <Attachments issueId={issue.id} />
           <Comments issueId={issue.id} />
