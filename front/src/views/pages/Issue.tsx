@@ -44,7 +44,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
 
   return (
     <>
-      {issue.id && (
+      {Boolean(issue.id) && (
         <fieldset className="right">
           {statuses.map((status) => (
             <button
@@ -128,7 +128,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
           <div className="right">
             <SaveButton loading={saveLoading} disabled={saveLoading || deleteLoading} />
 
-            {issue.id && (
+            {Boolean(issue.id) && (
               <DeleteButton
                 onClick={() => onDelete(issue)}
                 loading={deleteLoading}
@@ -139,7 +139,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
         </div>
       </form>
 
-      {issue.id && (
+      {Boolean(issue.id) && (
         <>
           <Attachments issueId={issue.id} />
           <Comments issueId={issue.id} />

@@ -58,7 +58,7 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
         <div className="right">
           <SaveButton loading={saveLoading} disabled={saveLoading || deleteLoading} />
 
-          {release.id && (
+          {Boolean(release.id) && (
             <DeleteButton
               onClick={() => onDelete(release)}
               loading={deleteLoading}

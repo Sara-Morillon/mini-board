@@ -68,7 +68,7 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
         <div className="right">
           <SaveButton loading={saveLoading} disabled={saveLoading || deleteLoading} />
 
-          {project.id && (
+          {Boolean(project.id) && (
             <DeleteButton
               onClick={() => onDelete(project)}
               loading={deleteLoading}
