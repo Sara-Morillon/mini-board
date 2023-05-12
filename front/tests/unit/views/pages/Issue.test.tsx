@@ -77,14 +77,14 @@ describe('Issue', () => {
   it('should render issue type', async () => {
     render(<Issue />)
     await wait()
-    expect(screen.getByPlaceholderText('Type *')).toHaveValue('🔴 BUG')
+    expect(screen.getByPlaceholderText('Type *')).toHaveValue('bug')
   })
 
   it('should update issue type', async () => {
     render(<Issue />)
     await wait()
-    fireEvent.change(screen.getByPlaceholderText('Type *'), { target: { value: '🟡 FEATURE' } })
-    expect(screen.getByPlaceholderText('Type *')).toHaveValue('🟡 FEATURE')
+    fireEvent.change(screen.getByPlaceholderText('Type *'), { target: { value: 'feature' } })
+    expect(screen.getByPlaceholderText('Type *')).toHaveValue('feature')
   })
 
   it('should render issue title', async () => {

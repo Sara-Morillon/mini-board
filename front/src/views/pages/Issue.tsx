@@ -69,7 +69,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
               placeholder="Type *"
             >
               {types.map((type) => (
-                <option key={type}>
+                <option key={type} value={type}>
                   {typeIcons[type]} {type.toUpperCase()}
                 </option>
               ))}
