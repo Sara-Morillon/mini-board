@@ -12,7 +12,7 @@ model User {
   username  String    @unique(map: "uq_user_username") @db.VarChar(40)
   password  String    @db.Char(64)
   createdAt DateTime  @default(now()) @db.DateTime(6)
-  updatedAt DateTime  @updatedAt @db.DateTime(6)
+  updatedAt DateTime  @default(now()) @updatedAt @db.DateTime(6)
   comments  Comment[]
   issues    Issue[]
 
@@ -60,7 +60,7 @@ enum Status {
 model Issue {
   id          Int          @id @default(autoincrement())
   projectId   Int
-  releaseId   Int
+  releaseId   Int?
   authorId    Int
   type        Type
   status      Status       @default(todo)
@@ -74,7 +74,7 @@ model Issue {
   comments    Comment[]
   author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_issue_author_id")
   project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_issue_project_id")
-  release     Release      @relation(fields: [releaseId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_issue_release_id")
+  release     Release?     @relation(fields: [releaseId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_issue_release_id")
 
   @@map("issue")
 }

@@ -20,7 +20,7 @@ export function Issues() {
   const [maxPage, setMaxPage] = useState(1)
   const pagination = usePagination(maxPage)
   const [projectId, setProjectId] = useState<number>()
-  const [releaseId, setReleaseId] = useState<number>()
+  const [releaseId, setReleaseId] = useState<number | 'backlog'>()
 
   const fetch = useCallback(
     () => getIssues(projectId, releaseId, pagination.page, limit),
@@ -112,7 +112,7 @@ function IssuesTable({ issues, total, pagination, maxPage, setMaxPage }: IIssues
               <small>{format(parseISO(issue.createdAt), 'PP')}</small>
             </td>
             <td className="nowrap">
-              <small>{issue.release.name}</small>
+              <small>{issue.release ? issue.release.name : 'Backlog'}</small>
             </td>
             <td>
               <mark className={issue.status}>{issue.status.toUpperCase()}</mark>

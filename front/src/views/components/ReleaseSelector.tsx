@@ -5,8 +5,8 @@ import { getReleases } from '../../services/release'
 
 interface IReleaseSelectorProps {
   label?: string
-  value?: number
-  onChange: (releaseId: number) => void
+  value?: number | 'backlog'
+  onChange: (releaseId: number | 'backlog') => void
   labelProps?: LabelHTMLAttributes<HTMLLabelElement>
   selectProps?: SelectHTMLAttributes<HTMLSelectElement>
 }
@@ -25,12 +25,13 @@ export function ReleaseSelector({ label, value, onChange, labelProps = {}, selec
       {label}
       <select
         {...selectProps}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        value={value === null ? 'backlog' : value ?? ''}
+        onChange={(e) => onChange(e.target.value === 'backlog' ? 'backlog' : Number(e.target.value))}
         disabled={selectProps.disabled || !releases.length}
       >
         {!loading && !releases.length && <option value="">No release found</option>}
         {selectProps.placeholder && releases.length && <option value="">{selectProps.placeholder}</option>}
+        <option value="backlog">Backlog</option>
         {releases.map((release) => (
           <option key={release.id} value={release.id}>
             {format(parseISO(release.dueDate), 'PP')} ({release.name})

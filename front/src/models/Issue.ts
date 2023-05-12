@@ -17,7 +17,7 @@ export interface IIssue {
   id: number
   priority: number
   projectId: number
-  releaseId: number
+  releaseId: number | null
   authorId: number
   type: Type
   status: Status
@@ -29,6 +29,6 @@ export interface IIssue {
 
 export interface IIssueFull extends IIssue {
   project: IProject
-  release: IRelease
+  release: IRelease | null
   author: IUser
 }

@@ -23,7 +23,7 @@ export function Board(): JSX.Element {
           <h3 className="center mt0">
             {release.name} - {format(parseISO(release.dueDate), 'PP')}
           </h3>
-          <IssuesTable issues={release.issues} refresh={refresh} />
+          <IssuesTable releaseId={release.id} issues={release.issues} refresh={refresh} />
         </>
       )}
     </FetchContainer>
@@ -31,11 +31,12 @@ export function Board(): JSX.Element {
 }
 
 interface IIssueTableProps {
+  releaseId: number
   issues: IIssueFull[]
   refresh: () => void
 }
 
-function IssuesTable({ issues, refresh }: IIssueTableProps) {
+function IssuesTable({ releaseId, issues, refresh }: IIssueTableProps) {
   const [loading, setLoading] = useState(false)
 
   const onMove = useCallback(
@@ -43,12 +44,12 @@ function IssuesTable({ issues, refresh }: IIssueTableProps) {
       if (source.id !== target.id || source.status !== status) {
         setLoading(true)
         if (source.status !== status) await saveIssue({ ...source, status })
-        if (source.id !== target.id) await moveIssue(source.id, target.id)
+        if (source.id !== target.id) await moveIssue(releaseId, source.id, target.id)
         refresh()
         setLoading(false)
       }
     },
-    [refresh]
+    [releaseId, refresh]
   )
 
   return (

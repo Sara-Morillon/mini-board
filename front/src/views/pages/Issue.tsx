@@ -91,14 +91,14 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
             value={values.projectId}
             onChange={(projectId) => onChange('projectId', projectId)}
             labelProps={{ className: 'flex-auto' }}
-            selectProps={{ required: true, placeholder: 'Project *' }}
+            selectProps={{ required: true, placeholder: issue.id ? undefined : 'Project *' }}
           />
 
           <ReleaseSelector
-            value={values.releaseId}
-            onChange={(releaseId) => onChange('releaseId', releaseId)}
+            value={values.releaseId ?? 'backlog'}
+            onChange={(releaseId) => onChange('releaseId', releaseId === 'backlog' ? null : releaseId)}
             labelProps={{ className: 'flex-auto' }}
-            selectProps={{ required: true, placeholder: 'Release *' }}
+            selectProps={{ required: true }}
           />
 
           <label>

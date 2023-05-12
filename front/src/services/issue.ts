@@ -3,7 +3,7 @@ import { Axios } from './Axios'
 
 export async function getIssues(
   projectId?: number,
-  releaseId?: number,
+  releaseId?: number | 'backlog',
   page?: number,
   limit?: number
 ): Promise<{ issues: IIssueFull[]; total: number }> {
@@ -43,8 +43,8 @@ export async function saveIssue(issue: IIssue): Promise<string> {
   }
 }
 
-export async function moveIssue(sourceId: number, targetId: number): Promise<void> {
-  await Axios.post('/api/issues/move', { sourceId, targetId })
+export async function moveIssue(releaseId: number, sourceId: number, targetId: number): Promise<void> {
+  await Axios.post('/api/issues/move', { releaseId, sourceId, targetId })
 }
 
 export async function deleteIssue(issue: IIssue): Promise<string> {

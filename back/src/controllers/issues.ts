@@ -7,7 +7,7 @@ import { parseError } from '../utils/parseError'
 const schema = {
   list: z.object({
     projectId: z.string().transform(Number).optional(),
-    releaseId: z.string().transform(Number).optional(),
+    releaseId: z.union([z.literal('backlog'), z.string().transform(Number)]).optional(),
     page: z.string().transform(Number).optional(),
     limit: z.string().transform(Number).optional(),
   }),
@@ -16,14 +16,14 @@ const schema = {
   }),
   post: z.object({
     projectId: z.number(),
-    releaseId: z.number(),
+    releaseId: z.number().nullable(),
     type: z.nativeEnum(Type),
     points: z.number(),
     title: z.string(),
     description: z.string(),
   }),
   patch: z.object({
-    releaseId: z.number(),
+    releaseId: z.number().nullable(),
     type: z.nativeEnum(Type),
     status: z.nativeEnum(Status),
     points: z.number(),
@@ -33,21 +33,24 @@ const schema = {
   move: z.object({
     sourceId: z.number(),
     targetId: z.number(),
+    releaseId: z.number().nullable(),
   }),
 }
 
 export async function getIssues(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('get_issues')
   try {
-    const { projectId, releaseId, page, limit } = schema.list.parse(req.query)
+    const query = schema.list.parse(req.query)
+    const { projectId, page, limit } = query
+    const releaseId = query.releaseId === 'backlog' ? null : query.releaseId
     const issues = await prisma.issue.findMany({
-      where: { ...(releaseId && { releaseId }), ...(projectId && { projectId }) },
+      where: { ...((releaseId || releaseId === null) && { releaseId }), ...(projectId && { projectId }) },
       orderBy: [{ release: { dueDate: 'desc' } }, { priority: 'asc' }],
       include: { author: true, project: true, release: true },
       ...(page && limit && { take: limit, skip: (page - 1) * limit }),
     })
     const total = await prisma.issue.count({
-      where: { ...(releaseId && { releaseId }), ...(projectId && { projectId }) },
+      where: { ...((releaseId || releaseId === null) && { releaseId }), ...(projectId && { projectId }) },
     })
     res.json({ issues, total })
     success()
@@ -123,34 +126,23 @@ export async function deleteIssue(req: Request, res: Response): Promise<void> {
 export async function moveIssues(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('move_issues')
   try {
-    const { sourceId, targetId } = schema.move.parse(req.body)
-
+    const { sourceId, targetId, releaseId } = schema.move.parse(req.body)
     const source = await prisma.issue.findUnique({ where: { id: sourceId } })
     const target = await prisma.issue.findUnique({ where: { id: targetId } })
 
     if (source && target) {
-      const issues = await prisma.issue.findMany({
-        where: { releaseId: { in: [source.releaseId, target.releaseId] } },
-        orderBy: [{ releaseId: 'asc' }, { priority: 'asc' }],
-      })
-      const sourceIndex = issues.findIndex((issue) => source.id === issue.id)
-      const targetIndex = issues.findIndex((issue) => target.id === issue.id)
-
-      const [issue] = issues.splice(sourceIndex, 1)
-      issue.releaseId = target.releaseId
-      issues.splice(targetIndex, 0, issue)
-
-      let lastRelease
-      let priority = 0
-      for (const issue of issues) {
-        if (issue.releaseId !== lastRelease) {
-          priority = 0
-        }
-        const { id, releaseId } = issue
-        await prisma.issue.update({ where: { id }, data: { releaseId, priority } })
-        lastRelease = issue.releaseId
-        priority++
+      if (source.priority > target.priority) {
+        await prisma.issue.updateMany({
+          where: { releaseId, priority: { gte: target.priority, lte: source.priority } },
+          data: { priority: { increment: 1 } },
+        })
+      } else {
+        await prisma.issue.updateMany({
+          where: { releaseId, priority: { gte: source.priority, lte: target.priority } },
+          data: { priority: { decrement: 1 } },
+        })
       }
+      await prisma.issue.update({ where: { id: source.id }, data: { priority: target.priority } })
     }
 
     res.sendStatus(204)
