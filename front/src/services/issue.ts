@@ -36,10 +36,10 @@ export async function getIssue(id?: string): Promise<IIssue | null> {
 export async function saveIssue(issue: IIssue): Promise<string> {
   if (issue.id) {
     await Axios.patch(`/api/issues/${issue.id}`, issue)
-    return `/project/${issue.projectId}/issue/${issue.id}`
+    return `/issue/${issue.id}`
   } else {
     const id = await Axios.post('/api/issues', issue)
-    return `/project/${issue.projectId}/issue/${id}`
+    return `/issue/${id}`
   }
 }
 
@@ -49,5 +49,5 @@ export async function moveIssue(sourceId: number, targetId: number): Promise<voi
 
 export async function deleteIssue(issue: IIssue): Promise<string> {
   await Axios.delete(`/api/issues/${issue.id}`)
-  return `/project/${issue.projectId}/issues`
+  return '/issues'
 }
