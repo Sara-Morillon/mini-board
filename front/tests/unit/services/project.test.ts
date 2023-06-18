@@ -42,13 +42,16 @@ describe('getProject', () => {
 })
 
 describe('saveProject', () => {
+  beforeEach(() => {
+    jest.mocked(Axios.post).mockResolvedValue({ data: 2 })
+  })
+
   it('should post project without id', async () => {
     await saveProject(mockProject({ id: 0 }))
     expect(Axios.post).toHaveBeenCalledWith('/api/projects', mockProject({ id: 0 }))
   })
 
   it('should return created project path', async () => {
-    jest.mocked(Axios.post).mockResolvedValue('2')
     const path = await saveProject(mockProject({ id: 0 }))
     expect(path).toBe('/project/2')
   })

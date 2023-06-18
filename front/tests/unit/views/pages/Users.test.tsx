@@ -21,6 +21,13 @@ describe('Users', () => {
     expect(screen.getByText('Create user')).toHaveAttribute('href', '/user')
   })
 
+  it('should render not found message when no user is found', async () => {
+    jest.mocked(getUsers).mockResolvedValue([])
+    render(<Users />)
+    await wait()
+    expect(screen.getByText('No user found')).toBeInTheDocument()
+  })
+
   it('should render user name', async () => {
     render(<Users />)
     await wait()

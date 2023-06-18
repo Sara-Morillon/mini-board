@@ -38,7 +38,7 @@ export async function saveIssue(issue: IIssue): Promise<string> {
     await Axios.patch(`/api/issues/${issue.id}`, issue)
     return `/issue/${issue.id}`
   } else {
-    const id = await Axios.post('/api/issues', issue)
+    const { data: id } = await Axios.post('/api/issues', issue)
     return `/issue/${id}`
   }
 }

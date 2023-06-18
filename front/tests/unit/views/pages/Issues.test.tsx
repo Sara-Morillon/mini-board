@@ -26,6 +26,13 @@ describe('Issues', () => {
     expect(screen.getByText('Create issue')).toHaveAttribute('href', '/issue')
   })
 
+  it('should render not found message when no issue is found', async () => {
+    jest.mocked(getIssues).mockResolvedValue({ issues: [], total: 0 })
+    render(<Issues />)
+    await wait()
+    expect(screen.getByText('No issue found')).toBeInTheDocument()
+  })
+
   it('should render project selector', async () => {
     render(<Issues />)
     await wait()
