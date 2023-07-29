@@ -1,5 +1,5 @@
 import { useFetch } from '@saramorillon/hooks'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Error, Loading, NotFound } from './Helpers'
 
 interface IFetchContainerProps<T> {
@@ -20,7 +20,11 @@ export function FetchContainer<T>({
   notFoundMessage,
 }: IFetchContainerProps<T>): JSX.Element {
   const result = useFetch(fetchFn, defaultValue)
-  const [data, { loading, error }, refresh] = result
+  const [data, { loading, error }] = result
+
+  const refresh = useCallback(() => {
+    window.location.reload()
+  }, [])
 
   if (loading && !data) {
     return (
