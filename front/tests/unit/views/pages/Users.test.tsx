@@ -37,7 +37,7 @@ describe('Users', () => {
   it('should render user created date', async () => {
     render(<Users />)
     await wait()
-    expect(screen.getByText('Created at 01/01/2018, 1:00 AM')).toBeInTheDocument()
+    expect(screen.getByText('Created at 01/01/2018, 12:00 AM')).toBeInTheDocument()
   })
 
   it('should not render delete button if user is current user', async () => {
