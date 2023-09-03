@@ -1,6 +1,5 @@
 import { useForm } from '@saramorillon/hooks'
-import c from 'classnames'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useTitle } from '../../hooks/useTitle'
@@ -40,7 +39,11 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
   const [saveLoading, onSave] = useFormSave(saveIssue, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteIssue)
 
-  const { submit, values, onChange } = useForm(onSave, issue)
+  const { submit, values, onChange, reset } = useForm(onSave, issue)
+
+  useEffect(() => {
+    reset()
+  }, [issue, reset])
 
   return (
     <>
@@ -51,7 +54,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
               key={status}
               type="button"
               onClick={() => onSave({ ...values, status })}
-              className={c('mr1', status, { checked: values.status === status })}
+              className={`mr1 ${status} ${values.status === status ? 'checked' : ''}`}
               {...(values.status !== status && { 'data-variant': 'outlined' })}
             >
               {status.toUpperCase()}
@@ -69,7 +72,7 @@ function IssueForm({ issue, refresh }: IIssueFormProps) {
               placeholder="Type *"
             >
               {types.map((type) => (
-                <option key={type}>
+                <option key={type} value={type}>
                   {typeIcons[type]} {type.toUpperCase()}
                 </option>
               ))}

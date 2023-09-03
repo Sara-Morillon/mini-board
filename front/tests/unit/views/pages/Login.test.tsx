@@ -4,11 +4,11 @@ import { login } from '../../../../src/services/session'
 import { Login } from '../../../../src/views/pages/Login'
 import { mockLocation, restoreLocation, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/session.ts')
+vi.mock('../../../../src/services/session.ts')
 
 describe('Login', () => {
   beforeEach(() => {
-    jest.mocked(login).mockResolvedValue(undefined)
+    vi.mocked(login).mockResolvedValue(undefined)
   })
 
   it('should login when clicking on Log in button', async () => {
@@ -21,7 +21,7 @@ describe('Login', () => {
   })
 
   it('should reload page after login', async () => {
-    const reload = jest.fn()
+    const reload = vi.fn()
     mockLocation({ reload })
     render(<Login />)
     fireEvent.change(screen.getByLabelText('Username *'), { target: { value: 'username' } })
@@ -33,7 +33,7 @@ describe('Login', () => {
   })
 
   it('should show error in console if login fails', async () => {
-    jest.mocked(login).mockRejectedValue(new Error())
+    vi.mocked(login).mockRejectedValue(new Error())
     render(<Login />)
     fireEvent.change(screen.getByLabelText('Username *'), { target: { value: 'username' } })
     fireEvent.change(screen.getByLabelText('Password *'), { target: { value: 'password' } })

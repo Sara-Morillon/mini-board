@@ -1,4 +1,4 @@
-import { useFetch } from '@saramorillon/hooks'
+import { useQuery } from '@saramorillon/hooks'
 import { format, parseISO } from 'date-fns'
 import React, { LabelHTMLAttributes, SelectHTMLAttributes, useEffect } from 'react'
 import { getReleases } from '../../services/release'
@@ -12,7 +12,7 @@ interface IReleaseSelectorProps {
 }
 
 export function ReleaseSelector({ label, value, onChange, labelProps = {}, selectProps = {} }: IReleaseSelectorProps) {
-  const [releases, { loading }] = useFetch(getReleases, [])
+  const { result: releases, loading } = useQuery(getReleases, { autoRun: true, defaultValue: [] })
 
   useEffect(() => {
     if (releases.length && !value && !selectProps.placeholder) {

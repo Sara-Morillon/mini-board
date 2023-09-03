@@ -2,11 +2,11 @@ import { Axios } from '../../../src/services/Axios'
 import { deleteComment, getComments, saveComment } from '../../../src/services/comment'
 import { mockComment } from '../../mocks'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 describe('getComments', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'comments' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'comments' })
   })
 
   it('should get comments', async () => {

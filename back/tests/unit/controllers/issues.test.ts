@@ -1,12 +1,11 @@
-import { getMockRes } from '@jest-mock/express'
 import { deleteIssue, getIssue, getIssues, moveIssues, patchIssue, postIssue } from '../../../src/controllers/issues'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockAction, mockIssue } from '../../mocks'
+import { getMockReq, getMockRes, mockAction, mockIssue } from '../../mocks'
 
 describe('getIssues', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue()])
-    jest.spyOn(prisma.issue, 'count').mockResolvedValue(1)
+    vi.spyOn(prisma.issue, 'findMany').mockResolvedValue([mockIssue()])
+    vi.spyOn(prisma.issue, 'count').mockResolvedValue(1)
   })
 
   it('should get issues', async () => {
@@ -37,7 +36,7 @@ describe('getIssues', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'findMany').mockRejectedValue('Error')
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { res } = getMockRes()
     await getIssues(req, res)
@@ -53,7 +52,7 @@ describe('getIssues', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.issue, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'findMany').mockRejectedValue('Error')
     const req = getMockReq({ query: { projectId: '1', releaseId: '1', page: '2', limit: '10' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -64,8 +63,8 @@ describe('getIssues', () => {
 
 describe('postIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue())
-    jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: 7 } } as never)
+    vi.spyOn(prisma.issue, 'create').mockResolvedValue(mockIssue())
+    vi.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: { priority: 7 } } as never)
   })
 
   it('should create issue with max priority', async () => {
@@ -90,7 +89,7 @@ describe('postIssue', () => {
   })
 
   it('should create issue with default 0 priority', async () => {
-    jest.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: {} } as never)
+    vi.spyOn(prisma.issue, 'aggregate').mockResolvedValue({ _max: {} } as never)
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
     })
@@ -122,7 +121,7 @@ describe('postIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
     })
@@ -142,7 +141,7 @@ describe('postIssue', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'create').mockRejectedValue('Error')
     const req = getMockReq({
       body: { projectId: 1, releaseId: 1, type: 'bug', points: 1, title: 'title', description: 'description' },
     })
@@ -155,7 +154,7 @@ describe('postIssue', () => {
 
 describe('getIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(mockIssue())
+    vi.spyOn(prisma.issue, 'findUnique').mockResolvedValue(mockIssue())
   })
 
   it('should get issue', async () => {
@@ -173,7 +172,7 @@ describe('getIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getIssue(req, res)
@@ -189,7 +188,7 @@ describe('getIssue', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -200,7 +199,7 @@ describe('getIssue', () => {
 
 describe('patchIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue())
+    vi.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue())
   })
 
   it('should update issue', async () => {
@@ -236,7 +235,7 @@ describe('patchIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'update').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'update').mockRejectedValue('Error')
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
@@ -258,7 +257,7 @@ describe('patchIssue', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.issue, 'update').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'update').mockRejectedValue('Error')
     const req = getMockReq({
       params: { id: '1' },
       body: { releaseId: 1, type: 'bug', status: 'todo', points: 1, title: 'title', description: 'description' },
@@ -272,7 +271,7 @@ describe('patchIssue', () => {
 
 describe('deleteIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'delete').mockResolvedValue(mockIssue())
+    vi.spyOn(prisma.issue, 'delete').mockResolvedValue(mockIssue())
   })
 
   it('should delete issue', async () => {
@@ -290,7 +289,7 @@ describe('deleteIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteIssue(req, res)
@@ -306,7 +305,7 @@ describe('deleteIssue', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.issue, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -317,9 +316,9 @@ describe('deleteIssue', () => {
 
 describe('moveIssue', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValue(null)
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValue([])
-    jest.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue())
+    vi.spyOn(prisma.issue, 'findUnique').mockResolvedValue(null)
+    vi.spyOn(prisma.issue, 'findMany').mockResolvedValue([])
+    vi.spyOn(prisma.issue, 'update').mockResolvedValue(mockIssue())
   })
 
   it('should get source issue', async () => {
@@ -344,7 +343,7 @@ describe('moveIssue', () => {
   })
 
   it('should do nothing if target issue is not found', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(mockIssue())
+    vi.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(mockIssue())
     const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
     const { res } = getMockRes()
     await moveIssues(req, res)
@@ -358,9 +357,8 @@ describe('moveIssue', () => {
       mockIssue({ id: 3, releaseId: 2 }),
       mockIssue({ id: 4, releaseId: 2, priority: 1 }),
     ]
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(issues[0])
-    jest.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(issues[2])
-    jest.spyOn(prisma.issue, 'findMany').mockResolvedValueOnce(issues)
+    vi.spyOn(prisma.issue, 'findUnique').mockResolvedValueOnce(issues[0]).mockResolvedValueOnce(issues[2])
+    vi.spyOn(prisma.issue, 'findMany').mockResolvedValue(issues)
     const req = getMockReq({ body: { sourceId: 1, targetId: 3 } })
     const { res } = getMockRes()
     await moveIssues(req, res)
@@ -378,7 +376,7 @@ describe('moveIssue', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
     const { res } = getMockRes()
     await moveIssues(req, res)
@@ -394,7 +392,7 @@ describe('moveIssue', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.issue, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ body: { sourceId: 1, targetId: 2 } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()

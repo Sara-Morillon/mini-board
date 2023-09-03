@@ -18,23 +18,23 @@ import { deleteUser, getUsers, postUser } from '../../src/controllers/users'
 import { session } from '../../src/middlewares/session'
 import { routes } from '../../src/routes'
 
-jest.mock('express')
-jest.mock('multer')
+vi.mock('express')
+vi.mock('multer')
 
 function mockRouter() {
   return {
-    use: jest.fn(),
-    get: jest.fn(),
-    post: jest.fn(),
-    patch: jest.fn(),
-    delete: jest.fn(),
+    use: vi.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
   } as unknown as Router
 }
 
 describe('routes', () => {
   beforeEach(() => {
-    jest.mocked(Router).mockReturnValue(mockRouter())
-    jest.mocked(multer).mockReturnValue({ array: jest.fn().mockReturnValue('multer') } as never)
+    vi.mocked(Router).mockReturnValue(mockRouter())
+    vi.mocked(multer).mockReturnValue({ array: vi.fn().mockReturnValue('multer') } as never)
   })
 
   it('should create routes', () => {
@@ -84,7 +84,7 @@ describe('routes', () => {
 
   it('should return router', () => {
     const routerMock = mockRouter()
-    jest.mocked(Router).mockReturnValue(routerMock)
+    vi.mocked(Router).mockReturnValue(routerMock)
     const router = routes()
     expect(router).toBe(routerMock)
   })

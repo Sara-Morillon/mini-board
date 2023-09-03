@@ -1,11 +1,10 @@
-import { getMockRes } from '@jest-mock/express'
 import { deleteProject, getProject, getProjects, patchProject, postProject } from '../../../src/controllers/projects'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockAction, mockProject } from '../../mocks'
+import { getMockReq, getMockRes, mockAction, mockProject } from '../../mocks'
 
 describe('getProjects', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'findMany').mockResolvedValue([mockProject()])
+    vi.spyOn(prisma.project, 'findMany').mockResolvedValue([mockProject()])
   })
 
   it('should get projects', async () => {
@@ -23,7 +22,7 @@ describe('getProjects', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.project, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { res } = getMockRes()
     await getProjects(req, res)
@@ -39,7 +38,7 @@ describe('getProjects', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.project, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -50,7 +49,7 @@ describe('getProjects', () => {
 
 describe('postProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'create').mockResolvedValue(mockProject())
+    vi.spyOn(prisma.project, 'create').mockResolvedValue(mockProject())
   })
 
   it('should create project', async () => {
@@ -75,7 +74,7 @@ describe('postProject', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.project, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { key: 'key', name: 'name', description: 'description' } })
     const { res } = getMockRes()
     await postProject(req, res)
@@ -91,7 +90,7 @@ describe('postProject', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.project, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { key: 'key', name: 'name', description: 'description' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -102,7 +101,7 @@ describe('postProject', () => {
 
 describe('getProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'findUnique').mockResolvedValue(mockProject())
+    vi.spyOn(prisma.project, 'findUnique').mockResolvedValue(mockProject())
   })
 
   it('should get project', async () => {
@@ -120,7 +119,7 @@ describe('getProject', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.project, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getProject(req, res)
@@ -136,7 +135,7 @@ describe('getProject', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.project, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -147,7 +146,7 @@ describe('getProject', () => {
 
 describe('patchProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'update').mockResolvedValue(mockProject())
+    vi.spyOn(prisma.project, 'update').mockResolvedValue(mockProject())
   })
 
   it('should update project', async () => {
@@ -172,7 +171,7 @@ describe('patchProject', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.project, 'update').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'update').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' }, body: { name: 'name', description: 'description' } })
     const { res } = getMockRes()
     await patchProject(req, res)
@@ -188,7 +187,7 @@ describe('patchProject', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.project, 'update').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'update').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' }, body: { name: 'name', description: 'description' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -199,7 +198,7 @@ describe('patchProject', () => {
 
 describe('deleteProject', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.project, 'delete').mockResolvedValue(mockProject())
+    vi.spyOn(prisma.project, 'delete').mockResolvedValue(mockProject())
   })
 
   it('should delete project', async () => {
@@ -217,7 +216,7 @@ describe('deleteProject', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.project, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteProject(req, res)
@@ -233,7 +232,7 @@ describe('deleteProject', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.project, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.project, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()

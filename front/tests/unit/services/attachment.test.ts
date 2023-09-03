@@ -2,11 +2,11 @@ import { deleteAttachment, getAttachments, saveAttachments } from '../../../src/
 import { Axios } from '../../../src/services/Axios'
 import { mockAttachment } from '../../mocks'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 describe('getAttachments', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'attachments' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'attachments' })
   })
 
   it('should get attachments', async () => {

@@ -3,13 +3,13 @@ import { Axios } from '../../../src/services/Axios'
 import { deleteRelease, getRelease, getReleases, saveRelease } from '../../../src/services/release'
 import { mockRelease } from '../../mocks'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 mockdate.set('2022-01-01T00:00:00.000Z')
 
 describe('getReleases', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'releases' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'releases' })
   })
 
   it('should get releases', async () => {
@@ -30,7 +30,7 @@ describe('getReleases', () => {
 
 describe('getRelease', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'release' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'release' })
   })
 
   it('should return empty release without id', async () => {

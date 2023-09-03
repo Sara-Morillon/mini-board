@@ -17,7 +17,7 @@ export async function saveProject(project: IProject): Promise<string> {
     await Axios.patch(`/api/projects/${project.id}`, project)
     return `/project/${project.id}`
   } else {
-    const id = await Axios.post('/api/projects', project)
+    const { data: id } = await Axios.post('/api/projects', project)
     return `/project/${id}`
   }
 }

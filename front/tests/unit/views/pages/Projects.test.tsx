@@ -4,11 +4,11 @@ import { getProjects } from '../../../../src/services/project'
 import { Projects } from '../../../../src/views/pages/Projects'
 import { mockProject, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/project')
+vi.mock('../../../../src/services/project')
 
 describe('Projects', () => {
   beforeEach(() => {
-    jest.mocked(getProjects).mockResolvedValue([mockProject()])
+    vi.mocked(getProjects).mockResolvedValue([mockProject()])
   })
 
   it('should render create button', async () => {

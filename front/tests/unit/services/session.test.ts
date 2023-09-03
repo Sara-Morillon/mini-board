@@ -2,11 +2,11 @@ import axios from 'axios'
 import { Axios } from '../../../src/services/Axios'
 import { getSession, login } from '../../../src/services/session'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 describe('getSession', () => {
   beforeEach(() => {
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: 'session' })
+    vi.spyOn(axios, 'get').mockResolvedValue({ data: 'session' })
   })
 
   it('should get session', async () => {
@@ -20,7 +20,7 @@ describe('getSession', () => {
   })
 
   it('should return null if error', async () => {
-    jest.spyOn(axios, 'get').mockRejectedValue(new Error())
+    vi.spyOn(axios, 'get').mockRejectedValue(new Error())
     const result = await getSession()
     expect(result).toBeNull()
   })

@@ -1,13 +1,15 @@
 {
-  "include": ["src", "tests", "prisma", "jest.config.ts"],
+  "include": ["src", "tests", "prisma", "vitest.config.ts"],
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
     "outDir": "dist",
-    "strict": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["types", "./node_modules/@types"]
+    "esModuleInterop": true,
+    "strict": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "ts-node": {
+    "files": true
   }
 }

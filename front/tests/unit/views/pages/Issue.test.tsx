@@ -10,23 +10,23 @@ import { getReleases } from '../../../../src/services/release'
 import { Issue } from '../../../../src/views/pages/Issue'
 import { mockIssue, mockProject, mockRelease, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/issue')
-jest.mock('../../../../src/services/release')
-jest.mock('../../../../src/services/project')
-jest.mock('../../../../src/services/attachment')
-jest.mock('../../../../src/services/comment')
-jest.mock('../../../../src/hooks/useForm')
+vi.mock('../../../../src/services/issue')
+vi.mock('../../../../src/services/release')
+vi.mock('../../../../src/services/project')
+vi.mock('../../../../src/services/attachment')
+vi.mock('../../../../src/services/comment')
+vi.mock('../../../../src/hooks/useForm')
 
 describe('Issue', () => {
   beforeEach(() => {
-    jest.mocked(useParams).mockReturnValue({ id: '1' })
-    jest.mocked(getIssue).mockResolvedValue(mockIssue())
-    jest.mocked(getReleases).mockResolvedValue([mockRelease(), mockRelease({ id: 2 })])
-    jest.mocked(getProjects).mockResolvedValue([mockProject(), mockProject({ id: 2 })])
-    jest.mocked(getComments).mockResolvedValue([])
-    jest.mocked(getAttachments).mockResolvedValue([])
-    jest.mocked(useFormSave).mockReturnValue([false, jest.fn()])
-    jest.mocked(useFormDelete).mockReturnValue([false, jest.fn()])
+    vi.mocked(useParams).mockReturnValue({ id: '1' })
+    vi.mocked(getIssue).mockResolvedValue(mockIssue())
+    vi.mocked(getReleases).mockResolvedValue([mockRelease(), mockRelease({ id: 2 })])
+    vi.mocked(getProjects).mockResolvedValue([mockProject(), mockProject({ id: 2 })])
+    vi.mocked(getComments).mockResolvedValue([])
+    vi.mocked(getAttachments).mockResolvedValue([])
+    vi.mocked(useFormSave).mockReturnValue([false, vi.fn()])
+    vi.mocked(useFormDelete).mockReturnValue([false, vi.fn()])
   })
 
   it('should fetch issue', async () => {
@@ -42,14 +42,14 @@ describe('Issue', () => {
   })
 
   it('should render title when creating an issue', async () => {
-    jest.mocked(useParams).mockReturnValue({})
+    vi.mocked(useParams).mockReturnValue({})
     render(<Issue />)
     await wait()
     expect(document.title).toBe('Mini Board - Create issue')
   })
 
   it('should not render issue status when creating an issue', async () => {
-    jest.mocked(getIssue).mockResolvedValue(mockIssue({ id: 0 }))
+    vi.mocked(getIssue).mockResolvedValue(mockIssue({ id: 0 }))
     render(<Issue />)
     await wait()
     expect(screen.queryByRole('button', { name: 'TODO' })).not.toBeInTheDocument()
@@ -66,8 +66,8 @@ describe('Issue', () => {
   })
 
   it('should save issue when changing status', async () => {
-    const onSave = jest.fn()
-    jest.mocked(useFormSave).mockReturnValue([false, onSave])
+    const onSave = vi.fn()
+    vi.mocked(useFormSave).mockReturnValue([false, onSave])
     render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'TODO' }))
@@ -77,14 +77,14 @@ describe('Issue', () => {
   it('should render issue type', async () => {
     render(<Issue />)
     await wait()
-    expect(screen.getByPlaceholderText('Type *')).toHaveValue('🔴 BUG')
+    expect(screen.getByPlaceholderText('Type *')).toHaveValue('bug')
   })
 
   it('should update issue type', async () => {
     render(<Issue />)
     await wait()
-    fireEvent.change(screen.getByPlaceholderText('Type *'), { target: { value: '🟡 FEATURE' } })
-    expect(screen.getByPlaceholderText('Type *')).toHaveValue('🟡 FEATURE')
+    fireEvent.change(screen.getByPlaceholderText('Type *'), { target: { value: 'feature' } })
+    expect(screen.getByPlaceholderText('Type *')).toHaveValue('feature')
   })
 
   it('should render issue title', async () => {
@@ -160,7 +160,7 @@ describe('Issue', () => {
   })
 
   it('should disable buttons when saving', async () => {
-    jest.mocked(useFormSave).mockReturnValue([true, jest.fn()])
+    vi.mocked(useFormSave).mockReturnValue([true, vi.fn()])
     render(<Issue />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -168,8 +168,8 @@ describe('Issue', () => {
   })
 
   it('should save issue when clicking on save button', async () => {
-    const onSave = jest.fn()
-    jest.mocked(useFormSave).mockReturnValue([false, onSave])
+    const onSave = vi.fn()
+    vi.mocked(useFormSave).mockReturnValue([false, onSave])
     render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Save' }))
@@ -178,7 +178,7 @@ describe('Issue', () => {
   })
 
   it('should disable buttons when deleting', async () => {
-    jest.mocked(useFormDelete).mockReturnValue([true, jest.fn()])
+    vi.mocked(useFormDelete).mockReturnValue([true, vi.fn()])
     render(<Issue />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -186,8 +186,8 @@ describe('Issue', () => {
   })
 
   it('should delete issue when clicking on delete button', async () => {
-    const onDelete = jest.fn()
-    jest.mocked(useFormDelete).mockReturnValue([false, onDelete])
+    const onDelete = vi.fn()
+    vi.mocked(useFormDelete).mockReturnValue([false, onDelete])
     render(<Issue />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))

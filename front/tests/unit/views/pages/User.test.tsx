@@ -4,12 +4,12 @@ import { postUser } from '../../../../src/services/user'
 import { User } from '../../../../src/views/pages/User'
 import { mockNavigate, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/user')
+vi.mock('../../../../src/services/user')
 
 describe('User', () => {
   beforeEach(() => {
     mockNavigate()
-    jest.mocked(postUser).mockResolvedValue(undefined)
+    vi.mocked(postUser).mockResolvedValue(undefined)
   })
 
   it('should render save user when submitting form', () => {

@@ -1,7 +1,6 @@
-import { getMockRes } from '@jest-mock/express'
 import { join } from 'path'
 import { render } from '../../../src/controllers/render'
-import { getMockReq } from '../../mocks'
+import { getMockReq, getMockRes } from '../../mocks'
 
 describe('render', () => {
   it('should send index file', () => {

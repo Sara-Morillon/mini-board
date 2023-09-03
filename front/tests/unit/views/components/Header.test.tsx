@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { Header } from '../../../../src/views/components/Header'
 
-jest.mock('../../../../src/services/session')
+vi.mock('../../../../src/services/session')
 
 describe('Header', () => {
   it('should render brand and logo', () => {

@@ -5,13 +5,13 @@ import { moveIssue, saveIssue } from '../../../../src/services/issue'
 import { Board } from '../../../../src/views/pages/Board'
 import { mockIssueFull, mockReleaseFull, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/board')
-jest.mock('../../../../src/services/issue')
+vi.mock('../../../../src/services/board')
+vi.mock('../../../../src/services/issue')
 
 describe('Board', () => {
   beforeEach(() => {
-    jest.mocked(getBoard).mockResolvedValue(mockReleaseFull())
-    jest.mocked(saveIssue).mockResolvedValue('')
+    vi.mocked(getBoard).mockResolvedValue(mockReleaseFull())
+    vi.mocked(saveIssue).mockResolvedValue('')
   })
 
   it('should render board', async () => {
@@ -27,7 +27,7 @@ describe('Board', () => {
   })
 
   it('should render count of issues in each column', async () => {
-    jest.mocked(getBoard).mockResolvedValue(
+    vi.mocked(getBoard).mockResolvedValue(
       mockReleaseFull({
         issues: [
           mockIssueFull({ status: 'todo' }),
@@ -50,7 +50,7 @@ describe('Board', () => {
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[1], {
-      dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
+      dataTransfer: { getData: vi.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
     })
     await wait()
     expect(saveIssue).not.toHaveBeenCalled()
@@ -58,7 +58,7 @@ describe('Board', () => {
   })
 
   it('should not save issue when changing priority', async () => {
-    jest.mocked(getBoard).mockResolvedValue(
+    vi.mocked(getBoard).mockResolvedValue(
       mockReleaseFull({
         issues: [mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })],
       })
@@ -66,7 +66,7 @@ describe('Board', () => {
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[4], {
-      dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
+      dataTransfer: { getData: vi.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
     })
     await wait()
     expect(saveIssue).not.toHaveBeenCalled()
@@ -76,14 +76,14 @@ describe('Board', () => {
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[0], {
-      dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
+      dataTransfer: { getData: vi.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
     })
     await wait()
     expect(saveIssue).toHaveBeenCalledWith(mockIssueFull({ status: 'todo' }))
   })
 
   it('should move issue when changing priority', async () => {
-    jest.mocked(getBoard).mockResolvedValue(
+    vi.mocked(getBoard).mockResolvedValue(
       mockReleaseFull({
         issues: [mockIssueFull(), mockIssueFull({ id: 2, priority: 2 })],
       })
@@ -91,7 +91,7 @@ describe('Board', () => {
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[4], {
-      dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
+      dataTransfer: { getData: vi.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
     })
     await wait()
     expect(moveIssue).toHaveBeenCalledWith(1, 2)
@@ -101,7 +101,7 @@ describe('Board', () => {
     render(<Board />)
     await wait()
     fireEvent.drop(screen.getAllByTestId('ticket')[0], {
-      dataTransfer: { getData: jest.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
+      dataTransfer: { getData: vi.fn().mockReturnValue(JSON.stringify(mockIssueFull())) },
     })
     await wait()
     expect(moveIssue).not.toHaveBeenCalled()

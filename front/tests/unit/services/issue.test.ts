@@ -2,11 +2,11 @@ import { Axios } from '../../../src/services/Axios'
 import { deleteIssue, getIssue, getIssues, moveIssue, saveIssue } from '../../../src/services/issue'
 import { mockIssue } from '../../mocks'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 describe('getIssues', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'issues' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'issues' })
   })
 
   it('should get issues', async () => {
@@ -22,7 +22,7 @@ describe('getIssues', () => {
 
 describe('getIssue', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'issue' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'issue' })
   })
 
   it('should return null without id', async () => {
@@ -54,15 +54,18 @@ describe('getIssue', () => {
 })
 
 describe('saveIssue', () => {
+  beforeEach(() => {
+    vi.mocked(Axios.post).mockResolvedValue({ data: 2 })
+  })
+
   it('should post issue without id', async () => {
     await saveIssue(mockIssue({ id: 0 }))
     expect(Axios.post).toHaveBeenCalledWith('/api/issues', mockIssue({ id: 0 }))
   })
 
   it('should return created issue path', async () => {
-    jest.mocked(Axios.post).mockResolvedValue('2')
     const path = await saveIssue(mockIssue({ id: 0 }))
-    expect(path).toBe('/project/1/issue/2')
+    expect(path).toBe('/issue/2')
   })
 
   it('should patch issue with id', async () => {
@@ -72,7 +75,7 @@ describe('saveIssue', () => {
 
   it('should return edited issue path', async () => {
     const path = await saveIssue(mockIssue())
-    expect(path).toBe('/project/1/issue/1')
+    expect(path).toBe('/issue/1')
   })
 })
 
@@ -91,6 +94,6 @@ describe('deleteIssue', () => {
 
   it('should return issues path', async () => {
     const path = await deleteIssue(mockIssue())
-    expect(path).toBe('/project/1/issues')
+    expect(path).toBe('/issues')
   })
 })

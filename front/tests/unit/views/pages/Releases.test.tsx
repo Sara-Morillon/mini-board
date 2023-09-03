@@ -4,11 +4,11 @@ import { getReleases } from '../../../../src/services/release'
 import { Releases } from '../../../../src/views/pages/Releases'
 import { mockRelease, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/release')
+vi.mock('../../../../src/services/release')
 
 describe('Releases', () => {
   beforeEach(() => {
-    jest.mocked(getReleases).mockResolvedValue([mockRelease()])
+    vi.mocked(getReleases).mockResolvedValue([mockRelease()])
   })
 
   it('should get  releases', async () => {
