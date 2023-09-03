@@ -1,5 +1,5 @@
 import { useForm } from '@saramorillon/hooks'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useTitle } from '../../hooks/useTitle'
@@ -35,7 +35,11 @@ function ProjectForm({ project, refresh }: IProjectFormProps) {
   const [saveLoading, onSave] = useFormSave(saveProject, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteProject)
 
-  const { submit, values, onChange } = useForm(onSave, project)
+  const { submit, values, onChange, reset } = useForm(onSave, project)
+
+  useEffect(() => {
+    reset()
+  }, [project, reset])
 
   return (
     <form onSubmit={submit} className="max-width-4 mx-auto">

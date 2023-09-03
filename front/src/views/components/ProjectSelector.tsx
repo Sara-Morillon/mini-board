@@ -1,4 +1,4 @@
-import { useFetch } from '@saramorillon/hooks'
+import { useQuery } from '@saramorillon/hooks'
 import React, { LabelHTMLAttributes, SelectHTMLAttributes, useEffect } from 'react'
 import { getProjects } from '../../services/project'
 
@@ -11,7 +11,7 @@ interface IProjectSelectorProps {
 }
 
 export function ProjectSelector({ label, value, onChange, labelProps = {}, selectProps = {} }: IProjectSelectorProps) {
-  const [projects, { loading }] = useFetch(getProjects, [])
+  const { result: projects, loading } = useQuery(getProjects, { autoRun: true, defaultValue: [] })
 
   useEffect(() => {
     if (projects.length && !value && !selectProps.placeholder) {

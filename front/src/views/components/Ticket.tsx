@@ -1,5 +1,4 @@
 import { useDrag, useDrop } from '@saramorillon/hooks'
-import c from 'classnames'
 import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { IIssueFull, Status } from '../../models/Issue'
@@ -15,16 +14,17 @@ export function Ticket({ status, issue, onMove }: ITicketProps): JSX.Element | n
   const onDrop = useCallback((data: string) => onMove(JSON.parse(data), issue, status), [onMove, issue, status])
   const [isDragged, dragEvents] = useDrag(source)
   const [isOver, dropEvents] = useDrop(onDrop)
+  const draggable = status === issue.status
 
   return (
     <article
       data-testid="ticket"
       {...dragEvents}
       {...dropEvents}
-      draggable={status === issue.status}
-      className={c('mb0', 'ticket', { over: isOver, dragged: isDragged, [issue.type]: status === issue.status })}
+      draggable={draggable}
+      className={`mb0 ticket ${isOver ? 'over' : ''} ${isDragged ? 'dragged' : ''} ${draggable ? issue.type : ''}`}
     >
-      {status === issue.status && (
+      {draggable && (
         <>
           <mark className="right" data-variant="pill">
             {issue.points}

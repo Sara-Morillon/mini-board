@@ -925,10 +925,10 @@
     eslint-plugin-react-hooks "*"
     eslint-plugin-testing-library "*"
 
-"@saramorillon/hooks@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@saramorillon/hooks/-/hooks-2.7.0.tgz#3ddf40d5d448619e43a63db43b03ee193f12f9f6"
-  integrity sha512-K3RUFEI5N3QeF3qgjCs6s0zyVBdhv7jYZQ/7EWmdsuS5JH/38ZSw88P10/d/wNW/OHmA/jn84sL+gU2EZ/DBXA==
+"@saramorillon/hooks@^2.12.1":
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/@saramorillon/hooks/-/hooks-2.12.1.tgz#f12eaaa78a04e47cf751254ddcfa791c31f22258"
+  integrity sha512-hNmx4q6eP1aynvmxYS6Fu0aGdz7nGOObC+rBz3sX9WOR8yy8LxCnnaiDQroDpygwgTgTJItKa/DWIXB0QeDQ6Q==
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
@@ -1647,11 +1647,6 @@ cjs-module-lexer@^1.0.0:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
-
-classnames@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
-  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
 
 cliui@^8.0.1:
   version "8.0.1"
@@ -3938,11 +3933,6 @@ prettier@^2.8.4:
   version "2.8.4"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
   integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
-
-pretty-bytes@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-6.1.0.tgz#1d1cc9aae1939012c74180b679da6684616bf804"
-  integrity sha512-Rk753HI8f4uivXi4ZCIYdhmG1V+WKzvRMg/X+M42a6t7D07RcmopXJMDNk6N++7Bl75URRGsb40ruvg7Hcp2wQ==
 
 pretty-format@^27.0.2:
   version "27.5.1"

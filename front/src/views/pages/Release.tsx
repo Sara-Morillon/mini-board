@@ -1,6 +1,6 @@
 import { useForm } from '@saramorillon/hooks'
 import { formatDistanceToNow } from 'date-fns'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormDelete, useFormSave } from '../../hooks/useForm'
 import { useTitle } from '../../hooks/useTitle'
@@ -36,7 +36,11 @@ function ReleaseForm({ release, refresh }: IReleaseFormProps) {
   const [saveLoading, onSave] = useFormSave(saveRelease, refresh)
   const [deleteLoading, onDelete] = useFormDelete(deleteRelease)
 
-  const { submit, values, onChange } = useForm(onSave, release)
+  const { submit, values, onChange, reset } = useForm(onSave, release)
+
+  useEffect(() => {
+    reset()
+  }, [release, reset])
 
   return (
     <form onSubmit={submit} className="p3">
