@@ -1,11 +1,11 @@
 import { Axios } from '../../../src/services/Axios'
 import { getBoard } from '../../../src/services/board'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 describe('getBoard', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'board' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'board' })
   })
 
   it('should get board', async () => {

@@ -7,17 +7,17 @@ import { getReleases } from '../../../../src/services/release'
 import { Issues } from '../../../../src/views/pages/Issues'
 import { mockIssueFull, mockProject, mockRelease, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/issue')
-jest.mock('../../../../src/services/project')
-jest.mock('../../../../src/services/release')
+vi.mock('../../../../src/services/issue')
+vi.mock('../../../../src/services/project')
+vi.mock('../../../../src/services/release')
 
 mockdate.set('2019-01-01T00:00:00.000Z')
 
 describe('Issues', () => {
   beforeEach(() => {
-    jest.mocked(getReleases).mockResolvedValue([mockRelease()])
-    jest.mocked(getProjects).mockResolvedValue([mockProject()])
-    jest.mocked(getIssues).mockResolvedValue({ issues: [mockIssueFull()], total: 10 })
+    vi.mocked(getReleases).mockResolvedValue([mockRelease()])
+    vi.mocked(getProjects).mockResolvedValue([mockProject()])
+    vi.mocked(getIssues).mockResolvedValue({ issues: [mockIssueFull()], total: 10 })
   })
 
   it('should render create button', async () => {
@@ -27,7 +27,7 @@ describe('Issues', () => {
   })
 
   it('should render not found message when no issue is found', async () => {
-    jest.mocked(getIssues).mockResolvedValue({ issues: [], total: 0 })
+    vi.mocked(getIssues).mockResolvedValue({ issues: [], total: 0 })
     render(<Issues />)
     await wait()
     expect(screen.getByText('No issue found')).toBeInTheDocument()

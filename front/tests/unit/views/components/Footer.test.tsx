@@ -5,13 +5,13 @@ import { getApp } from '../../../../src/services/app'
 import { Footer } from '../../../../src/views/components/Footer'
 import { mockApp, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/app')
+vi.mock('../../../../src/services/app')
 
 mockdate.set('2022')
 
 describe('Footer', () => {
   beforeEach(() => {
-    jest.mocked(getApp).mockResolvedValue(mockApp())
+    vi.mocked(getApp).mockResolvedValue(mockApp())
   })
 
   it('should fetch app', async () => {

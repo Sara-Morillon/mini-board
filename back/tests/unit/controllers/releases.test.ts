@@ -1,14 +1,13 @@
-import { getMockRes } from '@jest-mock/express'
 import mockdate from 'mockdate'
 import { deleteRelease, getRelease, getReleases, patchRelease, postRelease } from '../../../src/controllers/releases'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockAction, mockRelease } from '../../mocks'
+import { getMockReq, getMockRes, mockAction, mockRelease } from '../../mocks'
 
 mockdate.set('2023-01-01T00:00:00.000Z')
 
 describe('getReleases', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'findMany').mockResolvedValue([mockRelease()])
+    vi.spyOn(prisma.release, 'findMany').mockResolvedValue([mockRelease()])
   })
 
   it('should get open releases', async () => {
@@ -36,7 +35,7 @@ describe('getReleases', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.release, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { res } = getMockRes()
     await getReleases(req, res)
@@ -52,7 +51,7 @@ describe('getReleases', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.release, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -63,7 +62,7 @@ describe('getReleases', () => {
 
 describe('postRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'create').mockResolvedValue(mockRelease())
+    vi.spyOn(prisma.release, 'create').mockResolvedValue(mockRelease())
   })
 
   it('should create release', async () => {
@@ -82,7 +81,7 @@ describe('postRelease', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.release, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { projectId: 1, name: 'name', dueDate: 'dueDate' } })
     const { res } = getMockRes()
     await postRelease(req, res)
@@ -98,7 +97,7 @@ describe('postRelease', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.release, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { projectId: 1, name: 'name', dueDate: 'dueDate' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -109,7 +108,7 @@ describe('postRelease', () => {
 
 describe('getRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'findUnique').mockResolvedValue(mockRelease())
+    vi.spyOn(prisma.release, 'findUnique').mockResolvedValue(mockRelease())
   })
 
   it('should get release', async () => {
@@ -127,7 +126,7 @@ describe('getRelease', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.release, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getRelease(req, res)
@@ -143,7 +142,7 @@ describe('getRelease', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.release, 'findUnique').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'findUnique').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -154,7 +153,7 @@ describe('getRelease', () => {
 
 describe('patchRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'update').mockResolvedValue(mockRelease())
+    vi.spyOn(prisma.release, 'update').mockResolvedValue(mockRelease())
   })
 
   it('should update release', async () => {
@@ -179,7 +178,7 @@ describe('patchRelease', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.release, 'update').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'update').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' }, body: { name: 'name', dueDate: 'dueDate' } })
     const { res } = getMockRes()
     await patchRelease(req, res)
@@ -195,7 +194,7 @@ describe('patchRelease', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.release, 'update').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'update').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' }, body: { name: 'name', dueDate: 'dueDate' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -206,7 +205,7 @@ describe('patchRelease', () => {
 
 describe('deleteRelease', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.release, 'delete').mockResolvedValue(mockRelease())
+    vi.spyOn(prisma.release, 'delete').mockResolvedValue(mockRelease())
   })
 
   it('should delete release', async () => {
@@ -224,7 +223,7 @@ describe('deleteRelease', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.release, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteRelease(req, res)
@@ -240,7 +239,7 @@ describe('deleteRelease', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.release, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.release, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()

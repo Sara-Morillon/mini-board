@@ -1,11 +1,10 @@
-import { getMockRes } from '@jest-mock/express'
 import { deleteUser, getUsers, postUser } from '../../../src/controllers/users'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockAction, mockUser } from '../../mocks'
+import { getMockReq, getMockRes, mockAction, mockUser } from '../../mocks'
 
 describe('getUsers', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.user, 'findMany').mockResolvedValue([mockUser()])
+    vi.spyOn(prisma.user, 'findMany').mockResolvedValue([mockUser()])
   })
 
   it('should get users', async () => {
@@ -23,7 +22,7 @@ describe('getUsers', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.user, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.user, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { res } = getMockRes()
     await getUsers(req, res)
@@ -39,7 +38,7 @@ describe('getUsers', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.user, 'findMany').mockRejectedValue('Error')
+    vi.spyOn(prisma.user, 'findMany').mockRejectedValue('Error')
     const req = getMockReq()
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -50,7 +49,7 @@ describe('getUsers', () => {
 
 describe('postUser', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.user, 'create').mockResolvedValue(mockUser())
+    vi.spyOn(prisma.user, 'create').mockResolvedValue(mockUser())
   })
 
   it('should create user', async () => {
@@ -74,7 +73,7 @@ describe('postUser', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.user, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.user, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { res } = getMockRes()
     await postUser(req, res)
@@ -90,7 +89,7 @@ describe('postUser', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.user, 'create').mockRejectedValue('Error')
+    vi.spyOn(prisma.user, 'create').mockRejectedValue('Error')
     const req = getMockReq({ body: { username: 'username', password: 'password' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()
@@ -101,7 +100,7 @@ describe('postUser', () => {
 
 describe('deleteUser', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.user, 'delete').mockResolvedValue(mockUser())
+    vi.spyOn(prisma.user, 'delete').mockResolvedValue(mockUser())
   })
 
   it('should delete user', async () => {
@@ -119,7 +118,7 @@ describe('deleteUser', () => {
   })
 
   it('should return 500 status when failure', async () => {
-    jest.spyOn(prisma.user, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.user, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteUser(req, res)
@@ -135,7 +134,7 @@ describe('deleteUser', () => {
   })
 
   it('should log failure', async () => {
-    jest.spyOn(prisma.user, 'delete').mockRejectedValue('Error')
+    vi.spyOn(prisma.user, 'delete').mockRejectedValue('Error')
     const req = getMockReq({ params: { id: '1' } })
     const { failure } = mockAction(req.logger)
     const { res } = getMockRes()

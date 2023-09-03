@@ -6,16 +6,16 @@ import { getRelease, getReleases } from '../../../../src/services/release'
 import { Release } from '../../../../src/views/pages/Release'
 import { mockRelease, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/release')
-jest.mock('../../../../src/hooks/useForm')
+vi.mock('../../../../src/services/release')
+vi.mock('../../../../src/hooks/useForm')
 
 describe('Release', () => {
   beforeEach(() => {
-    jest.mocked(useParams).mockReturnValue({ id: '1' })
-    jest.mocked(getRelease).mockResolvedValue(mockRelease())
-    jest.mocked(getReleases).mockResolvedValue([mockRelease()])
-    jest.mocked(useFormSave).mockReturnValue([false, jest.fn()])
-    jest.mocked(useFormDelete).mockReturnValue([false, jest.fn()])
+    vi.mocked(useParams).mockReturnValue({ id: '1' })
+    vi.mocked(getRelease).mockResolvedValue(mockRelease())
+    vi.mocked(getReleases).mockResolvedValue([mockRelease()])
+    vi.mocked(useFormSave).mockReturnValue([false, vi.fn()])
+    vi.mocked(useFormDelete).mockReturnValue([false, vi.fn()])
   })
 
   it('should fetch release', async () => {
@@ -31,7 +31,7 @@ describe('Release', () => {
   })
 
   it('should render title when creating a release', async () => {
-    jest.mocked(useParams).mockReturnValue({})
+    vi.mocked(useParams).mockReturnValue({})
     render(<Release />)
     await wait()
     expect(document.title).toBe('Mini Board - Create release')
@@ -72,7 +72,7 @@ describe('Release', () => {
   })
 
   it('should disable buttons when saving', async () => {
-    jest.mocked(useFormSave).mockReturnValue([true, jest.fn()])
+    vi.mocked(useFormSave).mockReturnValue([true, vi.fn()])
     render(<Release />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -80,7 +80,7 @@ describe('Release', () => {
   })
 
   it('should disable buttons when deleting', async () => {
-    jest.mocked(useFormDelete).mockReturnValue([true, jest.fn()])
+    vi.mocked(useFormDelete).mockReturnValue([true, vi.fn()])
     render(<Release />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -88,8 +88,8 @@ describe('Release', () => {
   })
 
   it('should delete release when clicking on delete button', async () => {
-    const onDelete = jest.fn()
-    jest.mocked(useFormDelete).mockReturnValue([false, onDelete])
+    const onDelete = vi.fn()
+    vi.mocked(useFormDelete).mockReturnValue([false, onDelete])
     render(<Release />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))

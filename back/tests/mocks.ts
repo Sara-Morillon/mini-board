@@ -1,21 +1,41 @@
-import { getMockReq as _getMockReq } from '@jest-mock/express'
 import { Attachment, Comment, Issue, Project, Release, User } from '@prisma/client'
 import { Logger } from '@saramorillon/logger'
 import archiver from 'archiver'
-import { SessionData } from 'express-session'
+import { NextFunction, Request, Response } from 'express'
+import { Session, SessionData } from 'express-session'
 import fs, { ReadStream } from 'fs'
 
-export function getMockReq(...params: Parameters<typeof _getMockReq>): ReturnType<typeof _getMockReq> {
-  const req = _getMockReq(...params)
-  req.session = {} as never
-  req.user = mockSession()
-  req.logger = new Logger({ silent: true })
-  return req
+export function getMockReq(request: Partial<Request> = {}): Request {
+  return {
+    params: {},
+    query: {},
+    body: {},
+    session: {} as Session,
+    user: mockSession(),
+    logger: new Logger({ silent: true }),
+    ...request,
+  } as never
+}
+
+export function getMockRes(response: Partial<Response> = {}): { res: Response; next: NextFunction } {
+  return {
+    res: {
+      json: vi.fn().mockReturnThis(),
+      sendStatus: vi.fn().mockReturnThis(),
+      set: vi.fn().mockReturnThis(),
+      status: vi.fn().mockReturnThis(),
+      sendFile: vi.fn().mockReturnThis(),
+      clearCookie: vi.fn().mockReturnThis(),
+      redirect: vi.fn().mockReturnThis(),
+      ...response,
+    } as never,
+    next: vi.fn() as never,
+  }
 }
 
 export function mockAction(logger: Logger) {
-  const action = { success: jest.fn(), failure: jest.fn() }
-  logger.start = jest.fn().mockReturnValue(action)
+  const action = { success: vi.fn(), failure: vi.fn() }
+  logger.start = vi.fn().mockReturnValue(action)
   return action
 }
 
@@ -104,13 +124,22 @@ export function mockRelease(release: Partial<Release> = {}): Release {
 }
 
 export function mockReadStream() {
-  const stream = { pipe: jest.fn() } as unknown as ReadStream
-  jest.spyOn(fs, 'createReadStream').mockReturnValue(stream)
+  const stream = { pipe: vi.fn() } as unknown as ReadStream
+  vi.spyOn(fs, 'createReadStream').mockReturnValue(stream)
   return stream
 }
 
 export function mockArchiveStream() {
-  const archive = { pipe: jest.fn(), file: jest.fn(), finalize: jest.fn() }
-  jest.mocked(archiver).mockReturnValue(archive as never)
+  const archive = { pipe: vi.fn(), file: vi.fn(), finalize: vi.fn() }
+  vi.mocked(archiver).mockReturnValue(archive as never)
   return archive
+}
+
+export function mockFile(file: Partial<Express.Multer.File> = {}): Express.Multer.File {
+  return {
+    originalname: 'filename',
+    filename: 'filepath',
+    mimetype: 'mimetype',
+    ...file,
+  } as never
 }

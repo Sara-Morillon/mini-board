@@ -1,9 +1,8 @@
-import { getMockRes } from '@jest-mock/express'
 import { Logger } from '@saramorillon/logger'
 import { logger } from '../../../src/middlewares/logger'
-import { getMockReq } from '../../mocks'
+import { getMockReq, getMockRes } from '../../mocks'
 
-jest.mock('@saramorillon/logger')
+vi.mock('@saramorillon/logger')
 
 describe('logger', () => {
   it('should create req logger', () => {
@@ -15,7 +14,7 @@ describe('logger', () => {
       {
         app: { host: 'http://app_host.io', name: 'mini-board', port: 3000, version: expect.any(String) },
         req: { url: 'url', params: { param: 'value' }, query: { query: 'value' } },
-      }
+      },
     )
     expect(req.logger).toBeInstanceOf(Logger)
   })

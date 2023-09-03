@@ -6,16 +6,15 @@ import { getProject } from '../../../../src/services/project'
 import { Project } from '../../../../src/views/pages/Project'
 import { mockProject, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/project')
-jest.mock('../../../../src/hooks/useForm')
-jest.mock('react-router-dom', () => ({ ...jest.requireActual('react-router-dom'), useParams: jest.fn() }))
+vi.mock('../../../../src/services/project')
+vi.mock('../../../../src/hooks/useForm')
 
 describe('Project', () => {
   beforeEach(() => {
-    jest.mocked(useParams).mockReturnValue({ id: '1' })
-    jest.mocked(getProject).mockResolvedValue(mockProject())
-    jest.mocked(useFormSave).mockReturnValue([false, jest.fn()])
-    jest.mocked(useFormDelete).mockReturnValue([false, jest.fn()])
+    vi.mocked(useParams).mockReturnValue({ id: '1' })
+    vi.mocked(getProject).mockResolvedValue(mockProject())
+    vi.mocked(useFormSave).mockReturnValue([false, vi.fn()])
+    vi.mocked(useFormDelete).mockReturnValue([false, vi.fn()])
   })
 
   it('should fetch project', async () => {
@@ -31,7 +30,7 @@ describe('Project', () => {
   })
 
   it('should render title when creating a project', async () => {
-    jest.mocked(useParams).mockReturnValue({})
+    vi.mocked(useParams).mockReturnValue({})
     render(<Project />)
     await wait()
     expect(document.title).toBe('Mini Board - Create project')
@@ -45,14 +44,14 @@ describe('Project', () => {
   })
 
   it('should enable project key if creating new project', async () => {
-    jest.mocked(getProject).mockResolvedValue(mockProject({ id: 0 }))
+    vi.mocked(getProject).mockResolvedValue(mockProject({ id: 0 }))
     render(<Project />)
     await wait()
     expect(screen.getByPlaceholderText('Key *')).toBeEnabled()
   })
 
   it('should update form values when changing key', async () => {
-    jest.mocked(getProject).mockResolvedValue(mockProject({ id: 0 }))
+    vi.mocked(getProject).mockResolvedValue(mockProject({ id: 0 }))
     render(<Project />)
     await wait()
     fireEvent.change(screen.getByPlaceholderText('Key *'), { target: { value: 'key2' } })
@@ -93,7 +92,7 @@ describe('Project', () => {
   })
 
   it('should disable buttons when saving', async () => {
-    jest.mocked(useFormSave).mockReturnValue([true, jest.fn()])
+    vi.mocked(useFormSave).mockReturnValue([true, vi.fn()])
     render(<Project />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -101,7 +100,7 @@ describe('Project', () => {
   })
 
   it('should disable buttons when deleting', async () => {
-    jest.mocked(useFormDelete).mockReturnValue([true, jest.fn()])
+    vi.mocked(useFormDelete).mockReturnValue([true, vi.fn()])
     render(<Project />)
     await wait()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -109,8 +108,8 @@ describe('Project', () => {
   })
 
   it('should delete project when clicking on delete button', async () => {
-    const onDelete = jest.fn()
-    jest.mocked(useFormDelete).mockReturnValue([false, onDelete])
+    const onDelete = vi.fn()
+    vi.mocked(useFormDelete).mockReturnValue([false, onDelete])
     render(<Project />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))

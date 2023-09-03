@@ -4,13 +4,13 @@ import { deleteComment, getComments, saveComment } from '../../../../src/service
 import { Comments } from '../../../../src/views/components/Comments'
 import { mockComment, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/comment')
+vi.mock('../../../../src/services/comment')
 
 describe('Comments', () => {
   beforeEach(() => {
-    jest.mocked(getComments).mockResolvedValue([])
-    jest.mocked(saveComment).mockResolvedValue(undefined)
-    jest.mocked(deleteComment).mockResolvedValue(undefined)
+    vi.mocked(getComments).mockResolvedValue([])
+    vi.mocked(saveComment).mockResolvedValue(undefined)
+    vi.mocked(deleteComment).mockResolvedValue(undefined)
   })
 
   it('should get comments', async () => {
@@ -20,7 +20,7 @@ describe('Comments', () => {
   })
 
   it('should delete comment when clicking on delete button', async () => {
-    jest.mocked(getComments).mockResolvedValue([mockComment()])
+    vi.mocked(getComments).mockResolvedValue([mockComment()])
     render(<Comments issueId={1} />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
@@ -29,10 +29,10 @@ describe('Comments', () => {
   })
 
   it('should refresh comments after deleting', async () => {
-    jest.mocked(getComments).mockResolvedValue([mockComment()])
+    vi.mocked(getComments).mockResolvedValue([mockComment()])
     render(<Comments issueId={1} />)
     await wait()
-    jest.mocked(getComments).mockClear()
+    vi.mocked(getComments).mockClear()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
     await wait()
     expect(getComments).toHaveBeenCalledWith(1)
@@ -50,7 +50,7 @@ describe('Comments', () => {
   it('should refresh comments after saving', async () => {
     render(<Comments issueId={1} />)
     await wait()
-    jest.mocked(getComments).mockClear()
+    vi.mocked(getComments).mockClear()
     fireEvent.change(screen.getByPlaceholderText('Add a comment'), { target: { value: 'new content' } })
     fireEvent.submit(screen.getByRole('form'))
     await wait()

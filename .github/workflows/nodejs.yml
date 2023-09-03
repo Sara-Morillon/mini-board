@@ -24,7 +24,7 @@ jobs:
         run: yarn tsc
         working-directory: backend
       - name: Test
-        run: yarn jest --runInBand
+        run: yarn vitest run
         working-directory: backend
 
   frontend:
@@ -45,5 +45,5 @@ jobs:
         run: yarn tsc
         working-directory: frontend
       - name: Test
-        run: yarn jest --runInBand
+        run: yarn vitest run
         working-directory: frontend

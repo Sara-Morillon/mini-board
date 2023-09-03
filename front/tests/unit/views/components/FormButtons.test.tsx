@@ -16,17 +16,17 @@ describe('SaveButton', () => {
 
 describe('DeleteButton', () => {
   it('should render loading button', () => {
-    render(<DeleteButton loading disabled={false} onClick={jest.fn()} />)
+    render(<DeleteButton loading disabled={false} onClick={vi.fn()} />)
     expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true')
   })
 
   it('should render disabled button', () => {
-    render(<DeleteButton loading={false} disabled onClick={jest.fn()} />)
+    render(<DeleteButton loading={false} disabled onClick={vi.fn()} />)
     expect(screen.getByRole('button')).toBeDisabled()
   })
 
   it('should call event handler when clicking on button', () => {
-    const onClick = jest.fn()
+    const onClick = vi.fn()
     render(<DeleteButton loading={false} disabled={false} onClick={onClick} />)
     fireEvent.click(screen.getByText('Delete'))
     expect(onClick).toHaveBeenCalled()

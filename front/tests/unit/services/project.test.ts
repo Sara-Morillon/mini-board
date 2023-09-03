@@ -2,11 +2,11 @@ import { Axios } from '../../../src/services/Axios'
 import { deleteProject, getProject, getProjects, saveProject } from '../../../src/services/project'
 import { mockProject } from '../../mocks'
 
-jest.mock('../../../src/services/Axios')
+vi.mock('../../../src/services/Axios')
 
 describe('getProjects', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'projects' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'projects' })
   })
 
   it('should get projects', async () => {
@@ -22,7 +22,7 @@ describe('getProjects', () => {
 
 describe('getProject', () => {
   beforeEach(() => {
-    jest.mocked(Axios.get).mockResolvedValue({ data: 'project' })
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'project' })
   })
 
   it('should return null without id', async () => {
@@ -43,7 +43,7 @@ describe('getProject', () => {
 
 describe('saveProject', () => {
   beforeEach(() => {
-    jest.mocked(Axios.post).mockResolvedValue({ data: 2 })
+    vi.mocked(Axios.post).mockResolvedValue({ data: 2 })
   })
 
   it('should post project without id', async () => {
