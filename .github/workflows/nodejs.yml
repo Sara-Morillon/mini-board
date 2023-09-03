@@ -1,4 +1,4 @@
-name: Mini Board
+name: Inventory
 
 on:
   push:
@@ -8,20 +8,16 @@ on:
 jobs:
   back:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
       - name: Install
         run: yarn install
         working-directory: back
       - name: Build
-        run: yarn tsc
+        run: yarn build
         working-directory: back
       - name: Test
         run: yarn vitest run
@@ -29,20 +25,16 @@ jobs:
 
   front:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
       - name: Install
         run: yarn install
         working-directory: front
       - name: Build
-        run: yarn tsc
+        run: yarn build
         working-directory: front
       - name: Test
         run: yarn vitest run
