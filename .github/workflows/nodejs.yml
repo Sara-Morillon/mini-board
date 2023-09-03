@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  backend:
+  back:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,15 +19,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: yarn install
-        working-directory: backend
+        working-directory: back
       - name: Build
         run: yarn tsc
-        working-directory: backend
+        working-directory: back
       - name: Test
         run: yarn vitest run
-        working-directory: backend
+        working-directory: back
 
-  frontend:
+  front:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -40,10 +40,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: yarn install
-        working-directory: frontend
+        working-directory: front
       - name: Build
         run: yarn tsc
-        working-directory: frontend
+        working-directory: front
       - name: Test
         run: yarn vitest run
-        working-directory: frontend
+        working-directory: front
