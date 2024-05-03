@@ -48,7 +48,7 @@ function IssuesTable({ issues, refresh }: IIssueTableProps) {
         setLoading(false)
       }
     },
-    [refresh]
+    [refresh],
   )
 
   return (
@@ -71,13 +71,13 @@ function IssuesTable({ issues, refresh }: IIssueTableProps) {
         <tbody>
           {issues.map((issue) => (
             <tr key={issue.id}>
-              <td style={{ height: 1 }}>
+              <td>
                 <Ticket issue={issue} status="todo" onMove={onMove} />
               </td>
-              <td style={{ height: 1 }}>
+              <td>
                 <Ticket issue={issue} status="doing" onMove={onMove} />
               </td>
-              <td style={{ height: 1 }}>
+              <td>
                 <Ticket issue={issue} status="done" onMove={onMove} />
               </td>
             </tr>
